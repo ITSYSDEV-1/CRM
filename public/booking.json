@@ -1,0 +1,714 @@
+{
+    "reviews": {
+        "total": "810",
+        "score": "8.4",
+        "rating": "Very good",
+        "breakdown": [
+            {
+                "name": "Cleanliness",
+                "value": "8.2"
+            },
+            {
+                "name": "Comfort",
+                "value": "8.4"
+            },
+            {
+                "name": "Location",
+                "value": "9"
+            },
+            {
+                "name": "Facilities",
+                "value": "8.2"
+            },
+            {
+                "name": "Staff",
+                "value": "8.8"
+            },
+            {
+                "name": "Value for money",
+                "value": "7.8"
+            },
+            {
+                "name": "Free WiFi",
+                "value": "7.1"
+            }
+        ],
+        "reviewlist": [
+            {
+                "date": "Reviewed: 21 February 2019",
+                "name": "Richard",
+                "nationality": "Singapore",
+                "score": "8.3",
+                "header": "Great location, clean, easy to go around, cozy place, quiet.",
+                "negative": "Blanket and pillows were uncomfortable. Felt like bed set for winter. For breakfast they run out of baked beans an hour before closing but they didn't top it up, even though many guests kept checking the pot and asking for it.",
+                "positive": "Great location, clean, easy to go around, cozy place, quiet. The room was spacious with everything you need for comfortable stay."
+            },
+            {
+                "date": "Reviewed: 19 February 2019",
+                "name": "Vikrant",
+                "nationality": "India",
+                "score": "5.8",
+                "header": "Breakfast served at the hotel has various options and well...",
+                "negative": "Too costly. Cost was for the Seaview but it does not provide that . No value for money and unnecessarily costly. For 1 ltr of warm drinking water they charged 36000 Rp.",
+                "positive": "Breakfast served at the hotel has various options and well served."
+            },
+            {
+                "date": "Reviewed: 24 January 2019",
+                "name": "Voffchik Burakov",
+                "nationality": "Canada",
+                "score": "10",
+                "header": "Excellent Kuta Seaview boutique ",
+                "negative": "Too costly. Cost was for the Seaview but it does not provide that . No value for money and unnecessarily costly. For 1 ltr of warm drinking water they charged 36000 Rp.",
+                "positive": "We stayed in Kuta Seaview 2 weeks. We love this place from first time. Check in was simple and easy! Winaya (driver from resort) met us at the airport and after 15-20 min we rich resort.  Room was big and clean with big balcony where I was smoking. Big screen tv with at least 30 channels, news, sports, entertainment, movies. Location was in 3min walk to beach, you just cross the street and you are on the beach. Shopping mall another 3-5 min. Resort has a lot of different plants, trees, small statues, almost like you are in jungle. There was Italian restaurant where we had breakfast, big variety of food, pastries, fruit and juices and I love Balinese coffee, always had no less that 3. On this property there is pool, next to the restaurant and you can order drinks or something to eat from there. All staff was very friendly, helpful and alway smiles. \nWhen we arrived we received discount for massages in resort spa. That was excellent. We had several massages there during our stay. \nWe visited few temples, Bali Zoo, bird forest, few different beaches. In this property always was several cars with drivers and you can choose where you want to go and price. I would recommend Gede. ( pronunciation like GoodDay :))\nWhat else to say? Thanks to all staff for all you job, new general manager Mr. Harold, assistant Mr. Wayene, all other assistants, housekeeping, restaurant staff, masseuse, pools guys Wira and Made!!! That was amazing time and see you rather sooner than later :)))\nVladimir and Tatjana. Stayed in room 222 10 days and 111 3 days. January 2019"
+            },
+            {
+                "date": "Reviewed: 20 January 2019",
+                "name": "viveksingh",
+                "nationality": "India",
+                "score": "9.6",
+                "header": "the location of resort was excellent just on the beach and...",
+                "negative": "everything was perfect .ther was nothing to dislike .\n",
+                "positive": "the location of resort was excellent just on the beach and in main market .staff was great and room was also good ."
+            },
+            {
+                "date": "Reviewed: 18 January 2019",
+                "name": "Vy",
+                "nationality": "Australia",
+                "score": "7.5",
+                "header": "The staff are friendly at reception , they were...",
+                "negative": "The room I was in first had little minor problems so I asked to switch room. But the staff were prompt to fix the issues and the manager was happy to get me a new and cleaner room. Rooms could be updated especially the bath rooms.",
+                "positive": "The staff are friendly at reception , they were accommodating to my needs and my kids needs. The staff at the bar and at breakfast were always smiling and service was prompt.\nBeautiful location with nice tropical plants. The pool was clean and my three year old daughter loved swimming there."
+            },
+            {
+                "date": "Reviewed: 14 January 2019",
+                "name": "Vishal",
+                "nationality": "India",
+                "score": "10",
+                "header": "Best location, excellent staff and amazing customer service,...",
+                "negative": "We booked sea view room and after checkin at hotel, we were told that the Lifts are still not ready to use, which was a bit of bummer with plenty of luggage and our room was on 3rd level.\nBut thanks to the duty manager he offered us an upgrade to a cottage suite which worked out better for us.\n",
+                "positive": "Best location, excellent staff and amazing customer service, good food and great facilities."
+            },
+            {
+                "date": "Reviewed: 2 January 2019",
+                "name": "Lesek",
+                "nationality": "Switzerland",
+                "score": "8.3",
+                "header": "Central location with good quality accommodation",
+                "negative": "The fact that we reserved and paid in advance and received confirmation for one Lanai Deluxe Garden room and one Premiere Deluxe Cottage and were told at checkin that we get only two standard rooms with no refund except dinner and spa vouchers is simple fraud as we paid at least 50 % more of what we in the end got.",
+                "positive": "We were the 4th time there and we like the location, the setting and the small pool with bar. Breakfast is quite rich in choice however not outstanding in taste but good enough. Friendliness of staff, free car parking."
+            },
+            {
+                "date": "Reviewed: 2 January 2019",
+                "name": "Stefano",
+                "nationality": "Italy",
+                "score": "4.6",
+                "header": "The location",
+                "negative": "All my previous stay in this resort were outstanding but this time...the stay has been extremely bad, the service has decreased and the staff was very disappointing.\nAs soon as we arrived they gave us the room without a welcome drink.\nThe room 172 was dirty, super dirty. When I woke up the first morning I found 4 alive cockroaches in the bathroom and 3 in the bed. I went immediately to reception and they told me they would send someone to clean. When I woke up the second day again 4 cockroaches in the bathroom and water leaking in the entire room. I called the reception and the attendant came. They said that they would fix the leaking and that unfortunately the cockroaches were due to a pest control they had done 2 days before. When I heard this I asked immediately to change room and they did, but without any apologies.\nThen we reserved the table for dinner for new year. At dinner our table was taken by another group and so they changed us another table which was not the one we booked. We also had prepaid 3000000 idr for the after dinner party which supposedly included all drinks we wanted up to 3000000.\nThe sad news is that when we reached the bar and asked for the first drink we found out that they had changes the menu list for the night and limited the drinks only to some cheap ones. We complained but nothing was done and therefore we had to basically drink what was on the menu.\nWe over paid also additional 600000 for extra drinks which supposedly were charged to our room.\nWe had two friends visiting our table and they were asked to pay an entrance fee even if they were with us!!! Ridiculous!!!!\nTwo days later at midnight someone knocks at my door to ask me to pay those 600000 because of a \u201ccomputer error\u201d they were not able to charge. I said that next morning I would have paid at the pool area but he insisted at midnight That I would be pay. Just because he was so insisting I did not pay and told him that I would pay next day!",
+                "positive": "The location"
+            },
+            {
+                "date": "Reviewed: 2 January 2019",
+                "name": "Claudio",
+                "nationality": "Switzerland",
+                "score": "6.3",
+                "header": "Kuta sea view potentially would be an amazing resort, but the way the manage it ruined everything!",
+                "negative": "Service was terrible especially the restaurant where the managers have no clue about hospitality's rules.",
+                "positive": "Location is very good and the structure is really amazing."
+            },
+            {
+                "date": "Reviewed: 1 January 2019",
+                "name": "Ashish",
+                "nationality": "India",
+                "score": "9.2",
+                "header": "Excellent property , comfortable stay",
+                "negative": "Room a/c we're not effective in hot weather",
+                "positive": "Property bang on beach . Rooms very comfortable though a/c we're not very effective. Excellent greenery inside the property...very refreshing"
+            },
+            {
+                "date": "Reviewed: 31 December 2018",
+                "name": "Ashay",
+                "nationality": "Australia",
+                "score": "3.8",
+                "header": "Not a value for money",
+                "negative": "Everything needs to be upgraded. Air conditioning needs a big time upgrade. Bed sheets are very old, not well clean.  Room lights were very dull. Very suffocating.",
+                "positive": "Location"
+            },
+            {
+                "date": "Reviewed: 29 December 2018",
+                "name": "Ateen",
+                "nationality": "India",
+                "score": "8.3",
+                "header": "good place to stay in Kuta",
+                "negative": "I had paid extra to book a sea facing room but couldnt view the sea at all from the balcony :(\ralso the shower water force in my room was disappointing :(",
+                "positive": "proximity to the sea and the business establishments surrounding the property"
+            },
+            {
+                "date": "Reviewed: 28 December 2018",
+                "name": "Wiard",
+                "nationality": "Netherlands",
+                "score": "6.7",
+                "header": "Friendly staff.",
+                "negative": "Pollution of the road in front of the hotel (all day traffic jam, the wind of the sea blows it right into the hotel area). Bad neighborhood I got more drugs offered and prostitution in one week than 20 years in Amsterdam. Rooms need renovation especially bathrooms. The repair is in progress, so a lot of construction sounds. The spa is overpriced (6x average elsewhere).",
+                "positive": "Friendly staff. Nice cottages. Well maintained garden."
+            },
+            {
+                "date": "Reviewed: 27 December 2018",
+                "name": "Azizi As",
+                "nationality": "Brunei Darussalam",
+                "score": "8.8",
+                "header": "Superb location as it was within walking distance to the...",
+                "negative": "The room need an upgrade when it comes to ventilation. During our stay the A/C was not working properly at all so our room got a bit uncomfortably hot and humid by noon. The bathroom as well had the same problem as it got really humid and hot once we started showering.",
+                "positive": "Superb location as it was within walking distance to the beach and shopping malls and eventhough the place is close to the busy road its not really that noisy though. The staffs were increadibly helpful and kind especially in arranging our transportation to the airport."
+            },
+            {
+                "date": "Reviewed: 27 December 2018",
+                "name": "Marie",
+                "nationality": "USA",
+                "score": "7.5",
+                "header": "Okay for short stay",
+                "negative": "Construction going on - in transition so some areas lovely others outdated. There is also an old building in front that some rooms look at the back of the peeling paint and wires.",
+                "positive": "Superb location as it was within walking distance to the beach and shopping malls and eventhough the place is close to the busy road its not really that noisy though. The staffs were increadibly helpful and kind especially in arranging our transportation to the airport."
+            },
+            {
+                "date": "Reviewed: 26 December 2018",
+                "name": "Ahmed",
+                "nationality": "Egypt",
+                "score": "2.5",
+                "header": "Really disgusting ",
+                "negative": "-Hotel stuff are really rude and bad attitude (house keeping man entering the room without even knock the door)\n-They were working a construction inside and outside the hotel with the drills allover the day we can\u2019t sleep from the voice and the dust all over the hotel we can\u2019t breathe \n- They were renewing the furniture of the hotel at the entrance many workers \nThe tour agent of the hotel was cheating all the time without any consideration that we are his hotel gusts\nReally i hate the experience i\u2019ll never visit bali any time else ",
+                "positive": "Nothing good"
+            },
+            {
+                "date": "Reviewed: 21 December 2018",
+                "name": "Flora",
+                "nationality": "Spain",
+                "score": "7.9",
+                "header": "Everything was good, except for the man working in the evening at the reception",
+                "negative": "When we checked in one lady at the reception explained that we have also a free feet massage for 15 min. for three people (me, mom and dad) available only within the first two days after checked in. At night i went to the reception to book the feet massage for the following morning and one man at the reception counter said: I'm sorry too late now, already expired, of course I complained and he said OK, but after he stated that was only for 2 people massage (even though I showed him the voucher that was given to me the first day where it was clearly written for 3 people!!!). Tired of fighting I said OK and o ly me and mom had the massage.... \rThe night before leaving I went to the receptionist and ask for a late check out and the lady gave me a price, during the conversation again the same man showed up and ask: how can I help you? I asked the same question and imagine what?! he gave me a different price, much higher than the one that was given by the lady. Again I complained about it and finally he accepted.\rThe feeling we had is that they try to squeeze the customers as much as they can.. In Bali you have to negotiate for EVERYTHING but we hoped that at least in the hotel could have been different... \rApart from this squeeze man, the rest of personal was simply great",
+                "positive": "Girls working in the restaurants and the guys around all smiling"
+            },
+            {
+                "date": "Reviewed: 12 December 2018",
+                "name": "David",
+                "nationality": "United Kingdom",
+                "score": "9.6",
+                "header": "We would be happy to stay at this hotel again, without the half board option!",
+                "negative": "Can't recommend the half board option because the \"included\" menu is extremely limited with just 2 main course options. Both options were good but who wants the same evening meal every night? Be aware that the lift/elevator is not yet available and there are a lot of stairs to the sea view rooms. Garden view suite was excellent",
+                "positive": "Lovely staff, very high standard of cleanliness, comfortable bed, good linens and plenty of towels."
+            },
+            {
+                "date": "Reviewed: 11 December 2018",
+                "name": "Sarah",
+                "nationality": "United Kingdom",
+                "score": "5.4",
+                "header": "Property on the main road and so is pool very open.",
+                "negative": "We weren\u2019t fans of kuta after staying round the island in some gorgeous places kuta just wasn\u2019t for us. The hotel wasn\u2019t bad for one night as a stop over but I wouldn\u2019t stay there any longer. ",
+                "positive": "Property on the main road and so is pool very open. We stayed in a room the balcony and room was lovely getting to the room was awful walking down a long corridor that extractor fans  backed into made it extra warm to walk the room when it was already hot!! We didn\u2019t eat at the hotel but plenty of places around to eat it\u2019s very western. "
+            },
+            {
+                "date": "Reviewed: 6 December 2018",
+                "name": "Karolina",
+                "nationality": "Guernsey",
+                "score": "10",
+                "header": "The most friendly hotel in Bali",
+                "negative": "Leaving",
+                "positive": "The hotel is friendly fabulous and faultless,\nWe arrived to be greeted by Drama at reception and Mariani who quickly checked us in and dealt with any questions we had . They where so professional and extremely friendly.\nOnce we where taken to our room by Drama it was big with large bed bed queen size large balcony with seated area and plenty of amenities such as iron hairdryer fridge wine soft drinks . There was a big bathroom with plenty of towels and brilliant shower .\nThe breakfast in the morning is one of the best we ever had in any hotel . There was juices teas coffees lots of local breads cold meats and plenty of hot local dishes as well as western dishes with Desak the very polite local Bali lady cooking eggs and omelettes so quick and very friendly. The hotel has an amazing swimming pool and spa and is just 20metres to an amazing 10 km beach .\nWe had planned to stay for three days and ended up for two weeks. All the staff are amazing and friendly and we can\u2019t wait to return back here next year to everyone again."
+            },
+            {
+                "date": "Reviewed: 5 December 2018",
+                "name": "Desmond",
+                "nationality": "Singapore",
+                "score": "9.6",
+                "header": "Great location close to sea  ",
+                "negative": "Nil",
+                "positive": "Very good location, comfortable and good view from my balcony, love the sofa beside the balcony.\nAll friendly staff and the design of the hotel and surrounding is Balinese. And it's just beside Rama Spa, had enjoyed a 2.5hr spa treatment. Fresh brewed coffee!!!!"
+            },
+            {
+                "date": "Reviewed: 29 November 2018",
+                "name": "Nataliya0604",
+                "nationality": "Sri Lanka",
+                "score": "8.8",
+                "header": "We really liked the place .",
+                "negative": "There isnt an elevator so everything has to be brought up via staircase",
+                "positive": "We really liked the place . the hotel is in close proximity to everything in Kuta, the beach is just across the street. \rThought the place is right by the road, there isnt any noise that comes through. The staff is very friendly and great service."
+            },
+            {
+                "date": "Reviewed: 22 November 2018",
+                "name": "Vicki",
+                "nationality": "Australia",
+                "score": "7.5",
+                "header": "Very enjoyable. I would definitely stay here again & would recommend the hotel to friends",
+                "negative": "There isnt an elevator so everything has to be brought up via staircase",
+                "positive": "The rooms were really lovely. Plenty of room to move around & very clean. Bathrooms were a good size aswell.\rGreat location to the beach, shops, restaurants & bars."
+            },
+            {
+                "date": "Reviewed: 19 November 2018",
+                "name": "Lutfiyya",
+                "nationality": "South Africa",
+                "score": "5.4",
+                "header": "The manager handled our discontent regarding the...",
+                "negative": "Bookings.com did not advise about the construction taking place at the hotel.",
+                "positive": "The manager handled our discontent regarding the construction taking place at the hotel, which caused awful noise and dirt. He offered to add breakfast to the stay"
+            },
+            {
+                "date": "Reviewed: 11 November 2018",
+                "name": "Anonymous",
+                "nationality": "Australia",
+                "score": "8.8",
+                "header": "The pool area where I spent a lot of my time was comfortable...",
+                "negative": "I found the price of food and drinks to be rather expensive compared to other places I have stayed. It would have been nice to have someone from the bar serve around the pool so you didn\u2019t have to constantly get out of the water for a drink.",
+                "positive": "The pool area where I spent a lot of my time was comfortable and delightful. The pool attendants were very polite and attentive. The room was nice and clean and the bed was extra comfy!"
+            },
+            {
+                "date": "Reviewed: 30 October 2018",
+                "name": "Joy",
+                "nationality": "Australia",
+                "score": "9.6",
+                "header": "Very enjoyable and a great location.",
+                "negative": "The bathrooms are a little tired and could do with a good clean, not just a wipe over. Also the towels were so old and grey they need to be replaced asap.",
+                "positive": "We enjoyed our stay here, the staff were very friendly and helpful, nothing was too much trouble."
+            },
+            {
+                "date": "Reviewed: 28 October 2018",
+                "name": "Nicole",
+                "nationality": "Australia",
+                "score": "8.3",
+                "header": "Great location and breakfast.",
+                "negative": "We arrived in the afternoon, well after check in and had to wait over an hour to get into our room. We were put in the last room on the 3rd floor and there were no elevators.\nDown the corridor to our room, all the air con units blow hot air at you which isn't ideal since it's already hot. Our room was given quarter of a roll of toilet paper and 2 towels between 3 people.",
+                "positive": "It's a beautiful place in a great location.\nThe breakfast is amazingg..best buffet ever.\nBeds are comfortable."
+            },
+            {
+                "date": "Reviewed: 27 October 2018",
+                "name": "Sylvia",
+                "nationality": "Austria",
+                "score": "7.9",
+                "header": "nice hotel with very good value for money.",
+                "negative": "unfortunately we got an upgrade to a garden bungalow (ground floor instead of upper store) the bungalows are very dark also during daytime you need lightening",
+                "positive": "nice hotel with very good value for money. the location is perfect and also the pool area is nice. "
+            },
+            {
+                "date": "Reviewed: 25 October 2018",
+                "name": "Anonymous",
+                "nationality": "Australia",
+                "score": "10",
+                "header": "Beachside Resort ",
+                "negative": "Couldn't fault anything.",
+                "positive": "Close to beach and shops - location definitely very good. Impeccable service and friendly staff. Lovely breakfast at front of hotel. Grounds beautiful and well maintained. Rooms spacious and clean. "
+            },
+            {
+                "date": "Reviewed: 17 October 2018",
+                "name": "Jill",
+                "nationality": "Australia",
+                "score": "10",
+                "header": "Beautiful room, beautiful food, beautiful location right across the road from the beach",
+                "negative": "Couldn't fault anything.",
+                "positive": "The staff were fantastic, very obliging to all requests. The room was very comfortable and clean. Meals from the dining room exceptional. Special thanks to who I think is the manager for returning my hair dryer that I left behind to our villa in Seminyak. Very attentive and grateful. We offered to come and get it in Kuta, but he was wonderful enough to bring to me in Seminyak. A must place to stay. Beautiful \ud83d\udc9e"
+            },
+            {
+                "date": "Reviewed: 17 October 2018",
+                "name": "Shazia",
+                "nationality": "Japan",
+                "score": "10",
+                "header": "We arrived there pretty late at night, really tired and were...",
+                "negative": "Couldn't fault anything.",
+                "positive": "We arrived there pretty late at night, really tired and were surprised by an upgrade of our rooms. The entire property is  beautifully decorated with a touch of Plumeria Flower trees all over which just makes you happy in a bit. The staffs were very friendly and welcoming. We would definitely come here if we come to Bali again."
+            },
+            {
+                "date": "Reviewed: 14 October 2018",
+                "name": "nazrulnsu",
+                "nationality": "Bangladesh",
+                "score": "7.1",
+                "header": "The green in the hotel complex was unique.",
+                "negative": "I traveled with a 2-year-old kid from Bangladesh. Due to the time difference, she slept during the breakfast time. So, I and my wife had the breakfast while she was just lying down on the sofa in the breakfast area. We asked to go box for my 2-year-old and the hotel staffs were not friendly enough for this request for our entire 6 days stay. The very last day they didn't give us a simple paper to go box due to their policy!",
+                "positive": "The green in the hotel complex was unique."
+            },
+            {
+                "date": "Reviewed: 6 October 2018",
+                "name": "Guthrie",
+                "nationality": "Australia",
+                "score": "6.7",
+                "header": "Good for an airport or short stopover but not recommended for a holiday destination",
+                "negative": "Value for money, didn't get the room that we booked as the hotel had overbooked the rooms, not as boutique as we expected, pool was very warm and general area the hotel is located in was not great",
+                "positive": "Friendly staff, proximity to the beach, clean, and good breakfast"
+            },
+            {
+                "date": "Reviewed: 30 September 2018",
+                "name": "Apple6311",
+                "nationality": "Singapore",
+                "score": "8.3",
+                "header": "Relaxing, beautiful sunset & convenience location",
+                "negative": "Room towel not soft enough. Garden view room have mosquito (feedback to hotel, they have taken preventive action & done the fogging job)",
+                "positive": "Staff are helpful & friendly, nice breakfast, good location (2 minutes walk to Kuta beach)"
+            },
+            {
+                "date": "Reviewed: 30 September 2018",
+                "name": "Anonymous",
+                "nationality": "Australia",
+                "score": "7.5",
+                "header": "Staff were very friendly & happy.",
+                "negative": "Room towel not soft enough. Garden view room have mosquito (feedback to hotel, they have taken preventive action & done the fogging job)",
+                "positive": "Staff were very friendly & happy. Love eating my breakfast at the front of Kuta Seaview and watching the world go by. Pool was great spent many hours relaxing."
+            },
+            {
+                "date": "Reviewed: 27 September 2018",
+                "name": "Ksenia",
+                "nationality": "Russia",
+                "score": "10",
+                "header": "Great stuff, excellent location (shops, cafes, restaurants -...",
+                "negative": "Wi-fi (",
+                "positive": "Great stuff, excellent location (shops, cafes, restaurants - everything nearby the hotel). Tasty food at Roso Vivo. Rooms are clean and comfortable."
+            },
+            {
+                "date": "Reviewed: 24 September 2018",
+                "name": "David",
+                "nationality": "Australia",
+                "score": "9.6",
+                "header": "Made our trip to Bali so much more enjoyable.",
+                "negative": "No elevators operating.  Ongoing renovations to part of the resort. More information to guests about the daily activities.",
+                "positive": "Super friendly staff, fantastic facilities, awesome location.  The price was well worth it and I would highly recommend the facility for couples."
+            },
+            {
+                "date": "Reviewed: 21 September 2018",
+                "name": "Jodie",
+                "nationality": "Australia",
+                "score": "8.3",
+                "header": "Great hotel. Great location .",
+                "negative": "Had a manicure at the spa and was the worst manicure I've ever had! Staff were exceptional though, just no clue how to do their job",
+                "positive": "Every single staff member was very friendly and went above and beyond to make sure we had everything we needed. Fantastic!!"
+            },
+            {
+                "date": "Reviewed: 20 September 2018",
+                "name": "Annette",
+                "nationality": "Australia",
+                "score": "9.6",
+                "header": "Nice pool and very good location",
+                "negative": "Our first room was on the third floor and we had a 9 month old baby with us and they told us the lift wasn\u2019t working. Changed to another room the next day with no hassle and it was very nice ",
+                "positive": "Nice pool and very good location"
+            },
+            {
+                "date": "Reviewed: 18 September 2018",
+                "name": "MikkelWilhelm",
+                "nationality": "Denmark",
+                "score": "9.6",
+                "header": "Smiling staff",
+                "negative": "We lived in the apartment, and it Was very warm on the aile.. but thats the only thing i can think of, that Was anoying.. but it Was a small thing",
+                "positive": "The staff, was so nice.. All of them, smiling and just in general nice and talky..\nIts placed perfect in Kuta, only few minuts from a big shopping mall.."
+            },
+            {
+                "date": "Reviewed: 9 September 2018",
+                "name": "Calvin.K",
+                "nationality": "Singapore",
+                "score": "7.5",
+                "header": "Only Location is good. ",
+                "negative": "If you have baby and baby stroller, I dont recommend this place aa they dont have lift!! \nAnd baby bed is too shallow which is useless in terms of safety. Breakfast is ok but coffee machine is home appliance small one which takes very long to have. \nI paid extra for sea view room but you cant see sea. Jist facing sea side doesnt mean hotel can sell as sea view. So dont opt for sea view room by paying extra. ",
+                "positive": "Hotel employees are all quite kind and location is good. Location is the only plus."
+            },
+            {
+                "date": "Reviewed: 7 September 2018",
+                "name": "Monique",
+                "nationality": "Australia",
+                "score": "9.6",
+                "header": "Awesome location and great value for money. ",
+                "negative": "Not enough day beds around the pool..",
+                "positive": "Everything! Location awesome. Room we had everything we needed. And was nice clean and comfy. Pizzas were awesome. Staff were nice. We will be back ! "
+            },
+            {
+                "date": "Reviewed: 2 September 2018",
+                "name": "Fangi",
+                "nationality": "Italy",
+                "score": "7.9",
+                "header": "The room is big and cozy.",
+                "negative": "One thing i dont like is that my room is in 3th floor. It is difficult that when I went down/up with the baby cart and my baby who is only 8 months olds.\rFrom my room there is no ANY view.",
+                "positive": "The room is big and cozy. The beds are very comfortable. The location is perfect in Kuta."
+            },
+            {
+                "date": "Reviewed: 1 September 2018",
+                "name": "Anonymous",
+                "nationality": "Australia",
+                "score": "7.1",
+                "header": "Staff were brilliant, breakfast was Good, pool & gardens...",
+                "negative": "On arrival  the room seem to be a little  warm thought the air con may have just be turned on it did not get cool.Next day we were  moved to another room. The hotel must have know that it wasn't  working properly do not know  why they bothered putting us in there in the first place just a complete  waste of time, a bit second rate.",
+                "positive": "Staff were brilliant, breakfast was Good, pool & gardens were really nice ."
+            },
+            {
+                "date": "Reviewed: 1 September 2018",
+                "name": "Anonymous",
+                "nationality": "South Korea",
+                "score": "6.3",
+                "header": "Bathroom needs to be cleaned.",
+                "negative": "Bathroom is old and dirty. Dust on the tower shelf with stained towel and bed sheet. Housekeeper never changed bed sheet.\rHad to deal with cockroach and mosquitoes. The pool was closed at night.",
+                "positive": "Staffs are very friendly. Great traditional vibe."
+            },
+            {
+                "date": "Reviewed: 24 August 2018",
+                "name": "Catherine",
+                "nationality": "Luxembourg",
+                "score": "4.6",
+                "header": "Noisy",
+                "negative": "Bed sheets & seating area had spots, rooms were very noisy - could here the neighbors and surroundings, pool is located next to a very busy and noisy street, tours offered at the hotel are way to expensive (double the price than others), hairdryer is outdated, wifi is weak, ...",
+                "positive": "Big choice at breakfast buffet, nice staff at reception"
+            },
+            {
+                "date": "Reviewed: 22 August 2018",
+                "name": "Gregor",
+                "nationality": "Austria",
+                "score": "8.3",
+                "header": "Bed was very fine and breakfast was very ok.",
+                "negative": "Currently the house is in some places renovated and there is some work.\rThe price was a bit high to our experience in Bali, but the location was excellent (just across the street was the beach).",
+                "positive": "Bed was very fine and breakfast was very ok. The room was very fine and tidy. Super Location and very friendly and helpful personal. We liked our stay very much. Also the pool area was very beautiful."
+            },
+            {
+                "date": "Reviewed: 22 August 2018",
+                "name": "Anonymous",
+                "nationality": "Australia",
+                "score": "3.8",
+                "header": "I am unlikely to go there again",
+                "negative": "The plumbing did not work and we had to keep calling housekeeping who could only manage temporary fixes. The linen did not appear very clean.",
+                "positive": "The breakfast was decent, some of the staff was really good. The location is great in terms of accessing cafes, beach, shopping etc"
+            },
+            {
+                "date": "Reviewed: 3 August 2018",
+                "name": "Karen",
+                "nationality": "United Kingdom",
+                "score": "8.8",
+                "header": "Excellent Balinese hotel in traditional style and not in the noisy part of Kuta",
+                "negative": "Towels were rough and had a strange smell. Beds were extremely creaky and kept me awake every time my son moved.",
+                "positive": "Wonderful, older style Balinese property. Staff great, pool lovely, breakfast choice was good."
+            },
+            {
+                "date": "Reviewed: 28 July 2018",
+                "name": "Roxanne",
+                "nationality": "United Arab Emirates",
+                "score": "9.6",
+                "header": "Perfect way to start my holiday!",
+                "negative": "Internet is a bit shoddy, but then again, you're on holiday, so who needs wifi!",
+                "positive": "Perfect way to start my holiday! The rooms are quaint and comfy, the staff is excellent and the cocktails on offer were a great way to sit back, relax and enjoy the awesome pool!"
+            },
+            {
+                "date": "Reviewed: 25 July 2018",
+                "name": "Fiona",
+                "nationality": "United Kingdom",
+                "score": "10",
+                "header": "Over all the hotel exceeded expectations, every staff member was polite and say good morning.",
+                "negative": "Check in was awkward. I had booked 3 nights however I was travelling from Gili T and couldn't arrive first two days of stay as I hard to get a slow ferry back to Bali as the water was too rough for a fast boat. The hotel didn't understand and weren't easy to contact to ask about only staying a night & sadly we couldn't get our money back from the first two nights. Felt like maybe we could have got some sort of voucher due to us ending up spending \u00a3300 on one night. Also late check out was only an extra hour?",
+                "positive": "It's better than the photos, it's beautiful and so perfect for a relaxing holiday. Breakfast was a highlight! Rooms are lovely and so comfortable with necessities provided. Every day you'll see staff keeping the gardens and features pretty and kept. Staff are unbelievablely polite and welcoming. 100% staying again when in kuta."
+            },
+            {
+                "date": "Reviewed: 24 July 2018",
+                "name": "Bianca_83",
+                "nationality": "Philippines",
+                "score": "10",
+                "header": "GREAT STAFF AND LOCATION",
+                "negative": "On going construction but it is to upgrade hotel facilities and landscape...so it's acceptable and understandable plus the workers try their best to lessen the noise and inconvenience caused to the guest. ",
+                "positive": "The friendliest staff youll ever meet. They know your name and they go out of your way to help you and make you feel comfortable. They also surprised my boyfriend when they learned it was his birthday. And they can arrange day tours for you..Plus the location is just perfect. Just across Kuta beach,  beside beachwalk mall, few metera away from matahari mall. At the back of the hotel, you can also find great bars and restaurant. Rosso Vivo bar has also good pizza selections and reasonably priced. Seminyak beach is also 45- min. walk along the shore. "
+            },
+            {
+                "date": "Reviewed: 23 July 2018",
+                "name": "Dewald",
+                "nationality": "South Africa",
+                "score": "9.2",
+                "header": "excellent",
+                "negative": "only thing is obviously with the exchange rate it was a bit pricey for us. I think if it was a bit more cost effective we would have stayed longer. If a special rate could be worked out for South Africans I think many more would go because it really is fabulous",
+                "positive": "we loved our stay here, the staff the environment everything was excellent. Very central you have everything at your fingertips from beach mall eating places"
+            },
+            {
+                "date": "Reviewed: 5 July 2018",
+                "name": "Dewald",
+                "nationality": "South Africa",
+                "score": "7.9",
+                "header": "It was awesome",
+                "negative": "only thing I can say is perhaps have more gluten free options on dinner menu Prices are a bit high, but just a personal observation being from south Africa and the exchange rate. Maybe look at having a special rate for South Africans would attract many more people",
+                "positive": "we loved it. The fact that I had dietary restrictions and the hotel accommodated this ensuring I had gluten free bread and pancakes in the morning for breakfast...big thank you. Staff so helpful and friendly The gluten free pasta was yummy. Meeting and having tea with the manager. Was lovely interacting with the staff\rVery central, lovely having access to beach and if need be the shops. Perfect location"
+            },
+            {
+                "date": "Reviewed: 21 June 2018",
+                "name": "Rajat",
+                "nationality": "India",
+                "score": "5.4",
+                "header": "Will go to Bali again but will not stay in this hotel",
+                "negative": "Breakfast was below average and not hygienic... Saw ants near the fruits and bread area... No good choices to eat..\rWashroom is so pathetic and walls are full of seepage... Even the rooms had the same problem .",
+                "positive": "Only thing good about this property is that Kuta beach is right opposite to it... And it's near beach walk mall..."
+            },
+            {
+                "date": "Reviewed: 13 June 2018",
+                "name": "Rajarshi",
+                "nationality": "Singapore",
+                "score": "8.3",
+                "header": "Location,staff,restaurants",
+                "negative": "The aircon did not had any servicing.we stayed for 4 days.first day there was issue on cooling and 2 nd day when i entered the room the room was soaked wd water leaking from aircon.although the staff was helpfull enough to resolve the issue even at 12 midnight.\nA little maintanance should make this resort more beautiful and peacefull stay\n",
+                "positive": "Location,staff,restaurants"
+            },
+            {
+                "date": "Reviewed: 12 June 2018",
+                "name": "Heather",
+                "nationality": "East Timor",
+                "score": "9.2",
+                "header": "The beds and pillows were very comfy.",
+                "negative": "Closet door in our room was broken so the light was on all night. I did not have a hand towel my first night.",
+                "positive": "The beds and pillows were very comfy. The staff was helpful and attentive. The overall room quality was good but this room was not as good as the last."
+            },
+            {
+                "date": "Reviewed: 9 June 2018",
+                "name": "Pranav",
+                "nationality": "India",
+                "score": "9.2",
+                "header": "happy to stay here nice property in this range",
+                "negative": "The check in time is 2.00 pm and we got room at 2.15 as i have travel many countries in world, hotels always give check-in atleast 30 min before their official check - in time, but thats ok",
+                "positive": "The best thing is the location too good, rooms were small but good and Staff was very active and responsive,\rWe enjoyed our stay\rIf you are veg than you dont have much options in Breakfast as well as in their Menu but you will get lots of option just outside the hotel as location is too good"
+            },
+            {
+                "date": "Reviewed: 8 June 2018",
+                "name": "Rebecca",
+                "nationality": "Australia",
+                "score": "9.0",
+                "header": "Great location across from the beach.",
+                "negative": "Likes everything - good value for money",
+                "positive": "Great location across from the beach.  Close to Matahari shopping centre and  the Beachwalk(?) shopping centre.\rOn site restaurant was very good-  nice food and great cocktails!! Rooms were services early in the day which was great ."
+            },
+            {
+                "date": "Reviewed: 7 June 2018",
+                "name": "Ionel",
+                "nationality": "Romania",
+                "score": "4.6",
+                "header": "We really enjoyed the pool.",
+                "negative": "Rooms are not so clean, in our room the windows were really dirty and nobody cleaned them for the entire stay. Also the ceiling of our room contains molds. 4 stars hotel? at best you feel like in a hotel of 3 stars(or less), definitely does not deserve the money. \rBreakfast was rather poor, you had to choose between 4 or 5 cooked items and if you did not like the options you could choose eggs or jam, ham and chesse is missing completely.",
+                "positive": "We really enjoyed the pool."
+            },
+            {
+                "date": "Reviewed: 6 June 2018",
+                "name": "Lee",
+                "nationality": "Australia",
+                "score": "10",
+                "header": "We had two nights of bliss",
+                "negative": "The power transformer buzzed in the bedroom",
+                "positive": "The location is fabulous, the staff from the gardeners to reception were all engaging and wonderful.  we also were upgraded to their new suite which was wonderful."
+            },
+            {
+                "date": "Reviewed: 31 May 2018",
+                "name": "Dawn",
+                "nationality": "United Kingdom",
+                "score": "9.2",
+                "header": "Will be back!",
+                "negative": "The power transformer buzzed in the bedroom",
+                "positive": "Location is excellent, 1 min to the beach. Garden cottage where we stayed was really great. Pool clean, plenty sun beds available. Staff attentive and very friendly."
+            },
+            {
+                "date": "Reviewed: 29 May 2018",
+                "name": "J",
+                "nationality": "Australia",
+                "score": "9.6",
+                "header": "Beautiful Pool and temperature.",
+                "negative": " Maybe better drink or cocktail specials...oh definitely need to upgrade the coffee machine! Or bring coffee to the table for breakfast so don't have to wait.",
+                "positive": "Beautiful Pool and temperature. Clean, great location, beautiful food. Awesome Pizza. Accross the road from the beach. Rooms quiet for sleeping. Tranquil room areas. Nice staff."
+            },
+            {
+                "date": "Reviewed: 27 May 2018",
+                "name": "John",
+                "nationality": "New Zealand",
+                "score": "9.2",
+                "header": "Stayed there several times, will do it again",
+                "negative": "The lifts were being added, which will help people on the 3rd floor, but some noise during the day as the workmen prepared the area. Have to say didn\u2019t worry me",
+                "positive": "Some of the friendliest staff, location central and across the road from the surf beach.\rLoved the omelett cooked to your taste for breakfast New"
+            },
+            {
+                "date": "Reviewed: 26 May 2018",
+                "name": "Crystal Watkins ",
+                "nationality": "Australia",
+                "score": "8.3",
+                "header": "Bathroom flooded 4 times.",
+                "negative": "Perfect location, lovely staff and a fantastic breakfast. Our room was spacious and comfortable ",
+                "positive": "Bathroom flooded 4 times. Renovations taking place during the day, very hard for our 2yo to have a nap with all the noise - wish we had have been advised this was taking place."
+            },
+            {
+                "date": "Reviewed: 24 May 2018",
+                "name": "Maree",
+                "nationality": "Australia",
+                "score": "9.2",
+                "header": "Had a very pleasant stay and would stay there again",
+                "negative": "The inability of getting natural light into the room  we had.  Window quite small and even with the door open we still had to have the light on.  I discussed this with the manager, who accepted my positive feedback graciously. She said she would look into it.  There are other renovations going on at the property, not that you would know, very quiet.",
+                "positive": "Breakfast/restaurant and the pool.  Conveniently located.  Very friendly and obliging staff.  The manager made it her business to have a chat with us about our stay when we checked out."
+            },
+            {
+                "date": "Reviewed: 20 May 2018",
+                "name": "Robert",
+                "nationality": "Australia",
+                "score": "6.3",
+                "header": "Very good restaurant Rosso Vito, pool area nice.",
+                "negative": "Hotel a little outdated now.....Kuta location is not the best in Bali, not the resorts fault but seems the Night life of the area in general has held back quality property developments and improvements",
+                "positive": "Very good restaurant Rosso Vito, pool area nice. Spa is very good setup and service "
+            },
+            {
+                "date": "Reviewed: 18 May 2018",
+                "name": "Steve",
+                "nationality": "Australia",
+                "score": "8.3",
+                "header": "If you are looking for a central location with a small pool and good bar service- This is for you.",
+                "negative": "The Breakfast Range was very poor compared to others. \r-Poor range of fresh fruit\r-The toaster required 2 times through- Just an adjustment\r-Catered for Indian residents in the Hot food.\r-After 4 days I asked for bacon- They keep it out the back???- [ Beef Bacon??]\r-The Automatic coffee machine was the slowest\r-When Juice/Hot food ran out- Not replaced.\r- The Chef needs to visit other hotels and see the difference\rThe Omelettes/Egg making was good.\rThe bathrooms in the Seaview rooms are very average\r- The Smell from the plumbing sometimes overwhelming\r-Shower curtains- A blast from the past!!!- Not hygienic\r-An amazing plumbing system that sees excess water from the shower drip down to the floor eventually",
+                "positive": "Location is perfect if Kuta is your thing.\rAll the staff are friendly. Especially- Front of House, Room cleaners. Pool Attendant\rThe Seaview rooms with the Balcony & Couch were the best"
+            },
+            {
+                "date": "Reviewed: 17 May 2018",
+                "name": "Vivi",
+                "nationality": "Cambodia",
+                "score": "10",
+                "header": "The location is just perfect, near to restaurant/mall...",
+                "negative": "Towel is little rough ",
+                "positive": "The location is just perfect, near to restaurant/mall and beach. There was error of my booking and I had to switch to another hotel for one night (was private cottage) and it was great staying there. 3 night in kuta sea view just fabulous and the AFO manager was very friendly and helpful. I enjoyed my stay and will come back again "
+            },
+            {
+                "date": "Reviewed: 16 May 2018",
+                "name": "Naomi__M",
+                "nationality": "USA",
+                "score": "9.2",
+                "header": "Nice hotel, nice spa, great breakfast and relaxing pool",
+                "negative": "Only the fact that it was adjacent to a busy road, but we couldn't hear the noise from our room.  There are so many better beaches in Bali than Kuta; definitely make an effort to get outside this area to see the true beauty of Bali.",
+                "positive": "This was a great place to recover from jet lag--we used it as a stopping over point before transferring to a hotel 3 hours from Kuta.  The pool was fantastic and the beach is very accessible across the street.  We also enjoyed the cocktails and the breakfast, as well as the spa (highly recommend)."
+            },
+            {
+                "date": "Reviewed: 15 May 2018",
+                "name": "John",
+                "nationality": "Ireland",
+                "score": "10",
+                "header": "Great option.",
+                "negative": "Most rooms only have baths with shower, and not a full shower. ",
+                "positive": "Beside the beach, shopping mall and central. Not noisy. Nice relaxing feeling about the place, very friendly staff and they make the extra effort, great chill out pool area."
+            },
+            {
+                "date": "Reviewed: 11 May 2018",
+                "name": "Jerry",
+                "nationality": "United Arab Emirates",
+                "score": "10",
+                "header": "Excellent Location, awesome staff, just what you need for a great escape. Value for money!",
+                "negative": "I can't complain for the price I paid",
+                "positive": "They suprised me on arrival by upgrading my room and provided few Spa vouchers ... There are few maintenance works going on to enrich the experience.... Great location to head to the top clubs in kuta and it's beach front property... The on-site restaurant food is awesome as well."
+            },
+            {
+                "date": "Reviewed: 7 May 2018",
+                "name": "alpie",
+                "nationality": "Australia",
+                "score": "8.8",
+                "header": "Nice relaxing week away.",
+                "negative": "Resort all OK. \rJust the hawkers on the beach become a little overbearing, but too be expected from the tourist belt.",
+                "positive": "Good location across from beach, short walk to nightlfie and shopping."
+            },
+            {
+                "date": "Reviewed: 6 May 2018",
+                "name": "Karan",
+                "nationality": "Philippines",
+                "score": "7.9",
+                "header": "Good staff.",
+                "negative": "The beach is across the road. And the beach is crowded AF. Visited for all of three minutes during my entire stay.\rAverage breakfast.",
+                "positive": "Good staff. Clean and spacious rooms."
+            },
+            {
+                "date": "Reviewed: 1 May 2018",
+                "name": "Mal",
+                "nationality": "Australia",
+                "score": "4.2",
+                "header": "Keep your expectations low to avoid disappointed at the No-seaview Resort. ",
+                "negative": "Rude and disinterested staff detracted from my stay here. When I arrived at 2:30AM the night manager tried to scam an extra cash payment for my room charge by insisting that the hotel had not received any payment from booking.com. He still demanded money even after I showed him my receipt from booking.com to prove that I had already prepaid for the room in full, but I refused to pay anything extra. I was eventually given a room but after traveling all day and being very tired I did not appreciate the delay on check-in.  There are two classes of rooms at this property, some are new, modern and very stylish rooms that are in the booking website photos and then there are a whole lot of dirty old rooms like the one I was given.  I had to call three times on my first day to request for the room be to cleaned.  The housekeeping staff eventually arrived three hours later with filthy mops and rags to 'clean\" the room,  but they only made it look worse.  The water from the bathroom taps and shower had a very strong sulphur smell,  reflecting Bali's current water crisis and the recent volcanic activity. The food was unremarkable but the coffee was undrinkable.  I had to go elsewhere for breakfast,  but there are plenty of really good quality cafes nearby the hotel.  I didn't eat at the hotel restaurant after seeing the chef smoking a cigarette while he was cooking. ",
+                "positive": "The property is accross the road from the popular surfing beach at Kuta which makes for interesting people watching. The beach itself is filthy and there is more plastic than sand on the beach some mornings, so if beach-combing is your favorite hobby you're in for a thrill.  The swimming pool was clean and not very busy.  There were plenty of lounge chairs available by the pool ay all times although the amount of traffic noise and exhaust fumes from the road that passes next to the pool made it difficult to relax here.  "
+            }
+        ]
+    }
+}

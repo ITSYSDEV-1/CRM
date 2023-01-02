@@ -1,0 +1,3 @@
+Identity Number e.g passport/id,Company Contact ID add '99',First Name,Last Name,Salutation [Mr/Mrs/Miss],Gender [Male/Female],Email,Birthday [yyyy-mm-dd],[single/married/divorced/widowed],Country Code ISO 2 e.g AU / ID
+idnumber,ccid,fname,lname,salutation,gender,email,birthday,marital_status,country
+478357345239,5,Mudana,Komang,Mr,Male,danabala72@gmail.com,1988-05-18,single,ID

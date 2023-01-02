@@ -1,0 +1,462 @@
+@extends('layouts.master')
+@section('title')
+    Campaign Management | {{ $configuration->hotel_name.' '.$configuration->app_title }}
+@endsection
+@section('content')
+    <div  class="modal " id="recepientModal" tabindex="-1" role="dialog" aria-labelledby="recepientModalLabel">
+        <div class="modal-dialog  modal-lg " role="document">
+            <div class="modal-content" >
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="recepientModalLabel"> Campaign  </h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered table-striped table-hover subtable responsive js-basic-example"  width="100%" id="recepienttable">
+                        <thead>
+                        <tr>
+                            <th width="20%"> No </th>
+                            <th width="60%"> Name </th>
+                            <th width="20%"> Status</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div  class="modal " id="ScheduleModal" tabindex="-1" role="dialog" aria-labelledby="ScheduleModalLabel">
+        <div class="modal-dialog " role="document">
+            <div class="modal-content" >
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="ScheduleModalLabel">Schedule</h4>
+                </div>
+                <div class="modal-body">
+                    <label for="schedule" class="control-label">Schedule</label>
+                    <input type="text" class="form-control datetimepicker" name="scheduleInput" id="scheduleInput">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="UpdateSchedule">Save</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div  class="modal " id="ModalTemplate" tabindex="-1" role="dialog" aria-labelledby="ModalTemplateLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content" >
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="ModalTemplateLabel"></h4>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div  class="modal " id="Modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel">
+                    <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content" >
+                                    <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="ModalLabel"> Delivered Email</h4>
+                                        </div>
+                                    <div class="modal-body">
+                                            <table class="table table-bordered table-striped table-hover subtable responsive "  width="100%" id="modaltable">
+                                                    <thead>
+                                                    <tr>
+                                                            <th width="100%"> Recepient</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                        </div>
+                                    <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        </div>
+                                </div>
+                        </div>
+                </div>
+
+    <div  class="modal " id="Modal2" tabindex="-1" role="dialog" aria-labelledby="Modal2Label">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content" >
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="Modal2Label"> Delivered Email</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered table-striped table-hover subtable responsive "  width="100%" id="modal2table">
+                        <thead>
+                        <tr>
+                            <th width="100%"> Recepient</th>
+                            <th width="100%"> URL </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="right_col" role="main">
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row clearfix">
+                    <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                        <div class="x_panel tile ">
+                            <div class="x_title">
+                                <h3>Campaign Management</h3>
+                                <ul class="nav navbar-right panel_toolbox">
+                                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                    <li><a class="close-link"><i class="fa fa-close"></i></a>
+                                    </li>
+                                </ul>
+                                <div class="clearfix"></div>
+                                <a href="{{ url('campaign/create') }}" title="Create New Campaign" class=" btn btn-success"><i class="fa fa-plus"> </i> Create New Campaign</a>
+                            </div>
+                            <div class="x_content" >
+
+                                <div class="row clearfix">
+                                    <table id="campaigntable" class="table table-bordered table-striped table-hover responsive js-basic-example ">
+                                        <thead>
+                                        <tr>
+                                            <th width="10px">No</th>
+                                            <th>Name</th>
+                                            <th>Segment</th>
+                                            <th>Status</th>
+                                            <th>Schedule</th>
+                                            <th>Accepted</th>
+                                            <th>Delivered</th>
+                                            <th>Opened</th>
+                                            <th>Clicked</th>
+                                            <th>Unsubscribed</th>
+                                            <th>Failed</th>
+                                            <th>Rejected</th>
+                                            <th>Manage</th>
+                                        </tr>
+                                        </thead>
+
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+@endsection
+@section('script')
+    <script>
+        $(document).ready(function () {
+            var t= $('#campaigntable').DataTable({
+                "autoWidth": true,
+                "processing": true,
+                "language": {
+                    processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> '
+                },
+                "serverSide": true,
+                "pageLength":15,
+                "ajax":{
+                    "url": "{{ route('campaignlist') }}",
+                    "dataType": "json",
+                    "type": "POST",
+                    "data":{
+                        _token: "{{csrf_token()}}",
+                    },
+                    "error": function (error){
+                        console.log(error.responseJSON)
+                    }
+                },
+                "columns": [
+                    { "data": null },
+                    { "data": "name" },
+                    { "data": "segment" },
+                    { "data": "status" },
+                    { "data": "schedule"},
+                    { "data": "accepted"},
+                    { "data": "delivered"},
+                    { "data": "opened"},
+                    { "data": "clicked"},
+                    { "data": "unsubscribed"},
+                    { "data": "failed"},
+                    { "data": "rejected"},
+                    { "data": null},
+
+                ],
+                "columnDefs":[
+                    {
+                        "targets":0,
+                        "sortable":false,
+                        "render":function (data,type,row,meta) {
+                            return meta.row+1
+                        }
+                    },
+                    {
+                      "targets":3,
+                      "sortable":false,
+                      "render":function (data,type,row) {
+                          var status = ''
+                            if (data==='Scheduled'){
+                              status='Scheduled @ '+ moment(row.schedule).format('YYYY MMMM DD HH:mm')
+                            }else{
+                                status=data
+                            }
+                          return status
+                      }
+                    },
+                    {
+                        "targets":4,
+                        "sortable":false,
+                        "render":function (data,type,row) {
+                            var date =moment(data).format('YYYY MMMM DD HH:mm')
+                            return date
+                        }
+                    },
+                    {
+                        "targets":[2,5,6,7,9,10,11],
+                        "sortable":false,
+                    },
+                    {
+                        "targets":[8],
+                        "sortable":false,
+                        "render":function (data,type,row) {
+                            var result=[]
+                            var urls=[]
+                            var res=''
+                            $.each(data,function(k,v){
+                                urls=v.url.split(';')
+                                $.each(urls, function(i, e) {
+                                    if ($.inArray(e, result) == -1) result.push(e);
+                                });
+                                var list='<ul>'
+                                $.each(result,function(i,v){
+                                    list+='<li>'+v+'</li>'
+                                })
+                                list+='</ul>'
+                                res+='<tr><td>'+v.recepient+'</td><td>'+list+'</td></tr>'
+                            })
+                                var count = $.map(data, function(n, i) { return i; }).length;
+                                return '<a href="javascript:void(0)" id="'+row.id+'" title="" onclick="openModal2(\'' + res + '\') "> '+count+'</a> '
+
+                        }
+                    },
+                    {
+                    "targets":12,
+                        "sortable":false,
+                        "render":function(data,type,row){
+                        // console.log(data.id)
+                                if(data.template.length>0){
+                                    var str=escape(data.template[0].content)
+                                }else{
+                                    str=''
+                                }
+
+                            var id=data.id
+                            if(data.status==='Draft' || data.status==='Scheduled'){
+                                var sc=' <a href="javascript:void(0)" title="Set Schedule"  onclick="openModalSchedule(\''+id+'\')"> <i class="fa fa-calendar-check-o " style="font-size: 1.5em"></i></a>'
+                            }else{
+                                sc=' '
+                            }
+                            return '<a href="javascript:void(0)"  title="Preview Template" onclick="openModalTemplate(\''+str+'\')"> <i class="fa fa-eye" style="font-size: 1.5em"></i></a>'+ sc+
+                                   // ' <a href="javascript:void(0)" title="Show Recepient" onclick="openModalRecepient(\''+escape(recepient)+'\')"><i class="fa fa-users" style="font-size: 1.5em"></i> </a>'+
+                                   ' <a href="javascript:void(0)" title="Show Recepient" onclick="selectRecepient(\''+data.id+'\')"><i class="fa fa-users" style="font-size: 1.5em"></i> </a>'+
+                                    '<a href="#" title="Delete Template" onclick="return swal({title:\'Delete Confirmation\',text:\'This Template will permanently deleted\',type:\'warning\',\n' +
+                                '                                                            showCancelButton: true,\n' +
+                                '                                                            confirmButtonColor: \'#DD6B55\',\n' +
+                                '                                                            confirmButtonText:\'Delete\',\n' +
+                                '                                                            cancelButtonText: \'No\',\n' +
+                                '                                                            closeOnConfirm: false,\n' +
+                                '                                                            closeOnCancel: false\n' +
+                                '                                                            },\n' +
+                                '                                                            function(isConfirm){\n' +
+                                '                                                            if (isConfirm) {\n' +
+                                '                                                               deleteCampaign(\''+data.id+'\')\n' +
+                                '                                                            } else {\n' +
+                                '                                                            swal(\'Cancelled\', \'Delete Template Cancelled\',\'error\');\n' +
+                                '                                                            }\n' +
+                                '                                                            });"><i class="fa fa-trash" style="font-size: 1.5em">  </i>\n' +
+                                '                                                    </a>'
+                        }
+                    }
+                ]
+            });
+        })
+
+        $('[id^=scheduleSave]').on('click',function () {
+            var id_=this.id;
+            id_=id_.replace('scheduleSave','')
+            var val=$('#scheduleInput'+id_).val();
+            $.ajax({
+                url:'updateschedule',
+                type:'POST',
+                data:{
+                    id:id_,
+                    _token:'{{ csrf_token() }}',
+                    value:val,
+                },
+                success:function () {
+                    location.reload(true);
+                }
+            })
+        });
+
+        $('[id^=scheduleInput]').each(function () {
+            var start = new Date(),
+                prevDay,
+                startHours = 9;
+
+            // 09:00 AM
+            start.setHours(9);
+            start.setMinutes(0);
+
+            // If today is Saturday or Sunday set 10:00 AM
+            if ([6, 0].indexOf(start.getDay()) != -1) {
+                start.setHours(10);
+                startHours = 10
+            }
+
+            $(this).datepicker({
+                timepicker: true,
+                language: 'en',
+                dateFormat: 'dd M yyyy ',
+                timeFormat: 'hh:ii aa',
+                minDate: new Date(),
+//                    startDate: start,
+//                    minHours: startHours,
+//                    maxHours: 18,
+                onSelect: function (fd, d, picker) {
+
+                    // Do nothing if selection was cleared
+                    if (!d) return;
+
+                    var day = d.getDay();
+
+                    // Trigger only if date is changed
+                    if (prevDay != undefined && prevDay == day) return;
+                    prevDay = day;
+
+                }
+            })
+        });
+
+    </script>
+    <script>
+        function deleteCampaign(id){
+            $.ajax({
+                url:'{{ route('campaign.delete') }}',
+                type:'POST',
+                data:{
+                    _token:'{{ csrf_token() }}',
+                    id:id
+                },success:function(s){
+                    if(s==='ok'){
+                        location.reload()
+                    }
+                }
+            })
+        }
+        function selectRecepient(id){
+            var loading ='<i class="fa fa-spinner fa-spin fa-3x fa-fw center-align"></i><span class="sr-only">Loading...</span>';
+            $('#recepientModal tbody').empty()
+            $('#recepientModal tbody').append(loading)
+            $('#recepientModal').modal('toggle')
+            $.ajax({
+                url:'{{ route('campaignrecepient') }}',
+                dataType : 'json',
+                type:'POST',
+                data:{
+                    _token:'{{ csrf_token() }}',
+                    id:id
+                },
+                success: function(data){
+                    var recepient=''
+                    $.each(data,function(i,v){
+                        recepient+="<tr><td>"+parseInt(i)+1+"</td><td>"+v.fname+" "+v.lname+"</td><td>"+v.pivot.status+"</td></tr>"
+                    })
+                    $('#recepientModal tbody').empty()
+                    $('#recepientModal tbody').append(recepient)
+                    var tb=$('#recepientModal #recepienttable').DataTable()
+                }
+            })
+
+        }
+        function openModalSchedule(val) {
+            $('#ScheduleModal').modal('toggle')
+            $('#UpdateSchedule').on('click', function () {
+                var id_=val;
+                var value=$('#scheduleInput').val();
+                $.ajax({
+                    url:'updateschedule',
+                    type:'POST',
+                    data:{
+                        id:id_,
+                        _token:'{{ csrf_token() }}',
+                        value:value,
+                    },
+                    success:function () {
+                        location.reload(true);
+                    }
+                })
+            })
+        }
+        function openModal(val){
+
+
+          $('#Modal tbody').empty()
+          $('#Modal tbody').append(val)
+          var tb=$('#Modal .subtable').DataTable()
+          $('#Modal').modal('toggle')
+        }
+        function openModal2(val){
+
+
+            $('#Modal2 tbody').empty()
+            $('#Modal2 tbody').append(val)
+            var tb=$('#Modal2 .subtable').DataTable()
+            $('#Modal2').modal('toggle')
+        }
+        function openModalTemplate(val) {
+
+            $('#ModalTemplate .modal-body').empty()
+            $('#ModalTemplate .modal-body').append(unescape(val))
+
+            $('#ModalTemplate').modal('toggle')
+
+        }
+        $('#Modal').on('hidden.bs.modal',function () {
+            var tb=$('#Modal .subtable').DataTable()
+            tb.clear().draw()
+            tb.destroy()
+        })
+        $('#Modal2').on('hidden.bs.modal',function () {
+            var tb=$('#Modal2 .subtable').DataTable()
+            tb.clear().draw()
+            tb.destroy()
+        })
+        $('#recepientModal').on('hidden.bs.modal',function () {
+            var tb=$('#recepientModal #recepienttable').DataTable()
+            tb.clear().draw()
+            tb.destroy()
+        })
+    </script>
+@endsection

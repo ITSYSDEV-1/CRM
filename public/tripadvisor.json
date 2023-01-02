@@ -1,0 +1,1031 @@
+{
+    "aggregateRating": {
+        "rating": "4.5",
+        "totalreview": "1818",
+        "predicate": "Excellent"
+    },
+    "rating": [
+        {
+            "label": "Excellent",
+            "value": "950"
+        },
+        {
+            "label": "Good",
+            "value": "592"
+        },
+        {
+            "label": "Average",
+            "value": "182"
+        },
+        {
+            "label": "Poor",
+            "value": "61"
+        },
+        {
+            "label": "Terrible",
+            "value": "33"
+        }
+    ],
+    "reviews": [
+        {
+            "member": "Bonnie B",
+            "rate": "40",
+            "location": "",
+            "quotes": "Great stay",
+            "reviewdate": "Feb 20",
+            "review": "Very clean and well maintained property.  Staff are very friendly and willing to go beyond expectations.   Rooms are well kept.  We had one issue with the air conditioner icing up.  They immediately upgraded us to a cottage even though they had fixed the problem.  The beach",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r653671630-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Samip Shah",
+            "rate": "50",
+            "location": "",
+            "quotes": "Kuta Seaview",
+            "reviewdate": "Feb 18",
+            "review": "Wonderful Amenities... One of the best property on Kuta beach, Bali. Staff is very supportive & kind-hearted... Food is also very good. If you are vegetarian than they also prepare special food for you. Will love to come again",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r653353582-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Graeme W",
+            "rate": "50",
+            "location": "",
+            "quotes": "Great location - Great room - Great staff - Great food - A great place to stay",
+            "reviewdate": "Feb 16",
+            "review": "We have returned many times and it keeps getting better  Happy to recommend to all age groups  Situated opposite the beach and has a fantastic pool but the big highlight is the friendly staff.we will be returning ",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r652716075-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "TigermanCanada",
+            "rate": "50",
+            "location": "",
+            "quotes": "Quaint Boutique",
+            "reviewdate": "Feb 14",
+            "review": "Wonderful Gem of a resort. Reasonably priced, spacious clean rooms, excellent, friendly staff and management. They really went out of their way to accommodate. The Spa was wonderful, made many trips :) Great buffet breakfast and good menu choices. It was steps to the beach area",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r652416228-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Ravi Shah",
+            "rate": "40",
+            "location": "",
+            "quotes": "Overall Good Experience",
+            "reviewdate": "Feb 12",
+            "review": "Overall Nice Stay. Max. 100 Mtr distance to the Beach. So location is perfect. You can see the Sea while having the Breakfast.  I have taken Sea Facing Room but I can see the little bit of Sea from my Room.  Overall Food, Stay, Cleanliness was very good.  Except their Corridor",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r651954051-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Ravi Shah",
+            "rate": "40",
+            "location": "",
+            "quotes": "Overall Good Experience",
+            "reviewdate": "Feb 12",
+            "review": "Overall Nice Stay. Max. 100 Mtr distance to the Beach. So location is perfect. You can see the Sea while having the Breakfast.  I have taken Sea Facing Room but I can see the little bit of Sea from my Room.  Overall Food, Stay, Cleanliness was very good.  Except their Corridor",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r651954051-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Ravi Shah",
+            "rate": "40",
+            "location": "",
+            "quotes": "Overall Good Experience",
+            "reviewdate": "Feb 12",
+            "review": "Overall Nice Stay. Max. 100 Mtr distance to the Beach. So location is perfect. You can see the Sea while having the Breakfast.  I have taken Sea Facing Room but I can see the little bit of Sea from my Room.  Overall Food, Stay, Cleanliness was very good.  Except their Corridor",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r651954051-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Ravi Shah",
+            "rate": "40",
+            "location": "",
+            "quotes": "Overall Good Experience",
+            "reviewdate": "Feb 12",
+            "review": "Overall Nice Stay. Max. 100 Mtr distance to the Beach. So location is perfect. You can see the Sea while having the Breakfast.  I have taken Sea Facing Room but I can see the little bit of Sea from my Room.  Overall Food, Stay, Cleanliness was very good.  Except their Corridor",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r651954051-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Ravi Shah",
+            "rate": "40",
+            "location": "",
+            "quotes": "Overall Good Experience",
+            "reviewdate": "Feb 12",
+            "review": "Overall Nice Stay. Max. 100 Mtr distance to the Beach. So location is perfect. You can see the Sea while having the Breakfast.  I have taken Sea Facing Room but I can see the little bit of Sea from my Room.  Overall Food, Stay, Cleanliness was very good.  Except their Corridor",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r651954051-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Ravi Shah",
+            "rate": "40",
+            "location": "",
+            "quotes": "Overall Good Experience",
+            "reviewdate": "Feb 12",
+            "review": "Overall Nice Stay. Max. 100 Mtr distance to the Beach. So location is perfect. You can see the Sea while having the Breakfast.  I have taken Sea Facing Room but I can see the little bit of Sea from my Room.  Overall Food, Stay, Cleanliness was very good.  Except their Corridor",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r651954051-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "MJM2629",
+            "rate": "40",
+            "location": "",
+            "quotes": "Overall Good Experience",
+            "reviewdate": "Jan 2019",
+            "review": "Overall Nice Stay. Max. 100 Mtr distance to the Beach. So location is perfect. You can see the Sea while having the Breakfast.  I have taken Sea Facing Room but I can see the little bit of Sea from my Room.  Overall Food, Stay, Cleanliness was very good.  Except their Corridor",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r651954051-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Shrez999",
+            "rate": "40",
+            "location": "",
+            "quotes": "Overall Good Experience",
+            "reviewdate": "Jan 2019",
+            "review": "Overall Nice Stay. Max. 100 Mtr distance to the Beach. So location is perfect. You can see the Sea while having the Breakfast.  I have taken Sea Facing Room but I can see the little bit of Sea from my Room.  Overall Food, Stay, Cleanliness was very good.  Except their Corridor",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r651954051-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Delta Wisata",
+            "rate": "40",
+            "location": "",
+            "quotes": "Overall Good Experience",
+            "reviewdate": "Nov 2018",
+            "review": "Overall Nice Stay. Max. 100 Mtr distance to the Beach. So location is perfect. You can see the Sea while having the Breakfast.  I have taken Sea Facing Room but I can see the little bit of Sea from my Room.  Overall Food, Stay, Cleanliness was very good.  Except their Corridor",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r651954051-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "LizBallarat",
+            "rate": "40",
+            "location": "",
+            "quotes": "Overall Good Experience",
+            "reviewdate": "Nov 2018",
+            "review": "Overall Nice Stay. Max. 100 Mtr distance to the Beach. So location is perfect. You can see the Sea while having the Breakfast.  I have taken Sea Facing Room but I can see the little bit of Sea from my Room.  Overall Food, Stay, Cleanliness was very good.  Except their Corridor",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r651954051-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Ian B",
+            "rate": "40",
+            "location": "",
+            "quotes": "Overall Good Experience",
+            "reviewdate": "Aug 2018",
+            "review": "Overall Nice Stay. Max. 100 Mtr distance to the Beach. So location is perfect. You can see the Sea while having the Breakfast.  I have taken Sea Facing Room but I can see the little bit of Sea from my Room.  Overall Food, Stay, Cleanliness was very good.  Except their Corridor",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r651954051-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Vladimir B",
+            "rate": "40",
+            "location": "",
+            "quotes": "Overall Good Experience",
+            "reviewdate": "Jan 2019",
+            "review": "Overall Nice Stay. Max. 100 Mtr distance to the Beach. So location is perfect. You can see the Sea while having the Breakfast.  I have taken Sea Facing Room but I can see the little bit of Sea from my Room.  Overall Food, Stay, Cleanliness was very good.  Except their Corridor",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r651954051-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Mary S",
+            "rate": "40",
+            "location": "",
+            "quotes": "Overall Good Experience",
+            "reviewdate": "Jan 2019",
+            "review": "Overall Nice Stay. Max. 100 Mtr distance to the Beach. So location is perfect. You can see the Sea while having the Breakfast.  I have taken Sea Facing Room but I can see the little bit of Sea from my Room.  Overall Food, Stay, Cleanliness was very good.  Except their Corridor",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r651954051-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Chriselle B",
+            "rate": "40",
+            "location": "",
+            "quotes": "Overall Good Experience",
+            "reviewdate": "Dec 2018",
+            "review": "Overall Nice Stay. Max. 100 Mtr distance to the Beach. So location is perfect. You can see the Sea while having the Breakfast.  I have taken Sea Facing Room but I can see the little bit of Sea from my Room.  Overall Food, Stay, Cleanliness was very good.  Except their Corridor",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r651954051-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Steve Parkinson",
+            "rate": "40",
+            "location": "",
+            "quotes": "Overall Good Experience",
+            "reviewdate": "Nov 2018",
+            "review": "Overall Nice Stay. Max. 100 Mtr distance to the Beach. So location is perfect. You can see the Sea while having the Breakfast.  I have taken Sea Facing Room but I can see the little bit of Sea from my Room.  Overall Food, Stay, Cleanliness was very good.  Except their Corridor",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r651954051-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "mumneedsaholiday65",
+            "rate": "40",
+            "location": "",
+            "quotes": "Overall Good Experience",
+            "reviewdate": "Nov 2018",
+            "review": "Overall Nice Stay. Max. 100 Mtr distance to the Beach. So location is perfect. You can see the Sea while having the Breakfast.  I have taken Sea Facing Room but I can see the little bit of Sea from my Room.  Overall Food, Stay, Cleanliness was very good.  Except their Corridor",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r651954051-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "xena0066",
+            "rate": "50",
+            "location": "",
+            "quotes": "Lucky guess",
+            "reviewdate": "Feb 12",
+            "review": "Hi fellow travellers!  I needed a place to stay for just one night as I was arriving late and didn't want the hassle of a long trip from airport. I didn't want to spend too much cash either so chose this hotel for both price and location.  What a find!  Located opposite the",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r651936454-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Nereida H",
+            "rate": "50",
+            "location": "",
+            "quotes": "Location and beauty personal",
+            "reviewdate": "Feb 10",
+            "review": "The location is perfect. In front of the sea. The hotel is spacious, large, clean and the staff is lovely. The atmosphere transmits you relax. I totally recommend this wonderful place. Thank you to the personal working there. It was a real pleasure.  Nereida",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r651374489-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Ergo K",
+            "rate": "50",
+            "location": "",
+            "quotes": "Hay!",
+            "reviewdate": "Feb 9",
+            "review": "Very nice hotel, with lovely, lovely staff...frendly and helpful \ud83e\udd17 good food and great pool. Thank you for our 2 weeks ...no problems, no worries...! \ud83d\ude0e\ud83d\ude0d When you find the beach not as clean as you like it to be...think about what we have done with our beautiful planet...\u263a\ufe0f",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r651024575-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Jennifer2848",
+            "rate": "50",
+            "location": "",
+            "quotes": "Family holiday.",
+            "reviewdate": "Feb 6",
+            "review": "Had a wonderful time again .Lovely staff everyone very pleasant. My grandchildren loved the hotel the staff were lovely to them .Breakfast very good many choices available.Will certainly stay again.Great location in Kuta plenty of restaurants markets and beach across the road.",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r650595441-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Bren68",
+            "rate": "50",
+            "location": "",
+            "quotes": "Brilliant",
+            "reviewdate": "Feb 4",
+            "review": "First stay ever in Bali and Seaview was a great start to the holiday. I could have stayed longer. Great staff, room, service, pool, bar, location. Would go back in a heartbeat. The room was lovely and staff helpful. Buffet breakfast was awesome. Just across the road from the",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r650042013-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Bren68",
+            "rate": "50",
+            "location": "",
+            "quotes": "Brilliant",
+            "reviewdate": "Feb 4",
+            "review": "First stay ever in Bali and Seaview was a great start to the holiday. I could have stayed longer. Great staff, room, service, pool, bar, location. Would go back in a heartbeat. The room was lovely and staff helpful. Buffet breakfast was awesome. Just across the road from the",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r650042013-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Bren68",
+            "rate": "50",
+            "location": "",
+            "quotes": "Brilliant",
+            "reviewdate": "Feb 4",
+            "review": "First stay ever in Bali and Seaview was a great start to the holiday. I could have stayed longer. Great staff, room, service, pool, bar, location. Would go back in a heartbeat. The room was lovely and staff helpful. Buffet breakfast was awesome. Just across the road from the",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r650042013-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Bren68",
+            "rate": "50",
+            "location": "",
+            "quotes": "Brilliant",
+            "reviewdate": "Feb 4",
+            "review": "First stay ever in Bali and Seaview was a great start to the holiday. I could have stayed longer. Great staff, room, service, pool, bar, location. Would go back in a heartbeat. The room was lovely and staff helpful. Buffet breakfast was awesome. Just across the road from the",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r650042013-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Bren68",
+            "rate": "50",
+            "location": "",
+            "quotes": "Brilliant",
+            "reviewdate": "Feb 4",
+            "review": "First stay ever in Bali and Seaview was a great start to the holiday. I could have stayed longer. Great staff, room, service, pool, bar, location. Would go back in a heartbeat. The room was lovely and staff helpful. Buffet breakfast was awesome. Just across the road from the",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r650042013-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Bren68",
+            "rate": "50",
+            "location": "",
+            "quotes": "Brilliant",
+            "reviewdate": "Feb 4",
+            "review": "First stay ever in Bali and Seaview was a great start to the holiday. I could have stayed longer. Great staff, room, service, pool, bar, location. Would go back in a heartbeat. The room was lovely and staff helpful. Buffet breakfast was awesome. Just across the road from the",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r650042013-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "MJM2629",
+            "rate": "50",
+            "location": "",
+            "quotes": "Brilliant",
+            "reviewdate": "Jan 2019",
+            "review": "First stay ever in Bali and Seaview was a great start to the holiday. I could have stayed longer. Great staff, room, service, pool, bar, location. Would go back in a heartbeat. The room was lovely and staff helpful. Buffet breakfast was awesome. Just across the road from the",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r650042013-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Shrez999",
+            "rate": "50",
+            "location": "",
+            "quotes": "Brilliant",
+            "reviewdate": "Jan 2019",
+            "review": "First stay ever in Bali and Seaview was a great start to the holiday. I could have stayed longer. Great staff, room, service, pool, bar, location. Would go back in a heartbeat. The room was lovely and staff helpful. Buffet breakfast was awesome. Just across the road from the",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r650042013-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Delta Wisata",
+            "rate": "50",
+            "location": "",
+            "quotes": "Brilliant",
+            "reviewdate": "Nov 2018",
+            "review": "First stay ever in Bali and Seaview was a great start to the holiday. I could have stayed longer. Great staff, room, service, pool, bar, location. Would go back in a heartbeat. The room was lovely and staff helpful. Buffet breakfast was awesome. Just across the road from the",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r650042013-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "LizBallarat",
+            "rate": "50",
+            "location": "",
+            "quotes": "Brilliant",
+            "reviewdate": "Nov 2018",
+            "review": "First stay ever in Bali and Seaview was a great start to the holiday. I could have stayed longer. Great staff, room, service, pool, bar, location. Would go back in a heartbeat. The room was lovely and staff helpful. Buffet breakfast was awesome. Just across the road from the",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r650042013-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Ian B",
+            "rate": "50",
+            "location": "",
+            "quotes": "Brilliant",
+            "reviewdate": "Aug 2018",
+            "review": "First stay ever in Bali and Seaview was a great start to the holiday. I could have stayed longer. Great staff, room, service, pool, bar, location. Would go back in a heartbeat. The room was lovely and staff helpful. Buffet breakfast was awesome. Just across the road from the",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r650042013-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Vladimir B",
+            "rate": "50",
+            "location": "",
+            "quotes": "Brilliant",
+            "reviewdate": "Jan 2019",
+            "review": "First stay ever in Bali and Seaview was a great start to the holiday. I could have stayed longer. Great staff, room, service, pool, bar, location. Would go back in a heartbeat. The room was lovely and staff helpful. Buffet breakfast was awesome. Just across the road from the",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r650042013-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Mary S",
+            "rate": "50",
+            "location": "",
+            "quotes": "Brilliant",
+            "reviewdate": "Jan 2019",
+            "review": "First stay ever in Bali and Seaview was a great start to the holiday. I could have stayed longer. Great staff, room, service, pool, bar, location. Would go back in a heartbeat. The room was lovely and staff helpful. Buffet breakfast was awesome. Just across the road from the",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r650042013-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Chriselle B",
+            "rate": "50",
+            "location": "",
+            "quotes": "Brilliant",
+            "reviewdate": "Dec 2018",
+            "review": "First stay ever in Bali and Seaview was a great start to the holiday. I could have stayed longer. Great staff, room, service, pool, bar, location. Would go back in a heartbeat. The room was lovely and staff helpful. Buffet breakfast was awesome. Just across the road from the",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r650042013-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Steve Parkinson",
+            "rate": "50",
+            "location": "",
+            "quotes": "Brilliant",
+            "reviewdate": "Nov 2018",
+            "review": "First stay ever in Bali and Seaview was a great start to the holiday. I could have stayed longer. Great staff, room, service, pool, bar, location. Would go back in a heartbeat. The room was lovely and staff helpful. Buffet breakfast was awesome. Just across the road from the",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r650042013-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "mumneedsaholiday65",
+            "rate": "50",
+            "location": "",
+            "quotes": "Brilliant",
+            "reviewdate": "Nov 2018",
+            "review": "First stay ever in Bali and Seaview was a great start to the holiday. I could have stayed longer. Great staff, room, service, pool, bar, location. Would go back in a heartbeat. The room was lovely and staff helpful. Buffet breakfast was awesome. Just across the road from the",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r650042013-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "aniek_puspawardani",
+            "rate": "50",
+            "location": "",
+            "quotes": "Upgraded and super delicious food",
+            "reviewdate": "Jan 2019",
+            "review": "I have been staying in this hotel for so many times and I found out on my latest stay that the restaurant has been upgraded.  Not only the interior but the most important thing is the variety of the menu for our breakfast, providing Western, Chinese,  traditional and modern",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r648832904-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Vladimir B",
+            "rate": "50",
+            "location": "",
+            "quotes": "Excellent Kuta Seaview Boutique",
+            "reviewdate": "Jan 2019",
+            "review": "We stayed in Kuta Seaview 2 weeks. We love this place from first time. Check in was simple and easy! Winaya (driver from resort) met us at the airport and after 15-20 min we rich resort. Room was big and clean with big balcony where I was smoking. Big screen tv with at least 30",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r648001851-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Melissa Reeves",
+            "rate": "50",
+            "location": "",
+            "quotes": "Amazing resort",
+            "reviewdate": "Jan 2019",
+            "review": "Our first stay here but not our last. We stayed in the deluxe  cottage and its perfect. All the staff are very friendly and always asking if there is anything they can do for us . Service is amazing. We will definitely be coming back here with our children. The location is very",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r647683071-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Michelle D",
+            "rate": "50",
+            "location": "",
+            "quotes": "Family vacation. .",
+            "reviewdate": "Jan 2019",
+            "review": "We stayed here for 12 nights and have had a wonderful time  here..many staff always with a smile. .rooms are clean and big with plenty of  diff options..we stayed in a delux room. Next time we will choose a suite or cottage..restaurant  has a fabulous beeakfast with so much to",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r646665397-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "greekbeak",
+            "rate": "50",
+            "location": "",
+            "quotes": "All about the Staff \ud83d\udc4c",
+            "reviewdate": "Jan 2019",
+            "review": "A very nice green resort where you can forget you're in Kuta once you step inside. Very good rooms with the most comfortable beds. Breakfast was decent as is the pool area which could benefit from working WiFi and somehow cooling as it is actual bath temperature. What makes this",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r646564627-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "greekbeak",
+            "rate": "50",
+            "location": "",
+            "quotes": "All about the Staff \ud83d\udc4c",
+            "reviewdate": "Jan 2019",
+            "review": "A very nice green resort where you can forget you're in Kuta once you step inside. Very good rooms with the most comfortable beds. Breakfast was decent as is the pool area which could benefit from working WiFi and somehow cooling as it is actual bath temperature. What makes this",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r646564627-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "greekbeak",
+            "rate": "50",
+            "location": "",
+            "quotes": "All about the Staff \ud83d\udc4c",
+            "reviewdate": "Jan 2019",
+            "review": "A very nice green resort where you can forget you're in Kuta once you step inside. Very good rooms with the most comfortable beds. Breakfast was decent as is the pool area which could benefit from working WiFi and somehow cooling as it is actual bath temperature. What makes this",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r646564627-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "greekbeak",
+            "rate": "50",
+            "location": "",
+            "quotes": "All about the Staff \ud83d\udc4c",
+            "reviewdate": "Jan 2019",
+            "review": "A very nice green resort where you can forget you're in Kuta once you step inside. Very good rooms with the most comfortable beds. Breakfast was decent as is the pool area which could benefit from working WiFi and somehow cooling as it is actual bath temperature. What makes this",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r646564627-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "greekbeak",
+            "rate": "50",
+            "location": "",
+            "quotes": "All about the Staff \ud83d\udc4c",
+            "reviewdate": "Jan 2019",
+            "review": "A very nice green resort where you can forget you're in Kuta once you step inside. Very good rooms with the most comfortable beds. Breakfast was decent as is the pool area which could benefit from working WiFi and somehow cooling as it is actual bath temperature. What makes this",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r646564627-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "greekbeak",
+            "rate": "50",
+            "location": "",
+            "quotes": "All about the Staff \ud83d\udc4c",
+            "reviewdate": "Jan 2019",
+            "review": "A very nice green resort where you can forget you're in Kuta once you step inside. Very good rooms with the most comfortable beds. Breakfast was decent as is the pool area which could benefit from working WiFi and somehow cooling as it is actual bath temperature. What makes this",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r646564627-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "MJM2629",
+            "rate": "50",
+            "location": "",
+            "quotes": "All about the Staff \ud83d\udc4c",
+            "reviewdate": "Jan 2019",
+            "review": "A very nice green resort where you can forget you're in Kuta once you step inside. Very good rooms with the most comfortable beds. Breakfast was decent as is the pool area which could benefit from working WiFi and somehow cooling as it is actual bath temperature. What makes this",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r646564627-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Shrez999",
+            "rate": "50",
+            "location": "",
+            "quotes": "All about the Staff \ud83d\udc4c",
+            "reviewdate": "Jan 2019",
+            "review": "A very nice green resort where you can forget you're in Kuta once you step inside. Very good rooms with the most comfortable beds. Breakfast was decent as is the pool area which could benefit from working WiFi and somehow cooling as it is actual bath temperature. What makes this",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r646564627-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Delta Wisata",
+            "rate": "50",
+            "location": "",
+            "quotes": "All about the Staff \ud83d\udc4c",
+            "reviewdate": "Nov 2018",
+            "review": "A very nice green resort where you can forget you're in Kuta once you step inside. Very good rooms with the most comfortable beds. Breakfast was decent as is the pool area which could benefit from working WiFi and somehow cooling as it is actual bath temperature. What makes this",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r646564627-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "LizBallarat",
+            "rate": "50",
+            "location": "",
+            "quotes": "All about the Staff \ud83d\udc4c",
+            "reviewdate": "Nov 2018",
+            "review": "A very nice green resort where you can forget you're in Kuta once you step inside. Very good rooms with the most comfortable beds. Breakfast was decent as is the pool area which could benefit from working WiFi and somehow cooling as it is actual bath temperature. What makes this",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r646564627-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Ian B",
+            "rate": "50",
+            "location": "",
+            "quotes": "All about the Staff \ud83d\udc4c",
+            "reviewdate": "Aug 2018",
+            "review": "A very nice green resort where you can forget you're in Kuta once you step inside. Very good rooms with the most comfortable beds. Breakfast was decent as is the pool area which could benefit from working WiFi and somehow cooling as it is actual bath temperature. What makes this",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r646564627-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Vladimir B",
+            "rate": "50",
+            "location": "",
+            "quotes": "All about the Staff \ud83d\udc4c",
+            "reviewdate": "Jan 2019",
+            "review": "A very nice green resort where you can forget you're in Kuta once you step inside. Very good rooms with the most comfortable beds. Breakfast was decent as is the pool area which could benefit from working WiFi and somehow cooling as it is actual bath temperature. What makes this",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r646564627-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Mary S",
+            "rate": "50",
+            "location": "",
+            "quotes": "All about the Staff \ud83d\udc4c",
+            "reviewdate": "Jan 2019",
+            "review": "A very nice green resort where you can forget you're in Kuta once you step inside. Very good rooms with the most comfortable beds. Breakfast was decent as is the pool area which could benefit from working WiFi and somehow cooling as it is actual bath temperature. What makes this",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r646564627-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Chriselle B",
+            "rate": "50",
+            "location": "",
+            "quotes": "All about the Staff \ud83d\udc4c",
+            "reviewdate": "Dec 2018",
+            "review": "A very nice green resort where you can forget you're in Kuta once you step inside. Very good rooms with the most comfortable beds. Breakfast was decent as is the pool area which could benefit from working WiFi and somehow cooling as it is actual bath temperature. What makes this",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r646564627-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Steve Parkinson",
+            "rate": "50",
+            "location": "",
+            "quotes": "All about the Staff \ud83d\udc4c",
+            "reviewdate": "Nov 2018",
+            "review": "A very nice green resort where you can forget you're in Kuta once you step inside. Very good rooms with the most comfortable beds. Breakfast was decent as is the pool area which could benefit from working WiFi and somehow cooling as it is actual bath temperature. What makes this",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r646564627-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "mumneedsaholiday65",
+            "rate": "50",
+            "location": "",
+            "quotes": "All about the Staff \ud83d\udc4c",
+            "reviewdate": "Nov 2018",
+            "review": "A very nice green resort where you can forget you're in Kuta once you step inside. Very good rooms with the most comfortable beds. Breakfast was decent as is the pool area which could benefit from working WiFi and somehow cooling as it is actual bath temperature. What makes this",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r646564627-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Mary S",
+            "rate": "40",
+            "location": "",
+            "quotes": "We have just had our 5th visit to Seaview Kuta Boutique",
+            "reviewdate": "Jan 2019",
+            "review": "After numerous stays at the beautiful hotel we will be back again this year  The rooms are lovely  The staff and amenities are what makes us come back  Cannot recommend high enough looking forward to our stay in 2019",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r646154757-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "hcrowles",
+            "rate": "50",
+            "location": "",
+            "quotes": "Perfect holiday",
+            "reviewdate": "Jan 2019",
+            "review": "Stayed once again at The Kuta Seaview and could not have had a better stay.  The staff are amazing, in particular Hardi went above and beyond to make our stay the best experience.  We just love this place and have been back many many times. The food, rooms, staff, grounds and",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r646136024-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Colincfc",
+            "rate": "40",
+            "location": "",
+            "quotes": "Lovely pool rooms quite small",
+            "reviewdate": "Jan 2019",
+            "review": "Stayed here for 4 days in July, nice & central location opposite the beach, friendly staff nice food & drink at the beach bar, our room not far from the pool was smaller than we thought it would be & very dark, also the cats make a screeching noise at night outside our room",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r644074172-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Ben O",
+            "rate": "50",
+            "location": "",
+            "quotes": "Great Hotel, across the street from the beach",
+            "reviewdate": "Jan 2019",
+            "review": "I stayed here for 4 nights. It's an easy ride from the airport after a long flight. The staff was so helpful and welcoming. The rooms are clean and private. Great  atmosphere by the pool and the restaurant for dinner is surprisingly good. Not to mention a fantastic breakfast",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r643929721-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Towny",
+            "rate": "50",
+            "location": "",
+            "quotes": "Beautiful people beautiful resort",
+            "reviewdate": "Jan 2019",
+            "review": "Wow where do I start I have stayed in Bali numerous times and coming to stay at Kuta Seaview was one of my most wonderful experiences. It was like I have gained a new family. All of the staff were so friendly and helpful nothing was to hard for them . The accommodation is what a",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r643767087-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Towny",
+            "rate": "50",
+            "location": "",
+            "quotes": "Beautiful people beautiful resort",
+            "reviewdate": "Jan 2019",
+            "review": "Wow where do I start I have stayed in Bali numerous times and coming to stay at Kuta Seaview was one of my most wonderful experiences. It was like I have gained a new family. All of the staff were so friendly and helpful nothing was to hard for them . The accommodation is what a",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r643767087-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Towny",
+            "rate": "50",
+            "location": "",
+            "quotes": "Beautiful people beautiful resort",
+            "reviewdate": "Jan 2019",
+            "review": "Wow where do I start I have stayed in Bali numerous times and coming to stay at Kuta Seaview was one of my most wonderful experiences. It was like I have gained a new family. All of the staff were so friendly and helpful nothing was to hard for them . The accommodation is what a",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r643767087-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Towny",
+            "rate": "50",
+            "location": "",
+            "quotes": "Beautiful people beautiful resort",
+            "reviewdate": "Jan 2019",
+            "review": "Wow where do I start I have stayed in Bali numerous times and coming to stay at Kuta Seaview was one of my most wonderful experiences. It was like I have gained a new family. All of the staff were so friendly and helpful nothing was to hard for them . The accommodation is what a",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r643767087-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Towny",
+            "rate": "50",
+            "location": "",
+            "quotes": "Beautiful people beautiful resort",
+            "reviewdate": "Jan 2019",
+            "review": "Wow where do I start I have stayed in Bali numerous times and coming to stay at Kuta Seaview was one of my most wonderful experiences. It was like I have gained a new family. All of the staff were so friendly and helpful nothing was to hard for them . The accommodation is what a",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r643767087-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Towny",
+            "rate": "50",
+            "location": "",
+            "quotes": "Beautiful people beautiful resort",
+            "reviewdate": "Jan 2019",
+            "review": "Wow where do I start I have stayed in Bali numerous times and coming to stay at Kuta Seaview was one of my most wonderful experiences. It was like I have gained a new family. All of the staff were so friendly and helpful nothing was to hard for them . The accommodation is what a",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r643767087-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "MJM2629",
+            "rate": "50",
+            "location": "",
+            "quotes": "Beautiful people beautiful resort",
+            "reviewdate": "Jan 2019",
+            "review": "Wow where do I start I have stayed in Bali numerous times and coming to stay at Kuta Seaview was one of my most wonderful experiences. It was like I have gained a new family. All of the staff were so friendly and helpful nothing was to hard for them . The accommodation is what a",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r643767087-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Shrez999",
+            "rate": "50",
+            "location": "",
+            "quotes": "Beautiful people beautiful resort",
+            "reviewdate": "Jan 2019",
+            "review": "Wow where do I start I have stayed in Bali numerous times and coming to stay at Kuta Seaview was one of my most wonderful experiences. It was like I have gained a new family. All of the staff were so friendly and helpful nothing was to hard for them . The accommodation is what a",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r643767087-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Delta Wisata",
+            "rate": "50",
+            "location": "",
+            "quotes": "Beautiful people beautiful resort",
+            "reviewdate": "Nov 2018",
+            "review": "Wow where do I start I have stayed in Bali numerous times and coming to stay at Kuta Seaview was one of my most wonderful experiences. It was like I have gained a new family. All of the staff were so friendly and helpful nothing was to hard for them . The accommodation is what a",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r643767087-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "LizBallarat",
+            "rate": "50",
+            "location": "",
+            "quotes": "Beautiful people beautiful resort",
+            "reviewdate": "Nov 2018",
+            "review": "Wow where do I start I have stayed in Bali numerous times and coming to stay at Kuta Seaview was one of my most wonderful experiences. It was like I have gained a new family. All of the staff were so friendly and helpful nothing was to hard for them . The accommodation is what a",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r643767087-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Ian B",
+            "rate": "50",
+            "location": "",
+            "quotes": "Beautiful people beautiful resort",
+            "reviewdate": "Aug 2018",
+            "review": "Wow where do I start I have stayed in Bali numerous times and coming to stay at Kuta Seaview was one of my most wonderful experiences. It was like I have gained a new family. All of the staff were so friendly and helpful nothing was to hard for them . The accommodation is what a",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r643767087-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Vladimir B",
+            "rate": "50",
+            "location": "",
+            "quotes": "Beautiful people beautiful resort",
+            "reviewdate": "Jan 2019",
+            "review": "Wow where do I start I have stayed in Bali numerous times and coming to stay at Kuta Seaview was one of my most wonderful experiences. It was like I have gained a new family. All of the staff were so friendly and helpful nothing was to hard for them . The accommodation is what a",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r643767087-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Mary S",
+            "rate": "50",
+            "location": "",
+            "quotes": "Beautiful people beautiful resort",
+            "reviewdate": "Jan 2019",
+            "review": "Wow where do I start I have stayed in Bali numerous times and coming to stay at Kuta Seaview was one of my most wonderful experiences. It was like I have gained a new family. All of the staff were so friendly and helpful nothing was to hard for them . The accommodation is what a",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r643767087-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Chriselle B",
+            "rate": "50",
+            "location": "",
+            "quotes": "Beautiful people beautiful resort",
+            "reviewdate": "Dec 2018",
+            "review": "Wow where do I start I have stayed in Bali numerous times and coming to stay at Kuta Seaview was one of my most wonderful experiences. It was like I have gained a new family. All of the staff were so friendly and helpful nothing was to hard for them . The accommodation is what a",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r643767087-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Steve Parkinson",
+            "rate": "50",
+            "location": "",
+            "quotes": "Beautiful people beautiful resort",
+            "reviewdate": "Nov 2018",
+            "review": "Wow where do I start I have stayed in Bali numerous times and coming to stay at Kuta Seaview was one of my most wonderful experiences. It was like I have gained a new family. All of the staff were so friendly and helpful nothing was to hard for them . The accommodation is what a",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r643767087-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "mumneedsaholiday65",
+            "rate": "50",
+            "location": "",
+            "quotes": "Beautiful people beautiful resort",
+            "reviewdate": "Nov 2018",
+            "review": "Wow where do I start I have stayed in Bali numerous times and coming to stay at Kuta Seaview was one of my most wonderful experiences. It was like I have gained a new family. All of the staff were so friendly and helpful nothing was to hard for them . The accommodation is what a",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r643767087-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Chinna",
+            "rate": "50",
+            "location": "",
+            "quotes": "Great experience with family ",
+            "reviewdate": "Jan 2019",
+            "review": "Friendly management with prompt service for any questions we had, nice pool and scenic walkway, good rooms, nice breakfast and dinner at Rosso Vivo restaurant (in resort), spa was also good, very close to beach, overall enjoyed our stay  ",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r643660983-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Mohammed",
+            "rate": "50",
+            "location": "",
+            "quotes": "My experience at kuta seaview",
+            "reviewdate": "Jan 2019",
+            "review": "The hotel located in the center of the activities at jalan pantai in kuta,also a few steps from the shore. The hotel has a very nice stuff and people at administration are welling to help at anytime.  Really I enjoyed staying in this hotel.   Thanks for all stuff and members.",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r643479991-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Eman",
+            "rate": "50",
+            "location": "",
+            "quotes": "Excellent experience",
+            "reviewdate": "Jan 2019",
+            "review": "Big thanks to the whole team of Kuta Seaview hotel for their hospitality, they made our staying enjoyable.  The place was fantastic,clean and provides what you needs in everyday basis. And what I like the most it is calm place and suitable for a family vacation.",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r643475674-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Vijay S",
+            "rate": "20",
+            "location": "",
+            "quotes": "Good Infrastructure, Not so good experience",
+            "reviewdate": "Jan 2019",
+            "review": "Good things first...  1) It's a beautiful property in terms of infrastructure...the fact that a lot of passion has gone into making it is visible in all aspects of the hotel design.  2) Room cleaning: I have never seen such efficient and proactive room cleaning in any other",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r643431715-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "MrPal304306",
+            "rate": "40",
+            "location": "",
+            "quotes": "good clean property",
+            "reviewdate": "Jan 2019",
+            "review": "great location with many commercial establishments near by inlcuding the beach. However disappointed to book a sea facing room paying extra, not to be able to see the sea at all :(  breakfast was great with many options (indonesian and continental)",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r643259513-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "MrPal304306",
+            "rate": "40",
+            "location": "",
+            "quotes": "good clean property",
+            "reviewdate": "Jan 2019",
+            "review": "great location with many commercial establishments near by inlcuding the beach. However disappointed to book a sea facing room paying extra, not to be able to see the sea at all :(  breakfast was great with many options (indonesian and continental)",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r643259513-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "MrPal304306",
+            "rate": "40",
+            "location": "",
+            "quotes": "good clean property",
+            "reviewdate": "Jan 2019",
+            "review": "great location with many commercial establishments near by inlcuding the beach. However disappointed to book a sea facing room paying extra, not to be able to see the sea at all :(  breakfast was great with many options (indonesian and continental)",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r643259513-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "MrPal304306",
+            "rate": "40",
+            "location": "",
+            "quotes": "good clean property",
+            "reviewdate": "Jan 2019",
+            "review": "great location with many commercial establishments near by inlcuding the beach. However disappointed to book a sea facing room paying extra, not to be able to see the sea at all :(  breakfast was great with many options (indonesian and continental)",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r643259513-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "MrPal304306",
+            "rate": "40",
+            "location": "",
+            "quotes": "good clean property",
+            "reviewdate": "Jan 2019",
+            "review": "great location with many commercial establishments near by inlcuding the beach. However disappointed to book a sea facing room paying extra, not to be able to see the sea at all :(  breakfast was great with many options (indonesian and continental)",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r643259513-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "MrPal304306",
+            "rate": "40",
+            "location": "",
+            "quotes": "good clean property",
+            "reviewdate": "Jan 2019",
+            "review": "great location with many commercial establishments near by inlcuding the beach. However disappointed to book a sea facing room paying extra, not to be able to see the sea at all :(  breakfast was great with many options (indonesian and continental)",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r643259513-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "MJM2629",
+            "rate": "40",
+            "location": "",
+            "quotes": "good clean property",
+            "reviewdate": "Jan 2019",
+            "review": "great location with many commercial establishments near by inlcuding the beach. However disappointed to book a sea facing room paying extra, not to be able to see the sea at all :(  breakfast was great with many options (indonesian and continental)",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r643259513-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Shrez999",
+            "rate": "40",
+            "location": "",
+            "quotes": "good clean property",
+            "reviewdate": "Jan 2019",
+            "review": "great location with many commercial establishments near by inlcuding the beach. However disappointed to book a sea facing room paying extra, not to be able to see the sea at all :(  breakfast was great with many options (indonesian and continental)",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r643259513-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Delta Wisata",
+            "rate": "40",
+            "location": "",
+            "quotes": "good clean property",
+            "reviewdate": "Nov 2018",
+            "review": "great location with many commercial establishments near by inlcuding the beach. However disappointed to book a sea facing room paying extra, not to be able to see the sea at all :(  breakfast was great with many options (indonesian and continental)",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r643259513-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "LizBallarat",
+            "rate": "40",
+            "location": "",
+            "quotes": "good clean property",
+            "reviewdate": "Nov 2018",
+            "review": "great location with many commercial establishments near by inlcuding the beach. However disappointed to book a sea facing room paying extra, not to be able to see the sea at all :(  breakfast was great with many options (indonesian and continental)",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r643259513-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Ian B",
+            "rate": "40",
+            "location": "",
+            "quotes": "good clean property",
+            "reviewdate": "Aug 2018",
+            "review": "great location with many commercial establishments near by inlcuding the beach. However disappointed to book a sea facing room paying extra, not to be able to see the sea at all :(  breakfast was great with many options (indonesian and continental)",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r643259513-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Vladimir B",
+            "rate": "40",
+            "location": "",
+            "quotes": "good clean property",
+            "reviewdate": "Jan 2019",
+            "review": "great location with many commercial establishments near by inlcuding the beach. However disappointed to book a sea facing room paying extra, not to be able to see the sea at all :(  breakfast was great with many options (indonesian and continental)",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r643259513-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Mary S",
+            "rate": "40",
+            "location": "",
+            "quotes": "good clean property",
+            "reviewdate": "Jan 2019",
+            "review": "great location with many commercial establishments near by inlcuding the beach. However disappointed to book a sea facing room paying extra, not to be able to see the sea at all :(  breakfast was great with many options (indonesian and continental)",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r643259513-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Chriselle B",
+            "rate": "40",
+            "location": "",
+            "quotes": "good clean property",
+            "reviewdate": "Dec 2018",
+            "review": "great location with many commercial establishments near by inlcuding the beach. However disappointed to book a sea facing room paying extra, not to be able to see the sea at all :(  breakfast was great with many options (indonesian and continental)",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r643259513-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "Steve Parkinson",
+            "rate": "40",
+            "location": "",
+            "quotes": "good clean property",
+            "reviewdate": "Nov 2018",
+            "review": "great location with many commercial establishments near by inlcuding the beach. However disappointed to book a sea facing room paying extra, not to be able to see the sea at all :(  breakfast was great with many options (indonesian and continental)",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r643259513-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        },
+        {
+            "member": "mumneedsaholiday65",
+            "rate": "40",
+            "location": "",
+            "quotes": "good clean property",
+            "reviewdate": "Nov 2018",
+            "review": "great location with many commercial establishments near by inlcuding the beach. However disappointed to book a sea facing room paying extra, not to be able to see the sea at all :(  breakfast was great with many options (indonesian and continental)",
+            "link": "https://www.tripadvisor.com/ShowUserReviews-g297697-d1461739-r643259513-Kuta_Seaview_Boutique_Resort_Spa-Kuta_Kuta_District_Bali.html",
+            "avatar": ""
+        }
+    ]
+}
