@@ -13,9 +13,6 @@ class PrestayController extends BaseController
 {
     public function index()
     {
-
-
-
         $prestays = Contactprestay::all();
         if(!$prestays->isEmpty())
         {
