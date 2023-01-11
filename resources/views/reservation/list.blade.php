@@ -66,9 +66,9 @@
                                                 @if($contact->prestay_status != null and $contact->prestay_status['next_action'] != 'NOACTION')
                                                     @if($contact->prestay_status['next_action'] == 'SENDTOWEB')
                                                         <i class="fa fa-check-square" style="font-size: x-large;" data-toggle="tooltip" data-placement="top" title="Data ready to send"></i>
-                                                    @elseif($contact->prestay_status['next_action'] == 'FETCHFROMWEB' && $contact->prestay_status['sendtoguest_at'] == null)
+                                                    @elseif($contact->prestay_status['next_action'] == 'FETCHFROMWEB' && $contact->sendtoguest_at['sendtoguest_at'] == null)
                                                         <i class="fa fa-check-square" style="font-size: x-large;" data-toggle="tooltip" data-placement="top" title="Data ready to send"></i>
-                                                    @elseif($contact->prestay_status['next_action'] == 'FETCHFROMWEB' && $contact->prestay_status['sendtoguest_at'] != null)
+                                                    @elseif($contact->prestay_status['next_action'] == 'FETCHFROMWEB' && $contact->sendtoguest_at['sendtoguest_at'] != null)
                                                         <i class="fa fa-check-square" style="font-size: x-large;" data-toggle="tooltip" data-placement="top" title="Data ready to send"></i>
                                                         <i class="fa fa-envelope-square" style="font-size: x-large;" data-toggle="tooltip" data-placement="top" title="Data sent to guest"></i>
                                                     @elseif($contact->prestay_status['next_action'] == 'COMPLETED')
