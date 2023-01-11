@@ -35,6 +35,7 @@ class ReservationController extends Controller
             $contacts[$key]['roomtype'] = $val->roomtype;
             $contacts[$key]['folio_master'] = $val->folio_master;
             $contacts[$key]['prestay_status'] = Contactprestay::select('next_action')->where('contact_id', $val->profileid)->first();
+            $contacts[$key]['sendtoguest_at'] = Contactprestay::select('sendtoguest_at')->where('contact_id', $val->profileid)->first();
             $contacts[$key]['registration_code'] = Contactprestay::select(['registration_code'])->where('folio_master',$val->folio_master)->first();
         }
 
