@@ -8,6 +8,7 @@ use App\Models\ProfileFolio;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use function PHPUnit\Framework\isEmpty;
 
 class ReservationController extends Controller
 {
@@ -24,21 +25,24 @@ class ReservationController extends Controller
             ->orderBy('dateci','ASC')
             ->get();
 
-        foreach ($profilesfolio as $key=>$val)
-        {
-            $contacts[] = Contact::find($val->profileid);
-            $contacts[$key]['foliostatus'] = $val->foliostatus;
-            $contacts[$key]['dateci'] = $val->dateci;
-            $contacts[$key]['dateco'] = $val->dateco;
-            $contacts[$key]['source'] = $val->source;
-            $contacts[$key]['room'] = $val->room;
-            $contacts[$key]['roomtype'] = $val->roomtype;
-            $contacts[$key]['folio_master'] = $val->folio_master;
-            $contacts[$key]['prestay_status'] = Contactprestay::select('next_action')->where('contact_id', $val->profileid)->first();
-            $contacts[$key]['sendtoguest_at'] = Contactprestay::select('sendtoguest_at')->where('contact_id', $val->profileid)->first();
-            $contacts[$key]['registration_code'] = Contactprestay::select(['registration_code'])->where('folio_master',$val->folio_master)->first();
+
+        if(!!$profilesfolio){
+            foreach ($profilesfolio as $key=>$val)
+            {
+                $contacts[] = Contact::find($val->profileid);
+                $contacts[$key]['foliostatus'] = $val->foliostatus;
+                $contacts[$key]['dateci'] = $val->dateci;
+                $contacts[$key]['dateco'] = $val->dateco;
+                $contacts[$key]['source'] = $val->source;
+                $contacts[$key]['room'] = $val->room;
+                $contacts[$key]['roomtype'] = $val->roomtype;
+                $contacts[$key]['folio_master'] = $val->folio_master;
+                $contacts[$key]['prestay_status'] = Contactprestay::select('next_action')->where('contact_id', $val->profileid)->first();
+                $contacts[$key]['sendtoguest_at'] = Contactprestay::select('sendtoguest_at')->where('contact_id', $val->profileid)->first();
+                $contacts[$key]['registration_code'] = Contactprestay::select(['registration_code'])->where('folio_master',$val->folio_master)->first();
+            }
         }
-//dd($contacts);
+
         return view('reservation.list')->with(compact('contacts'));
     }
     public function registrationformprint ($registrationformcode){
@@ -50,8 +54,7 @@ class ReservationController extends Controller
         $completeContactPrestay['roomtype'] = $profilesFolio->roomtype == null ? '-':$profilesFolio->roomtype;
         $completeContactPrestay['pax'] = $profilesFolio->pax == null ? '-':$profilesFolio->pax;
         $completeContactPrestays = $completeContactPrestay->toarray();
-//dd($profilesFolio);
-//        return view('reservation.registrationpdf',$completeContactPrestays);
+
     $pdf = PDF::loadView('reservation.registrationpdf',$completeContactPrestays);
     return $pdf->download('Registration Form folio '.$completeContactPrestay['folio_master'].' .pdf');
     }

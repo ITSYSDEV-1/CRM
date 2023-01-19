@@ -185,35 +185,5 @@ Auth::routes();
 
 //Route for testing
 Route::get('test', function () {
-    $configPrestay=ConfigPrestay::find(1);
-    $mail=new PepipostMail();
-    if($configPrestay->active=='y') {
-        $configPrestay_templ = MailEditor::find($configPrestay->template_id);
-        $excluded = ExcludedEmail::pluck('email')->all();
-        $contact_lists = [];
-        $contactPrestayLists = Contactprestay::select('contact_prestays.id','contacts.fname','contacts.lname','contacts.email','contact_prestays.dateci', 'contact_prestays.registration_code')
-            ->leftJoin('contacts','contacts.contactid','=','contact_prestays.contact_id')
-            ->leftJoin('profilesfolio','contacts.contactid','=','profilesfolio.profileid')
-            ->where('sendtoguest_at', null)
-            ->where('registration_code', '!=', null)
-            ->where('next_action', 'FETCHFROMWEB')
-            ->whereNotIn('contacts.email', $excluded)->get();
-        foreach ($contactPrestayLists as $contactPrestay) {
-            if (Carbon::parse($contactPrestay->dateci)->addDay($configPrestay->sendafter)->format('Y-m-d') == Carbon::now()->format('Y-m-d')) {
-                array_push($contact_lists, $contactPrestay);
-            }
-        }
 
-        //Kirim email ke list email Prestay
-        foreach ($contact_lists as $contactlist){
-            dd($contactPrestay->registration_code);
-            $mail->send($contactlist,$configPrestay_templ,'prestay,'.env('UNIT').'','prestay',null,$contactPrestay->registration_code);
-            $contact_prestay = Contactprestay::find($contactlist->id);
-            $contact_prestay->update(
-                [
-                    'sendtoguest_at' => Carbon::now(),
-                ]
-            );
-        }
-    }
 });
