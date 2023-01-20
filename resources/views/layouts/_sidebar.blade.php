@@ -29,11 +29,11 @@
                         <li><a href="{{url('reservation')}}">Folio</a></li>
                 </ul>
             </li>
-            <li><a><i class="fa fa-envelope"></i> In Stay<span class="fa fa-chevron-down"></span></a>
-                <ul class="nav child_menu">
-                        <li><a href="{{url('inhouse')}}">Folio</a></li>
-                </ul>
-            </li>
+{{--            <li><a><i class="fa fa-envelope"></i> In Stay<span class="fa fa-chevron-down"></span></a>--}}
+{{--                <ul class="nav child_menu">--}}
+{{--                        <li><a href="{{url('inhouse')}}">Folio</a></li>--}}
+{{--                </ul>--}}
+{{--            </li>--}}
         </ul>
     </div>
 </div>
