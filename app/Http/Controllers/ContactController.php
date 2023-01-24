@@ -325,7 +325,6 @@ public function contactslist(Request $request){
                 $rev+=$transaction->revenue;
             }
 
-
             $nestedData['contactid']=$list->contactid;
             $nestedData['fname']=$list->fname;
             $nestedData['lname']=$list->lname;
@@ -392,6 +391,7 @@ public function contactslist(Request $request){
             ->whereColumn('profilesfolio.folio_master','profilesfolio.folio')
             ->get();
         $totalnight = 0;
+//        dd($contacts);
         foreach ($contacts[0]->transaction as $transaction)
         {
             $night = ProfileFolio::select('dateci','dateco')->where('folio_master', $transaction->resv_id)->first();

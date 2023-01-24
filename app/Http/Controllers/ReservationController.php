@@ -25,8 +25,13 @@ class ReservationController extends Controller
             ->orderBy('dateci','ASC')
             ->get();
 
+//        dd(isset($profilesfolio));
 
-        if(!!$profilesfolio){
+        if(isset($profilesfolio)){
+            $contacts = [];
+        }
+        else
+        {
             foreach ($profilesfolio as $key=>$val)
             {
                 $contacts[] = Contact::find($val->profileid);
@@ -41,8 +46,8 @@ class ReservationController extends Controller
                 $contacts[$key]['sendtoguest_at'] = Contactprestay::select('sendtoguest_at')->where('contact_id', $val->profileid)->first();
                 $contacts[$key]['registration_code'] = Contactprestay::select(['registration_code'])->where('folio_master',$val->folio_master)->first();
             }
-        }
 
+        }
         return view('reservation.list')->with(compact('contacts'));
     }
     public function registrationformprint ($registrationformcode){

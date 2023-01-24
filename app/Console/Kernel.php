@@ -16,15 +16,15 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
 
-//        $schedule->command('poststay')->dailyAt('15:00');
+        $schedule->command('poststay')->dailyAt('15:00');
 //        $schedule->command('prestay')->dailyAt('15:00');
-//        $schedule->command('updatestatus')->dailyAt('15:30');
-//        $schedule->command('birthdaymail')->dailyAt('11:59');
-//        $schedule->command('campaign')->everyMinute();
-//        $schedule->command('missyou')->dailyAt('11:59');
-//        $schedule->command('syncemailresponse')->cron('* */5 * * *');
-//        $schedule->command('emaillog')->cron('* */5 * * *');
-//        $schedule->command('validateemail')->hourly();
+        $schedule->command('updatestatus')->dailyAt('15:30');
+        $schedule->command('birthdaymail')->dailyAt('11:59');
+        $schedule->command('campaign')->everyMinute();
+        $schedule->command('missyou')->dailyAt('11:59');
+        $schedule->command('syncemailresponse')->cron('* */5 * * *');
+        $schedule->command('emaillog')->cron('* */5 * * *');
+        $schedule->command('validateemail')->hourly();
     }
 
     /**

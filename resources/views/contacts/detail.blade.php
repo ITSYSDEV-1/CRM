@@ -377,8 +377,8 @@
 
                                                                             <tr class="align-center">
                                                                                 <td>{{$contact->resv_id}}</td>
-                                                                                <td>{{\Carbon\Carbon::parse($contact->dateci)->format('d M Y')}}</td>
-                                                                                <td>{{\Carbon\Carbon::parse($contact->dateco)->format('d M Y')}}</td>
+                                                                                <td>{{$contact->dateci == null ? "" : \Carbon\Carbon::parse($contact->dateci)->format('d M Y')}}</td>
+                                                                                <td>{{$contact->dateco == null ? "" : \Carbon\Carbon::parse($contact->dateco)->format('d M Y')}}</td>
                                                                                 <td>{{\Carbon\Carbon::parse($contact->dateci)->diffInDays(\Carbon\Carbon::parse($contact->dateco))}}</td>
                                                                                 <td>{{$contact->source }}</td>
                                                                                 <td>{{$contact->room}}</td>

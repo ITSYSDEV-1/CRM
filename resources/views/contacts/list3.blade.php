@@ -50,7 +50,6 @@
 @endsection
 @section('script')
     <script>
-
         $(document).ready(function(){
             var item=[];
             var path="{{ asset('countries.json') }}"
@@ -112,7 +111,8 @@
 
                             return '<a href="{{ url('contacts/detail/') }}'+'/'+id+'" >'+ data +' ' +lname+'</a>'
                         }
-                    },{
+                    },
+                     {
                         "targets":2,
                         "visible":false,
                     },{
@@ -140,10 +140,9 @@
                         }
                     },{
                         "targets":9,
-                        "sortable":true,
                         "render":function (data,type,row) {
                             if(moment(data).isValid()){
-                                return moment(data).format("MMM DD YYYY")
+                                return moment(data).format('DD MMM YYYY')
                             }else {
                                 return ''
                             }

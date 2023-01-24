@@ -21,6 +21,7 @@ use Carbon\Carbon;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ContactController;
 use App\Models\Contact;
@@ -185,5 +186,5 @@ Auth::routes();
 
 //Route for testing
 Route::get('test', function () {
-
+ 
 });
