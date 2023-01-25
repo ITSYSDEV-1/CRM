@@ -25,9 +25,7 @@ class ReservationController extends Controller
             ->orderBy('dateci','ASC')
             ->get();
 
-//        dd(isset($profilesfolio));
-
-        if(isset($profilesfolio)){
+        if(empty($profilesfolio)){
             $contacts = [];
         }
         else

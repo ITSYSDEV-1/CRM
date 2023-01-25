@@ -186,5 +186,5 @@ Auth::routes();
 
 //Route for testing
 Route::get('test', function () {
- 
+
 });
