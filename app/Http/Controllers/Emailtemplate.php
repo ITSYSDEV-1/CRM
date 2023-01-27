@@ -191,20 +191,14 @@ class Emailtemplate extends Controller
                 }
 
                 $img->removeAttribute('src');
-                $img->setAttribute('src', 'https://'.env('FTP_TEMPLATE_PATH').''.$pth.'/'.$name);
+                $img->setAttribute('src', 'https://'.env('FTP_TEMPLATE_PATH').'/'.$pth.'/'.$name);
                 $img->setAttribute('url','');
                 $img->setAttribute('target','_blank');
 
             }
 
         }
-//        $urls=$dom->getElementsByTagName('a');
-//        foreach ($urls as $key=>$url) {
-//            $data = $url->getAttribute('href');
-////            dd($data);
-////            $encoded = urlencode(urldecode($data));
-////            $url->setAttribute('href',$data);
-//        }
+
         return $detail = $dom->saveHTML($dom->documentElement);
 
     }
