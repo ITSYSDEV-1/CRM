@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\Prestay;
 use App\Models\Birthday;
 use App\Models\ConfigPrestay;
 use App\Models\ConfirmEmail;
@@ -11,7 +12,8 @@ use App\Models\MailEditor;
 use App\Models\PostStay;
 use App\Models\MissYou;
 use App\Models\Configuration;
-use App\Models\Prestay;
+use App\Models\PreStayActivate;
+use App\Models\PreStayActive;
 use DOMDocument;
 use FtpClient\FtpClient;
 use Illuminate\Http\Request;
@@ -183,6 +185,7 @@ class Emailtemplate extends Controller
 
                 $base='public_html/'.env('FTP_TEMPLATE_PATH').'';
                 $image_name = $base.'/'.$pth.'/'.$name;
+
                 if (Storage::disk('ftp')->exists($image_name)){
                    Storage::disk('ftp')->delete($image_name);
                     Storage::disk('ftp')->put($image_name,$data);
@@ -264,7 +267,16 @@ class Emailtemplate extends Controller
         $poststay->update(['active'=>'n']);
         return response(['active'=>false],200);
     }
-
+    }
+    public function prestayActivate(Request $request){
+    $prestay=PreStayActivate::find(1);
+    if ($request->state=='on'){
+        $prestay->update(['active'=>'y']);
+        return response(['active'=>true],200);
+    }else{
+        $prestay->update(['active'=>'n']);
+        return response(['active'=>false],200);
+    }
     }
     //BIRTHDAY CONFIG
     public function birthdayConfig(){

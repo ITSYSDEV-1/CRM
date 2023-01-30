@@ -36,6 +36,9 @@ class MailEditor extends Model
     public function poststay(){
         return $this->hasOne('\App\Models\PostStay','template_id');
     }
+    public function prestayactivate(){
+        return $this->hasOne('\App\Models\PreStayActivate','template_id');
+    }
     public function configprestay(){
         return $this->hasOne('\App\Models\ConfigPrestay','template_id');
     }

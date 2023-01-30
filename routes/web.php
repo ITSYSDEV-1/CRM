@@ -90,6 +90,7 @@ Route::group(['middleware'=>'auth'],function (){
     //Pre Stay Config
     Route::get('email/config/prestay',[Emailtemplate::class,'preStayConfig']);
     Route::post('email/config/prestay/update',[Emailtemplate::class,'preStayUpdate'])->name('prestay.update');
+    Route::post('email/config/prestay/activate',[Emailtemplate::class,'prestayActivate']);
 
     Route::get('email/{id}/review',[ContactController::class,'review']);
     Route::get('email/delivery/status',[MailgunController::class,'delivery']);
@@ -170,6 +171,7 @@ Route::group(['middleware'=>'auth'],function (){
     //  Reservation
     Route::get('reservation',[ReservationController::class,'index']);
     Route::get('reservation/{registrationcode}',[ReservationController::class,'registrationformprint'])->name('registrationformprint');
+
 
     //  In House
     Route::get('inhouse',[InhouseController::class,'index']);

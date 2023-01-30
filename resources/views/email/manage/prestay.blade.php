@@ -94,6 +94,7 @@
             }else {
                 state='off';
             }
+            console.log(state)
             $.ajax({
                 url:'prestay/activate',
                 type:'post',
@@ -102,7 +103,7 @@
                     _token:'{{ csrf_token() }}',
                 },
                 success:function (data) {
-                    if(data['active']==true){
+                    if(data['active'] === true){
                         setSwitchery(mySwitch, true);
                     }else {
                         setSwitchery(mySwitch, false);
