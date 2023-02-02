@@ -4,6 +4,7 @@ use App\Http\Controllers\API\PrestayController;
 use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\InhouseController;
 use App\Http\Controllers\PepipostMail;
+use App\Http\Controllers\PromoprestayController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\Emailtemplate;
 use App\Http\Controllers\EmailTemplateController;
@@ -171,6 +172,7 @@ Route::group(['middleware'=>'auth'],function (){
     //  Reservation
     Route::get('reservation',[ReservationController::class,'index']);
     Route::get('reservation/{registrationcode}',[ReservationController::class,'registrationformprint'])->name('registrationformprint');
+    Route::resource('prestay/promo-configuration',PromoprestayController::class);
 
 
     //  In House

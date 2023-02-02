@@ -212,7 +212,6 @@ class Emailtemplate extends Controller
     }
     public function template(){
         $templ=MailEditor::all();
-//        dd($templ);
         return view('email.manage.list',['template'=>$templ]);
     }
 

@@ -16,7 +16,7 @@
                         <li><a href="{{url('campaigns') }}">Campaign Management</a></li>
                         <li><a href="{{url('segments') }}">Segment Management</a></li>
                         <li><a href="{{url('contacts/external') }}">External Contacts</a></li>
-                        <li><a href="{{url('email/config/prestay')}}">Prestay-Stay Configuration</a></li>
+                        <li><a href="{{url('email/config/prestay')}}">Pre-Stay Configuration</a></li>
                         <li><a href="{{url('email/config/poststay')}}">Post-Stay Configuration</a></li>
                         <li><a href="{{url('email/config/birthday')}}">Birthday Configuration</a></li>
                         <li><a href="{{url('email/config/miss')}}">We Miss You Configuration</a></li>
@@ -27,6 +27,7 @@
             <li><a><i class="fa fa-envelope"></i> Pre Stay <span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
                         <li><a href="{{url('reservation')}}">Folio</a></li>
+                        <li><a href="{{route('promo-configuration.index')}}">Pre-Stay Promo Configuration</a></li>
                 </ul>
             </li>
 {{--            <li><a><i class="fa fa-envelope"></i> In Stay<span class="fa fa-chevron-down"></span></a>--}}

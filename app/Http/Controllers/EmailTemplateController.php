@@ -84,6 +84,8 @@ class EmailTemplateController extends Controller
             'firstname' => '{firstname}',
             'lastname' => '{lastname}',
             'title' => '{title}',
+            'registrationcode' => '{registrationcode}',
+            'promoprestay' => '{promoprestay}',
             'hotelname' =>$config->hotel_name,
             'gmname' => '{gmname}',
         ];
