@@ -43,34 +43,12 @@ class CampaignController extends Controller
 
     public function campaignlist(Request $request){
         $campaign=Campaign::whereHas('schedule')->get();
-//        $columns = array(
-//            0=>'id',
-//            1 =>'name',
-//            2 =>'segment',
-//            3 =>'status',
-//            4 =>'schedule',
-//            5 =>'accepted',
-//            6 =>'delivered',
-//            7 =>'opened',
-//            8 =>'clicked',
-//            9 =>'unsubscribed',
-//            10 =>'failed',
-//            11 =>'rejected',
-//        );
 
         $totalData = $campaign->count();
         $totalFiltered = $totalData;
         $limit = $request->input('length');
         $start = $request->input('start');
         $search=$request->input('search.value');
-//        $campaignlist = Campaign::select()->offset($start)->limit($limit)->orderBy('created_at','desc')->get();
-
-//        if(!empty($search)){
-//            $campaignlist=Campaign::where('name','LIKE',"%$search%")->with('template')->whereHas('schedule')->with('emailresponse')->with('externalSegment')->with('segment')->with('schedule') ->offset($start)->limit($limit)->orderBy('created_at','desc')->get();
-//            $totalFiltered=count($campaignlist);
-//        }else{
-//            $campaignlist=Campaign::with('template')->whereHas('schedule')->with('emailresponse')->with('externalSegment')->with('segment')->with('schedule') ->offset($start)->limit($limit)->orderBy('created_at','desc')->get();
-//        }
 
         if(!empty($search)){
             $campaignlist=Campaign::where('name','LIKE',"%$search%")->offset($start)->limit($limit)->orderBy('created_at','desc')->get();
@@ -104,7 +82,6 @@ class CampaignController extends Controller
                 $nestedData['template']=$item->template;
                 $data[]=$nestedData;
 
-//                return response($data, 400);
             }
 
         }

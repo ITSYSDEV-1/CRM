@@ -159,6 +159,8 @@ class Emailtemplate extends Controller
         $s=[];
         foreach($images as $k => $img) {
             $data = $img->getAttribute('src');
+            //$data = "https://crm.ramayanasuites.com/themes/kuta/assets/mail-template/poststay/logo-rms.png"
+
             $name_space=$img->getAttribute('title');
             $name=str_replace(' ','_',$name_space);
             if (!empty(explode(';', $data)[1])) {

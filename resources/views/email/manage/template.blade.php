@@ -77,9 +77,7 @@
     </script>
 	 <script>
          $('#saveTemplate').on('click',function () {
-//asdasdasdasd
              $('#templateForm').submit()
-
          })
     </script>
 

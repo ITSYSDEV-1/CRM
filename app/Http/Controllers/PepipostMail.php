@@ -49,7 +49,6 @@ class PepipostMail extends Controller
             'lastname' => '{lastname}',
             'title' => '{title}',
             'registrationcode' => '{registrationcode}',
-            'promoprestay' => '{promoprestay}',
             'hotelname' => $config->hotel_name,
             'gmname' => $config->gm_name,
         ];
@@ -65,7 +64,7 @@ class PepipostMail extends Controller
         $body->tags=$tag;
         $emailController->createSendEmail($apikey,$body);
     }
-    public function send($user=null,$template,$tag=null,$type,$campaign=null, $registrationcode=null, $promoprestay=null){
+    public function send($user=null,$template,$tag=null,$type,$campaign=null, $registrationcode=null){
         $tempcontroller=new EmailTemplateController();
         $config=Configuration::find(1);
         $client=new PepipostAPILib\PepipostAPIClient();
@@ -98,8 +97,7 @@ class PepipostMail extends Controller
                 'title' => $this->convertstring($user->salutation),
                 'hotelname' => $config->hotel_name,
                 'gmname' => $config->gm_name,
-                'registrationcode' => $registrationcode,
-                'promoprestay' => $promoprestay,
+                'registrationcode' => $registrationcode
             ];
         }
         if($type=='poststay' || $type=='missyou' || $type=='campaign' || $type=='external' || $type=='testing' || $type=='prestay') {

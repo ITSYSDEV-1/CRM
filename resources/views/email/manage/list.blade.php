@@ -45,7 +45,7 @@
                                                         },
                                                         function(isConfirm){
                                                             if (isConfirm) {
-                                                        //$('#form{{$tem->id}}').submit();
+                                                        {{--$('#form{{$tem->id}}').submit();--}}
                                                             $.ajax({
                                                                 url:'{{ url("template/destroy") }}',
                                                                 type:'POST',
