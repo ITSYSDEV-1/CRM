@@ -24,11 +24,11 @@
                                     <thead>
                                     <th width="10px">No</th>
                                     <th>Name</th>
-                                    <th>Star Date</th>
+                                    <th>Start Date</th>
                                     <th>End Date</th>
-                                    <th>Promo Picture</th>
-                                    <th>Promo Text</th>
-                                    <th>Promo Url</th>
+                                    <th>Event Picture</th>
+                                    <th>Event Text</th>
+                                    <th>Event Url</th>
                                     <th>Manage</th>
                                     </thead>
                                     <tbody>
@@ -80,8 +80,6 @@
                                                     });"><i class="fa  fa-trash" style="font-size: 1.5em"></i> </a>
                                                 <a href="{{ route('promo-configuration.edit',$tem->id) }}" title="Edit"><i class="fa  fa-edit" style="font-size: 1.5em"></i> </a>
                                                 <a href="#myModal{{$tem->id}}" data-toggle="modal" data-target="#myModal{{$tem->id}}"><i class="fa  fa-eye" style="font-size: 1.5em"></i></a>
-{{--                                                <a href="#cloneTemplate{{$tem->id}}" data-toggle="modal" data-target="#cloneTemplate{{$tem->id}}" id="copyTempalte" title="Copy Template" ><i class="fa fa-copy" style="font-size: 1.5em"></i> </a>--}}
-{{--                                                <a href="#testEmail{{ $tem->id }}" data-toggle="modal" data-target="#testEmail{{ $tem->id }}" id="testSendEmail" title="Send Email Test"> <i class="fa fa-send"></i></a>--}}
                                             </td>
                                         </tr>
                                     @endforeach

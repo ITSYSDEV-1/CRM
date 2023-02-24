@@ -62,6 +62,19 @@
         </div>
     </div>
 </div>
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+        {{ Form::label('eventtext','Event Text') }}
+    </div>
+    <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
+        <div class="form-group">
+            <div class="form-line">
+                {{ Form::text('eventtext',$promoprestay->event_text,['class'=>'form-control']) }}
+                {!! $errors->first('eventtext', '<p style="background-color: pink;" class="help-block">:message</p>') !!}
+            </div>
+        </div>
+    </div>
+</div>
 <input type="hidden" name="active" id="priority" value="1" />
 <div class="row clearfix">
     <div class="col-lg-12 ">

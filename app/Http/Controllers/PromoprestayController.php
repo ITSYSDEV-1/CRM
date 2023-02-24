@@ -65,7 +65,7 @@ class PromoprestayController extends Controller
             'name' => 'required|unique:promo_prestays',
             'eventduration' => 'required',
             'eventurl' => 'required',
-            'eventpicture' => 'required'
+            'eventpicture' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048|dimensions:width=500,height=160'
         ],
         [
             'name.required' => 'Event Name tidak boleh kosong !',
@@ -105,6 +105,7 @@ class PromoprestayController extends Controller
         $promoprestay->event_duration = $request->eventduration;
         $promoprestay->event_picture = 'https://'.env('FTP_TEMPLATE_PATH').'/other/'.$filenametostore;
         $promoprestay->event_url = $request->eventurl;
+        $promoprestay->event_text = $request->eventtext;
         $promoprestay->save();
 
 
@@ -153,7 +154,7 @@ class PromoprestayController extends Controller
         $this->validate($request,[
             'name' => 'required|unique:promo_prestays,name,'. $id,
             'eventduration' => 'required',
-            'eventpicture' => 'dimensions:width=',
+            'eventpicture' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048|dimensions:width=500,height=160',
             'eventurl' => 'required',
         ],
         [
@@ -200,6 +201,7 @@ class PromoprestayController extends Controller
             'event_duration' => $request->eventduration,
             'event_picture' => $eventpicture,
             'event_url' => $request->eventurl,
+            'event_text' => $request->eventtext,
         ]);
         return redirect()->route('promo-configuration.index');
     }
@@ -212,7 +214,6 @@ class PromoprestayController extends Controller
      */
     public function destroy(Request $request)
     {
-//        dd($id);
         $promo=Promoprestay::find($request->id);
         $contactpromo = $promo->promoprestaycontact;
         if($contactpromo->isEmpty()){
