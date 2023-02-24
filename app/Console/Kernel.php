@@ -17,7 +17,7 @@ class Kernel extends ConsoleKernel
     {
 
         $schedule->command('poststay')->dailyAt('15:00');
-        $schedule->command('prestay')->dailyAt('15:00');
+//        $schedule->command('prestay')->dailyAt('15:00');
         $schedule->command('updatestatus')->dailyAt('15:30');
         $schedule->command('birthdaymail')->dailyAt('11:59');
         $schedule->command('campaign')->everyMinute();
