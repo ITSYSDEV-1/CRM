@@ -44,6 +44,7 @@
             @endif
             <div class="form-line">
                 {{ Form::file('eventpicture',['class'=>'form-control','required','id'=>'eventpicture']) }}
+                <span style="font-size: 9px">*Dimension : 500 x 160px</span>
                 {!! $errors->first('eventpicture', '<p style="background-color: pink;" class="help-block">:message</p>') !!}
             </div>
         </div>

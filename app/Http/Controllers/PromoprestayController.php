@@ -72,6 +72,7 @@ class PromoprestayController extends Controller
             'name.unique' => 'Event Name sudah terpakai !',
             'eventduration.required' => 'Event Duration tidak boleh kosong !',
             'eventpicture.required' => 'Event Picture tidak boleh kosong !',
+            'eventpicture.dimensions' => 'Dimensi tidak sesuai !',
             'eventurl.required' => 'Event Url tidak boleh kosong !',
         ]);
 

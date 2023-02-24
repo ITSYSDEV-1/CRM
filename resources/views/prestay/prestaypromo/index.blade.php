@@ -43,8 +43,8 @@
                                             <td>{{ $tem->event_url }}</td>
                                             <td>{!! Form::open(['method' => 'DELETE','route' => ['promo-configuration.destroy', $tem->id],'id'=>'form'.$tem->id]) !!}
                                                 {!! Form::close() !!}
-                                                <a href="#" title="Delete Promo" onclick="
-                                                    return swal({title:'Delete Confirmation',text:'This Promo will permanently deleted',type:'warning',                                                        showCancelButton: true,
+                                                <a href="#" title="Delete Event" onclick="
+                                                    return swal({title:'Delete Confirmation',text:'This Event will permanently deleted',type:'warning',                                                        showCancelButton: true,
                                                     confirmButtonColor: '#DD6B55',
                                                     confirmButtonText:'Delete',
                                                     cancelButtonText: 'No',
@@ -64,9 +64,9 @@
                                                     if(data.status==='error'){
                                                     var tmpl='{{$tem->promoprestaycontact }}'
                                                     tmpl=JSON.parse(tmpl);
-                                                    swal('Delete Failed', 'This promo is being used','error')
+                                                    swal('Delete Failed', 'This Event is being used','error')
                                                     } else {
-                                                    swal({title: 'Success', text: 'Promo deleted', type: 'success'},
+                                                    swal({title: 'Success', text: 'Event deleted', type: 'success'},
                                                     function(){
                                                     location.reload();
                                                     }
@@ -75,7 +75,7 @@
                                                     }
                                                     })
                                                     } else {
-                                                    swal('Cancelled', 'Delete Promo Cancelled','error');
+                                                    swal('Cancelled', 'Delete Event Cancelled','error');
                                                     }
                                                     });"><i class="fa  fa-trash" style="font-size: 1.5em"></i> </a>
                                                 <a href="{{ route('promo-configuration.edit',$tem->id) }}" title="Edit"><i class="fa  fa-edit" style="font-size: 1.5em"></i> </a>
