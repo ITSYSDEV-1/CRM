@@ -85,7 +85,7 @@
     <script>
         $(document).ready(function () {
             $('#tbl').DataTable({
-				"order": [[ 0, "desc" ]],
+				// "order": [[ 0, "desc" ]],
                 "columnDefs": [
                     {"width":"2%","targets":0},
                     {"width":"3%","targets":1},

@@ -914,7 +914,7 @@ public function contactslist(Request $request){
         return view('review.feedback',['contacts'=>$contacts,'review'=>$review]);
     }
     public function incomplete(){
-        $incomplete=CheckContact::where('checked','=','N')->orWhere('checked','=',NULL)->get();
+        $incomplete=CheckContact::where('checked','=','N')->orWhere('checked','=',NULL)->orderBy('dateci','asc')->get();
         return view('contacts.incomplete',['incompletes'=>$incomplete]);
     }
     public function updateStatus(Request $request){
