@@ -269,6 +269,16 @@ class Emailtemplate extends Controller
         return response(['active'=>false],200);
     }
     }
+    public function surveyActivate(Request $request){
+    $poststay=PostStay::find(1);
+    if ($request->state=='on'){
+        $poststay->update(['survey_active'=>'y']);
+        return response(['survey_active'=>true],200);
+    }else{
+        $poststay->update(['survey_active'=>'n']);
+        return response(['survey_active'=>false],200);
+    }
+    }
     public function prestayActivate(Request $request){
     $prestay=PreStayActivate::find(1);
     if ($request->state=='on'){
