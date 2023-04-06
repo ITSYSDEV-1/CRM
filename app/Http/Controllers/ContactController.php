@@ -914,9 +914,13 @@ public function contactslist(Request $request){
         return view('review.feedback',['contacts'=>$contacts,'review'=>$review]);
     }
     public function incomplete(){
+        $from = Carbon::now()->format('Y-m-d');
+        $to = Carbon::now()->addDays(30)->format('Y-m-d');
+
         $incomplete=CheckContact::where('checked','=','N')
             ->orWhere('checked','=',NULL)
             ->Where('foliostatus','!=','X')
+            ->whereBetween('dateci',[$from, $to])
             ->orderBy('dateci','asc')
             ->get();
         return view('contacts.incomplete',['incompletes'=>$incomplete]);
