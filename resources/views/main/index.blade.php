@@ -3,6 +3,7 @@
    Dashboard | {{ $configuration->hotel_name.' '.$configuration->app_title }}
     @endsection
 @section('content')
+    @can('2.1.1_view_dashboard')
     <div class="right_col" role="main">
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
@@ -36,20 +37,21 @@
                                 <div class="count orange"><a href="{{ url('contacts/f/female') }}" class="green" >{{ \App\Models\Contact::with('transaction')->whereHas('transaction')->where('gender','F')->count() }}</a></div>
 
                             </div>
-{{--                            <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">--}}
-{{--                                <span class="count_top"><i class="fa fa-user"></i> Inhouse </span>--}}
-{{--                                <div class="count green"> <a href="{{ url('contacts/f/status/Inhouse') }}" class="green" >{{ \App\Models\Contact::whereHas('profilesfolio',function($q){--}}
-{{--                                    return $q->where('foliostatus','=','I')->groupBy('profileid');--}}
-{{--                                })->count() }} </a> </div>--}}
+                            <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+                                <span class="count_top"><i class="fa fa-user"></i> Inhouse </span>
+                                <div class="count green"> <a href="{{ url('contacts/f/status/Inhouse') }}" class="green" >{{ \App\Models\Contact::whereHas('profilesfolio',function($q){
+                                    return $q->where('foliostatus','=','I')->groupBy('profileid');
+                                    })->whereHas('transaction',function($q){
+                                        return $q->havingRaw('sum(revenue)>=0');
+                                    })->count() }} </a> </div>
+                            </div>
 
-{{--                            </div>--}}
-{{--                            <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">--}}
-{{--                                <span class="count_top"><i class="fa fa-user"></i> Confirm </span>--}}
-{{--                                <div class="count red"> <a href="{{ url('contacts/f/status/Confirm') }}" class="green" > {{ \App\Models\Contact::whereHas('profilesfolio',function ($q){--}}
-{{--                                    return $q->where('foliostatus','=','C');--}}
-{{--                                    })->count()  }} </a></div>--}}
-
-{{--                            </div>--}}
+                            <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+                                <span class="count_top"><i class="fa fa-user"></i> Confirm </span>
+                                <div class="count red"> <a href="{{ url('contacts/f/status/Confirm') }}" class="green" > {{ \App\Models\Contact::whereHas('profilesfolio', function($q) {
+                                    return $q->where('foliostatus', '=', 'C');
+                                })->count() }} </a></div>
+                            </div>
 
                         </div>
                     </div>
@@ -63,7 +65,7 @@
             <div class="col-md-4 col-sm-4 col-xs-12 paneld" id="closeAdded">
                 <div class="x_panel tile " style="height: 420px">
                     <div class="x_title">
-                        <h2>Contacts Added</h2>
+                        <h2>Contacts Added Dashboard</h2>
                         <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                             <li><a class="close-link" id="closeAdded"><i class="fa fa-close"></i></a>
@@ -175,10 +177,12 @@
                                     </li>
                                 @endforeach
                             </ul>
+                            @can('2.2.1_view_incoming_birthdays')
                             {{ Form::open(['url'=>'contacts/birthday/search']) }}
                             {{ Form::hidden('days','7') }}
                             <button class="btn btn-sm" type="submit">More..</button>
                             {{ Form::close() }}
+                            @endcan
                         </div>
                     </div>
                 </div>
@@ -283,6 +287,14 @@
 
         </div>
     </div>
+    @else
+    <div class="right_col" role="main">
+        <div class="alert alert-danger">
+            <h4><i class="fa fa-exclamation-triangle"></i> Access Denied</h4>
+            <p>You don't have permission to view the dashboard.</p>
+        </div>
+    </div>
+    @endcan
 @endsection
 @section('script')
     <script>

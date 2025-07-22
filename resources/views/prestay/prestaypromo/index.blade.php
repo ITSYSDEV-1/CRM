@@ -17,8 +17,13 @@
                                     </li>
                                 </ul>
                                 <div class="clearfix"></div>
+                                @can('8.2.5_view_pre_stay_promo_list')
+                                @can('8.2.1_create_new_pre_stay_promo')
                                 <a href="{{route('promo-configuration.create')}}" title="Create New Template" class=" btn btn-sm btn-success"> <i class="fa fa-plus"></i> Create New</a>
+                                @endcan
+                                @endcan
                             </div>
+                            @can('8.2.5_view_pre_stay_promo_list')
                             <div class="x_content">
                                 <table class="table table-bordered table-striped table-hover dataTable js-basic-example" width="100%">
                                     <thead>
@@ -43,6 +48,7 @@
                                             <td>{{ $tem->event_url }}</td>
                                             <td>{!! Form::open(['method' => 'DELETE','route' => ['promo-configuration.destroy', $tem->id],'id'=>'form'.$tem->id]) !!}
                                                 {!! Form::close() !!}
+                                                @can('8.2.2_delete_pre_stay_promo')
                                                 <a href="#" title="Delete Event" onclick="
                                                     return swal({title:'Delete Confirmation',text:'This Event will permanently deleted',type:'warning',                                                        showCancelButton: true,
                                                     confirmButtonColor: '#DD6B55',
@@ -78,20 +84,37 @@
                                                     swal('Cancelled', 'Delete Event Cancelled','error');
                                                     }
                                                     });"><i class="fa  fa-trash" style="font-size: 1.5em"></i> </a>
+                                                @else
+                                                <i class="fa fa-trash" style="font-size: 1.5em; color: #ccc;" title="No permission to delete"></i>
+                                                @endcan
+                                                @can('8.2.3_edit_pre_stay_promo')
                                                 <a href="{{ route('promo-configuration.edit',$tem->id) }}" title="Edit"><i class="fa  fa-edit" style="font-size: 1.5em"></i> </a>
+                                                @else
+                                                <i class="fa fa-edit" style="font-size: 1.5em; color: #ccc;" title="No permission to edit"></i>
+                                                @endcan
+                                                @can('8.2.4_view_pre_stay_promo')
                                                 <a href="#myModal{{$tem->id}}" data-toggle="modal" data-target="#myModal{{$tem->id}}"><i class="fa  fa-eye" style="font-size: 1.5em"></i></a>
+                                                @else
+                                                <i class="fa fa-eye" style="font-size: 1.5em; color: #ccc;" title="No permission to view"></i>
+                                                @endcan
                                             </td>
                                         </tr>
                                     @endforeach
                                     </tbody>
                                 </table>
                             </div>
+                            @else
+                                <div class="x_content">
+                                    
+                                </div>
+                            @endcan
                         </div>
                     </div>
                 </div>
             </div>
         </section>
     </div>
+    @can('8.2.4_view_pre_stay_promo')
     @foreach($promotempl as $item)
         <div  class="modal " id="myModal{{ $item->id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
             <div class="modal-dialog modal-lg" role="document">
@@ -153,9 +176,11 @@
             </div>
         </div>
     @endforeach
+    @endcan
 
 @endsection
 @section('script')
+    @can('8.2.5_view_pre_stay_promo_list')
     <script>
         function sendEmailTest(id) {
             var form =$('#emailTest'+id);
@@ -189,4 +214,5 @@
         }
         $('.dataTable').dataTable();
     </script>
+    @endcan
 @endsection

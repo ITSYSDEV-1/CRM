@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
 class Contact extends Model
@@ -62,8 +62,16 @@ class Contact extends Model
     public function transaction(){
         return $this->belongsToMany('\App\Models\Transaction','contact_transaction','contact_id','transaction_id','contactid','id');
     }
+
     public function country(){
-        return $this->belongsTo('\App\Models\Country','country_id',env('COUNTRY_ISO'));
+        return $this->belongsTo('\App\Models\Country', 'country_id', 'iso3')
+            ->orWhere('iso2', $this->country_id);
+    }
+  
+    
+    // Tambahkan method untuk origin nationality
+    public function originnationality(){
+        return $this->belongsToMany('\App\Models\Attribute')->where('attr_name','=','origin_nationality')->withPivot('value');
     }
     public function attribute(){
         return $this->belongsToMany('\App\Models\Attribute');
@@ -82,4 +90,9 @@ class Contact extends Model
         return $this->hasOne('\App\Models\ExcludedEmail','email','email');
     }
 
+    public function latestfolios()
+    {
+        return $this->hasMany('\App\Models\ProfileFolio', 'profileid')->orderByDesc('updated_at');
+    }
+    
 }

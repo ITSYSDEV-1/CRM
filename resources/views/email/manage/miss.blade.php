@@ -21,10 +21,11 @@
                             <div class="x_content">
                                 <div class="form-inline">
                                     {{ Form::model($miss,['route'=>['miss.update',$miss->id],'files'=>'true','id'=>'templateForm']) }}
-                                    <div class="form-group">
-
-                                        <div class="col-md-12">
-                                            <div class="pull-right">
+                                    <div class="row">
+                                        <div class="form-group">
+                                            @can('5.4.1_view_email_miss_you')
+                                            @can('5.4.2_active_deactive_miss_you')
+                                            <div class="col-lg-12 col-md-12">
                                                 <div class="switch">
                                                     <label>
                                                         Deactivate
@@ -34,29 +35,53 @@
                                                     </label>
                                                 </div>
                                             </div>
+                                            @endcan
+                                            @endcan
+                                            
+                                            @can('5.4.1_view_email_miss_you')
+                                            @can('5.4.3_set_time_email_miss_you')
+                                            <div class="form-group">
                                             <div class="col-lg-12 col-md-12">
-                                                <div class="form-group">
                                                     <label class="control-label">
                                                         Send before / after ( month )</label>
                                                     {{ Form::select('sendafter',[''=>'Month/s After']+range(1,12,1),$miss->sendafter-1,['class'=>'form-control selectpicker']) }}
                                                 </div>
                                             </div>
-                                            <div class="col-lg-6 col-md-6">
+                                            @endcan
+                                            @endcan
+                                            
+                                            @can('5.4.1_view_email_miss_you')
+                                            @can('5.4.4_select_email_template_miss_you')
+                                            <div class="form-group">
+                                            <div class="col-lg-12 col-md-12">
                                                 <div id="templateSelection">
                                                     <label class="control-label">Select Email Template</label>
                                                     {{ Form::select('template',[''=>'Select Template']+\App\Models\MailEditor::where('type','Miss You')->pluck('name','id')->all(),$miss->template_id,['id'=>'templateChose','class'=>'form-control selectpicker','onchange'=>'selectTemplate(this.value)']) }}
                                                 </div>
+                                                </div>
                                             </div>
+                                            @endcan
+                                            @endcan
                                         </div>
                                     </div>
                                     <br>
                                     <br>
+                                    @can('5.4.1_view_email_miss_you')
                                     <div id="templatepreview" class="well">{!! $miss->template->content !!}</div>
+                                    @endcan
                                     <div class="form-group">
                                         <div class="row clearfix">
                                             <div class="col-lg-12 ">
                                                 <a class="btn btn-success btn-sm" href="{{ url('email/template') }}" title="Back"><i class="fa fa-arrow-circle-o-left"></i> Back</a>
+                                                @can('5.4.1_view_email_miss_you')
+                                                @can('5.4.2_active_deactive_miss_you')
+                                                @can('5.4.3_set_time_email_miss_you')
+                                                @can('5.4.4_select_email_template_miss_you')
                                                 <button class="btn btn-success btn-sm" type="submit"> <i class="fa fa-save"></i> Save</button>
+                                                @endcan
+                                                @endcan
+                                                @endcan
+                                                @endcan
                                             </div>
                                         </div>
                                     </div>

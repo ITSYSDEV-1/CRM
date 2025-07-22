@@ -53,6 +53,7 @@
                                 </div>
                             </div>
                             <hr>
+                            @can('1.1.2_edit_preferences')
                             <div class="header">
                                 <h2>Configuration</h2>
                             </div>
@@ -170,7 +171,11 @@
                                 </div>
 
                             </div>
-
+                            @else
+                            <div class="alert alert-info">
+                                <strong>Note:</strong> You don't have permission to edit system preferences. You can only modify your dashboard display settings above.
+                            </div>
+                            @endcan
                         </div>
                     </div>
                 </div>

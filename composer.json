@@ -27,6 +27,7 @@
         "nicolab/php-ftp-client": "^2.0",
         "php-http/message": "^1.13",
         "phpoffice/phpspreadsheet": "^1.25",
+        "spatie/laravel-permission": "^6.18",
         "zanysoft/cpanel-api": "^3.0"
     },
     "require-dev": {

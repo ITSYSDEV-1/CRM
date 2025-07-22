@@ -8,6 +8,7 @@ class ProfileFolio extends Model
 {
     //
     protected $table='profilesfolio';
+	protected $primaryKey = 'profileid';
     protected $fillable=['profileid','folio_master','folio','source','foliostatus'];
 
     public function contact(){

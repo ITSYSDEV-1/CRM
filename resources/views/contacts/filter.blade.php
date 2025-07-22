@@ -14,7 +14,7 @@
                             </div>
                             <div class="panel-body">
                                 {{ Form::open() }}
-
+                            
                                 <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
                                     {{ Form::label('country_id','Country') }}
                                 </div>
@@ -193,7 +193,9 @@
                                 </div>
 
                                 {{ Form::close() }}
+                                @can('3.3.2_create_segment')
                                 <button class="btn btn-sm btn-success" id="createSegment"><i class="fa fa-plus-circle"></i> Create Segment </button>
+                                @endcan
                             </div>
 
                             <hr>
@@ -220,7 +222,9 @@
                             </div>
                         </div>
                         <h4>With Selected </h4>
+                        @can('3.3.3_create_campaign')
                         <a href="#" class="btn btn-sm btn-success" id="createCampaign" ><i class="fa fa-plus-circle"></i> Create Campaign</a>
+                        @endcan
                     </div>
                 </div>
             </div>
@@ -647,7 +651,11 @@
                     'searchable': true,
                     'orderable': false,
                     'render': function (data, type, full, meta){
-                        return '<a href="detail/'+data.contactid+'" >'+data.fname+' '+data.lname+'</a>';
+                        @can('3.1.2_view_detail')
+                            return '<a href="detail/' + data.contactid + '">' + data.fname + ' ' + data.lname + '</a>';
+                        @else
+                            return data.fname + ' ' + data.lname;
+                        @endcan
                     }
                 }],
             });
@@ -676,49 +684,72 @@
 
         })
         $('#saveCampaign').on('click',function (e) {
-            e.preventDefault();
+    e.preventDefault();
 
-            $.ajax({
-                url:'newcampaign',
-                type:'post',
-                data:{
-                    cname:$('#cname').val(),
-                    segment_id:$('#segmentid').val(),
-                    template_id:$('#template').val(),
-                    contacts:$('input[type=checkbox]').serializeArray(),
-                    status:'Scheduled',
-                    type:'Promo',
-                    schedule:$('#schedule').val(),
-                    _token:'{{ csrf_token() }}'
-                },success:function (data) {
+    // Validasi input terlebih dahulu
+    if(!$('#cname').val()) {
+        swal('', 'Campaign name is required', 'warning');
+        return;
+    }
+    if(!$('#schedule').val()) {
+        swal('', 'Schedule is required', 'warning'); 
+        return;
+    }
+    if(!$('#template').val()) {
+        swal('', 'Template is required', 'warning');
+        return;
+    }
 
-                    if(data==='success'){
-                        swal({
-                            title: "Sucess",
-                            text: "New Campaign added",
-                            type: "success",
-                        },function() {
-                            window.location.reload();
-                        });
+    // Dapatkan contacts yang dicentang
+    var selectedContacts = [];
+    $('input[type=checkbox]:checked').each(function() {
+        selectedContacts.push($(this).val());
+    });
 
-                    }else {
-                        if (data.errors.cname && data.errors.schedule) {
-                            swal('', 'Campaign name and schedule is required', 'warning')
-                        } else {
-                            if (data.errors.cname) {
-                                swal('', data.errors.cname[0], 'warning')
+    if(selectedContacts.length === 0) {
+        swal('', 'Please select at least one contact', 'warning');
+        return;
+    }
 
-                            } else {
-                                if (data.errors.schedule) {
-                                    swal('', data.errors.schedule[0], 'warning')
-                                }
-                            }
-
-                        }
-                    }
+    $.ajax({
+        url: '/contacts/newcampaign',
+        type: 'POST',
+        data: {
+            cname: $('#cname').val(),
+            segment_id: $('#segmentid').val(),
+            template_id: $('#template').val(),
+            contacts: selectedContacts,
+            status: 'Scheduled',
+            type: 'Promo', 
+            schedule: $('#schedule').val(),
+            _token: '{{ csrf_token() }}'
+        },
+        success: function(data) {
+            if(data.success) {
+                swal({
+                    title: "Sukses",
+                    text: "Campaign baru berhasil ditambahkan",
+                    type: "success"
+                }, function() {
+                    window.location.reload();
+                });
+            } else {
+                if(data.errors) {
+                    var errorMessage = '';
+                    $.each(data.errors, function(key, value) {
+                        errorMessage += value[0] + '\n';
+                    });
+                    swal('Error', errorMessage, 'error');
+                } else {
+                    swal('Error', 'Terjadi kesalahan saat menyimpan campaign', 'error');
                 }
-            })
-        })
+            }
+        },
+        error: function(xhr, status, error) {
+            swal('Error', 'Terjadi kesalahan pada server: ' + error, 'error');
+        }
+    });
+});
 
     </script>
 

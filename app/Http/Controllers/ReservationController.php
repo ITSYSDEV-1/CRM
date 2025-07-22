@@ -10,8 +10,11 @@ use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use function PHPUnit\Framework\isEmpty;
 
+use App\Traits\UserLogsActivity;
+
 class ReservationController extends Controller
 {
+    use UserLogsActivity;
     /**
      * Display a listing of the resource.
      *
@@ -24,12 +27,11 @@ class ReservationController extends Controller
             ->where('dateci','>=', Carbon::now()->format('Y-m-d'))
             ->orderBy('dateci','ASC')
             ->get();
-
-        if(empty($profilesfolio)){
-            $contacts = [];
-        }
-        else
-        {
+    
+        // Inisialisasi $contacts di awal untuk memastikan selalu terdefinisi
+        $contacts = [];
+        
+        if(!empty($profilesfolio)){
             foreach ($profilesfolio as $key=>$val)
             {
                 $contacts[] = Contact::find($val->profileid);
@@ -44,8 +46,9 @@ class ReservationController extends Controller
                 $contacts[$key]['sendtoguest_at'] = Contactprestay::select('sendtoguest_at')->where('contact_id', $val->profileid)->first();
                 $contacts[$key]['registration_code'] = Contactprestay::select(['registration_code'])->where('folio_master',$val->folio_master)->first();
             }
-
         }
+    
+        // dd($contacts);
         return view('reservation.list')->with(compact('contacts'));
     }
     public function registrationformprint ($registrationformcode){
@@ -57,10 +60,78 @@ class ReservationController extends Controller
         $completeContactPrestay['roomtype'] = $profilesFolio->roomtype == null ? '-':$profilesFolio->roomtype;
         $completeContactPrestay['pax'] = $profilesFolio->pax == null ? '-':$profilesFolio->pax;
         $completeContactPrestays = $completeContactPrestay->toarray();
-
-    $pdf = PDF::loadView('reservation.registrationpdf',$completeContactPrestays);
-    return $pdf->download('Registration Form folio '.$completeContactPrestay['folio_master'].' .pdf');
+    
+        // Tambahkan logging aktivitas pengguna
+        $this->logActivity(
+            'print_registration_form',
+            Contactprestay::class,
+            $completeContactPrestay->id,
+            [],
+            [
+                'registration_code' => $registrationformcode,
+                'folio_master' => $completeContactPrestay['folio_master'],
+                'contact_id' => $completeContactPrestay['contact_id'],
+                'dateci' => $completeContactPrestay['dateci'],
+                'dateco' => $completeContactPrestay['dateco']
+            ],
+            'Printed registration form for folio: ' . $completeContactPrestay['folio_master']
+        );
+    
+        // Konfigurasi PDF dengan kualitas tinggi
+        $pdf = PDF::loadView('reservation.registrationpdf',$completeContactPrestays)
+            ->setPaper('A4', 'portrait')
+            ->setOptions([
+                'dpi' => 300,                    // Set DPI tinggi
+                'defaultFont' => 'Arial',
+                'isRemoteEnabled' => true,
+                'isHtml5ParserEnabled' => true,
+                'isFontSubsettingEnabled' => true,
+                'isPhpEnabled' => true,
+                'debugKeepTemp' => false,
+                'debugCss' => false,
+                'debugLayout' => false,
+                'debugLayoutLines' => false,
+                'debugLayoutBlocks' => false,
+                'debugLayoutInline' => false,
+                'debugLayoutPaddingBox' => false,
+                'enable_remote' => true,
+                'enable_php' => true,
+                'enable_javascript' => false,
+                'enable_html5_parser' => true,
+                'font_height_ratio' => 1.1,
+                'image_dpi' => 300,             // DPI khusus untuk gambar
+                'enable_font_subsetting' => true,
+                'pdf_backend' => 'CPDF',
+                'default_media_type' => 'print',
+                'default_paper_size' => 'A4',
+                'default_font' => 'Arial',
+                'dpi' => 300,
+                'font_dir' => storage_path('fonts/'),
+                'font_cache' => storage_path('fonts/'),
+                'temp_dir' => sys_get_temp_dir(),
+                'chroot' => realpath(base_path()),
+                'enable_remote' => true,
+                'font_height_ratio' => 1.1,
+                'enable_css_float' => true
+            ]);
+            
+        return $pdf->download('Registration Form folio '.$completeContactPrestay['folio_master'].' .pdf');
     }
+
+    // Method baru untuk preview HTML
+public function registrationformpreview ($registrationformcode){
+    $completeContactPrestay = Contactprestay::where('registration_code', $registrationformcode)->where('next_action','=','COMPLETED')->first();
+    $profilesFolio = ProfileFolio::select('room','roomtype','pax','dateci','dateco')->where('folio',$completeContactPrestay['folio_master'])->first();
+    $completeContactPrestay['dateci'] = $profilesFolio->dateci == null ? '-':$profilesFolio->dateci;
+    $completeContactPrestay['dateco'] = $profilesFolio->dateco == null ? '-':$profilesFolio->dateco;
+    $completeContactPrestay['room'] = $profilesFolio->room == null ? '-':$profilesFolio->room;
+    $completeContactPrestay['roomtype'] = $profilesFolio->roomtype == null ? '-':$profilesFolio->roomtype;
+    $completeContactPrestay['pax'] = $profilesFolio->pax == null ? '-':$profilesFolio->pax;
+    $completeContactPrestays = $completeContactPrestay->toarray();
+
+    // Return HTML view langsung tanpa PDF
+    return view('reservation.registrationpdf', $completeContactPrestays);
+}
 
     /**
      * Show the form for creating a new resource.

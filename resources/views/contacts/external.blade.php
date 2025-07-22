@@ -10,9 +10,11 @@
                 <div class="row clearfix">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="card">
+                            @canany(['3.5.2_import_file_new_category', '3.5.1_download_template'])
                             <div class="header">
                                 <h1>Contact Upload</h1>
                             </div>
+                            @endcanany
                             <div class="row clearfix">
                                 <div class="col-lg-12">
                                 </div>
@@ -23,14 +25,19 @@
                                 </div>
                             @endif
                             <div class="body">
+                            @can('3.5.1_download_template')
                                 <br>
                                 <div class="row">
                                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5">
+                                    
                                         <a href="{{ url('externalcontact/template') }}"> <i class="fa fa-download"></i> Download Template</a>
+                                        
                                     </div>
                                 </div>
                                 <br>
+                            @endcan
                                 <br>
+                            @can('3.5.2_import_file_new_category')
                                 <form id="saveBlast" action="saveexternalcontact" method="post" files="true" enctype="multipart/form-data">
                                     {!! Form::token() !!}
                                     <div class="row">
@@ -54,6 +61,7 @@
                                     </div>
                                     <br>
 
+                               
                                     <div class="row" id="newcategory">
                                         <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
                                             {{ Form::label('new_category','Category') }}
@@ -66,7 +74,7 @@
                                                 </span>
                                             </div>
                                         </div>
-
+                               
 
                                     </div>
                                     <div class="row" id="pickcategory">
@@ -82,12 +90,13 @@
                                     <br>
                                     <button class="btn btn-sm btn-success" id="saveEmailBlast" >Upload</button>
                                 </form>
+                            @endcan
                             </div>
                         </div>
                         <hr>
                         <div class="card">
                             <div class="header">
-                                <h1>Contact List</h1>
+                                <h1>External Contact List</h1>
                             </div>
                             <div class="body">
                                 <div id="loader" style="display: none">
@@ -98,7 +107,9 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Category</th>
+                                        @can('3.5.3_delete_external_contatcs_category')
                                         <th>Action</th>
+                                        @endcan
                                     </tr>
                                     </thead>
                                 </table>
@@ -180,8 +191,9 @@
                 "columns": [
                     {"data":null},
                     { "data": "category" },
+                    @can('3.5.3_delete_external_contatcs_category')
                     { "data": null },
-
+                    @endcan
 
                 ],
                 "columnDefs": [
@@ -191,15 +203,21 @@
                     },{
                         "targets":1,
                         "render":function (data,type,row) {
-                            return '<a href="category/'+row.id+'">'+data+'  <b>| ('+row.email_count+' Emails )</b></a>';
+                            @can('3.5.4_view_detail_external_contatcs')
+                                return '<a href="category/'+row.id+'">'+data+'  <b>| ('+row.email_count+' Emails )</b></a>';
+                            @else
+                                return data+'  <b>| ('+row.email_count+' Emails )</b>';
+                            @endcan
                         }
-                    },{
+                    }
+                    @can('3.5.3_delete_external_contatcs_category')
+                    ,{
                         "targets":2,
                         "render":function (data,type,row) {
                             return '<a href="#" onclick="event.preventDefault(); delCategory(this.id)" class="btn btn-default"  id="category'+data.id+'"><i class="fa fa-trash"></i> </a>'
                         }
-
                     }
+                    @endcan
                 ],
                 "pageLength":20,
                 "createdRow": function( row, data, dataIndex){

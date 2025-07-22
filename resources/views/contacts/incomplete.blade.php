@@ -32,7 +32,9 @@
                                         <th class="align-center">Full Name</th>
                                         <th class="align-center">Email</th>
                                         <th class="align-center">Problems</th>
+                                        @can('3.4.2_checked_incomplete_contacts')
                                         <th class="align-center">Checked</th>
+                                        @endcan
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -65,9 +67,9 @@
                                                echo "</ul></td>";
                                                 @endphp
                                                 <input type="hidden" id ="input{{ $contact->folio }}" value="{{ $contact->problems }}">
-
-                                                <td><input type="checkbox" class="chk" id="{{ $contact->folio }}" name="check" value="checked" {{ $contact->checked=='Y' ? 'checked':'' }}></td>
-                                            </tr>
+                                                @can('3.4.2_checked_incomplete_contacts')
+                                                    <td><input type="checkbox" class="chk" id="{{ $contact->folio }}" name="check" value="checked" {{ $contact->checked=='Y' ? 'checked':'' }}></td>
+                                                @endcan
 
                                     @endforeach
                                     </tbody>

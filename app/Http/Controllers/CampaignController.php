@@ -11,6 +11,7 @@ use App\Models\MailEditor;
 use App\Models\Campaign;
 use App\Models\Schedule;
 use App\Models\Segment;
+use App\Traits\UserLogsActivity;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -18,6 +19,8 @@ use Illuminate\Support\Facades\Validator;
 
 class CampaignController extends Controller
 {
+    use UserLogsActivity;
+    
     /**
      * Display a listing of the resource.
      *
@@ -96,17 +99,18 @@ class CampaignController extends Controller
     }
     public function campaignrecepient(Request $request){
         $campaignlist = Campaign::find($request->id);
-        if($campaignlist->type=='internal'){
-
-                    foreach ($campaignlist->contact as $val)
-                    {
-                        $contact[]=$val;
-                    }
+        $contact = [];
+        
+        if($campaignlist->type=='internal' || $campaignlist->type=='Promo'){
+            foreach ($campaignlist->contact as $val)
+            {
+                $contact[]=$val;
+            }
         }else{
-                    foreach ($campaignlist->external as $val)
-                    {
-                        $contact[]=$val;
-                    }
+            foreach ($campaignlist->external as $val)
+            {
+                $contact[]=$val;
+            }
         }
 
         return response($contact);
@@ -150,15 +154,28 @@ class CampaignController extends Controller
         foreach ($excluded as $exc){
             array_push($ex,$exc->email);
         }
+
+        // Variabel untuk menghitung jumlah penerima
+        $recipientCount = 0;
+
+        // if($type=='internal') {
+        //     $contacts = Contact::with('transaction', 'profilesfolio')->when(unserialize($seg->country_id)[0] != null, function ($q) use ($seg) {
+        //         return $q->whereIn('country_id',unserialize($seg->country_id));
+        // })->when(unserialize($seg->area)[0]!=null,function ($q) use ($seg){
+        //     return $q->whereIn('area',unserialize($seg->area));
+        // })->when(unserialize($seg->guest_status)[0] !=null,function ($q) use ($seg){
+        //     return $q->whereHas('profilesfolio',function ($q) use ($seg){
+        //         return $q->whereIn('foliostatus',unserialize($seg->guest_status));
+        //     });
         if($type=='internal') {
-            $contacts = Contact::with('transaction', 'profilesfolio')->when(unserialize($seg->country_id)[0] != null, function ($q) use ($seg) {
+            $contacts = Contact::with('transaction', 'profilesfolio')->when(unserialize($seg->country_id) && isset(unserialize($seg->country_id)[0]), function ($q) use ($seg) {
                 return $q->whereIn('country_id',unserialize($seg->country_id));
-        })->when(unserialize($seg->area)[0]!=null,function ($q) use ($seg){
+        })->when($seg->area && unserialize($seg->area) && isset(unserialize($seg->area)[0]),function ($q) use ($seg){
             return $q->whereIn('area',unserialize($seg->area));
-        })->when(unserialize($seg->guest_status)[0] !=null,function ($q) use ($seg){
+        })->when($seg->guest_status && unserialize($seg->guest_status) && isset(unserialize($seg->guest_status)[0]),function ($q) use ($seg){
             return $q->whereHas('profilesfolio',function ($q) use ($seg){
                 return $q->whereIn('foliostatus',unserialize($seg->guest_status));
-            });
+        });
         })->when($seg->spending_from ==null and $seg->spending_to !=null ,function ($q) use ($seg){
             return $q->whereHas('transaction',function ($q) use ($seg){
                 return $q->whereBetween('revenue',[0,str_replace('.','',$seg->spending_to)]);
@@ -171,8 +188,11 @@ class CampaignController extends Controller
             return $q->whereHas('transaction',function ($q) use ($seg){
                 return $q->whereBetween('revenue',[str_replace('.','',$seg->spending_from),str_replace('.','',$seg->spending_to)]);
             });
-        })->when(unserialize($seg->gender)[0] !=null,function ($q) use ($seg) {
+        // })->when(unserialize($seg->gender)[0] !=null,function ($q) use ($seg) {
+        //     return $q->whereIn('gender', unserialize($seg->gender));
+        })->when($seg->gender && unserialize($seg->gender) && isset(unserialize($seg->gender)[0]), function ($q) use ($seg) {
             return $q->whereIn('gender', unserialize($seg->gender));
+
         })->when($seg->stay_from == null and $seg->stay_to != null,function ($q) use ($seg) {
             return $q->whereHas('transaction', function ($q) use ($seg) {
                 return $q->where('checkout', '<=', Carbon::parse($seg->stay_to)->format('Y-m-d'));
@@ -210,10 +230,16 @@ class CampaignController extends Controller
             return $q->whereRaw('birthday <= date_sub(now(),INTERVAL \''.$seg->age_from.'\' YEAR)');
         })->when($seg->age_to !=null,function ($q) use ($seg){
             return $q->whereRaw('birthday >= date_sub(now(),INTERVAL \''.$seg->age_to.'\' YEAR)');
-        })->when(unserialize($seg->booking_source)[0]!=null,function ($q) use ($seg){
-            return   $q->whereHas('profilesfolio',function ($q) use ($seg){
-                 return  $q->whereIn('source',unserialize($seg->booking_source));
+        // })->when(unserialize($seg->booking_source)[0]!=null,function ($q) use ($seg){
+        //     return   $q->whereHas('profilesfolio',function ($q) use ($seg){
+        //          return  $q->whereIn('source',unserialize($seg->booking_source));
+        //     });
+
+        })->when($seg->booking_source && unserialize($seg->booking_source) && isset(unserialize($seg->booking_source)[0]), function ($q) use ($seg){
+            return $q->whereHas('profilesfolio',function ($q) use ($seg){
+                return $q->whereIn('source', unserialize($seg->booking_source));
             });
+
         })->when($seg->wedding_bday_from ==null and $seg->wedding_bday_to !=null , function ($q) use ($seg){
             return $q->whereRaw('DATE_FORMAT(wedding_bday,\'%m-%d\') = ?',[Carbon::parse($seg->wedding_bday_to)->format('m-d')]);
         })->when($seg->wedding_bday_from !=null and $seg->wedding_bday_to == null , function ($q) use ($seg){
@@ -225,24 +251,61 @@ class CampaignController extends Controller
 
             foreach ($contacts as $contact) {
                 if(!in_array($contact->email,$ex)) {
+                    $recipientCount++; // Menghitung jumlah penerima yang valid
                     $campaign->contact()->attach($contact);
                     $campaign->contact()->updateExistingPivot($contact, ['status' => 'queue']);
                 }
             }
             $campaign->segment()->attach($segment);
             $campaign->template()->attach($request->template);
+            
+            // Log campaign creation activity dengan jumlah penerima
+            $this->logActivity(
+                'create_campaign',
+                Campaign::class,
+                $campaign->id,
+                null,
+                [
+                    'name' => $campaign->name,
+                    'type' => $campaign->type,
+                    'status' => $campaign->status,
+                    'template_id' => $campaign->template_id,
+                    'recipient_count' => $recipientCount
+                ],
+                'User created a new campaign: ' . $campaign->name . ' with ' . $recipientCount . ' recipients'
+            );
+            
             $this->setSheduleFunc($campaign->id,$request->schedule);
             return redirect('campaigns');
         } else {
             $contacts=$cat->email;
+            
             foreach ($contacts as $contact){
                 if(!in_array($contact->email,$ex)) {
+                    $recipientCount++; // Menghitung jumlah penerima yang valid
                     $campaign->external()->attach($contact);
                     $campaign->external()->updateExistingPivot($contact, ['status' => 'queue']);
                 }
             }
             $campaign->externalSegment()->attach($segment);
             $campaign->template()->attach($request->template);
+            
+            // Log campaign creation activity dengan jumlah penerima
+            $this->logActivity(
+                'create_campaign',
+                Campaign::class,
+                $campaign->id,
+                null,
+                [
+                    'name' => $campaign->name,
+                    'type' => $campaign->type,
+                    'status' => $campaign->status,
+                    'template_id' => $campaign->template_id,
+                    'recipient_count' => $recipientCount
+                ],
+                'User created a new campaign: ' . $campaign->name . ' with ' . $recipientCount . ' recipients'
+            );
+            
             $this->setSheduleFunc($campaign->id,$request->schedule);
             return redirect('campaigns');
         }
@@ -378,6 +441,7 @@ class CampaignController extends Controller
         return redirect('campaign');
     }
 
+
     /**
      * Remove the specified resource from storage.
      *
@@ -387,6 +451,14 @@ class CampaignController extends Controller
     public function destroy($id)
     {
        $campaign=Campaign::find($id);
+       
+       // Simpan informasi campaign untuk logging
+       $campaignInfo = [
+           'id' => $campaign->id,
+           'name' => $campaign->name,
+           'status' => $campaign->status
+       ];
+       
        foreach ($campaign->contact as $key => $contact) {
            $campaign->contact()->detach($contact->id);
        }
@@ -400,14 +472,31 @@ class CampaignController extends Controller
            $campaign->externalSegment()->detach($value->id);
        }
        $campaign->delete();
+       
+       // Log aktivitas penghapusan setelah campaign berhasil dihapus
+       $this->logActivity(
+           'delete',
+           Campaign::class,
+           $id,
+           $campaignInfo,
+           null,
+           'Deleted campaign: ' . $campaignInfo['name']
+       );
 
        return redirect()->back();
-
     }
+    
     public function delete(Request $request)
     {
-
         $campaign=Campaign::find($request->id);
+        
+        // Simpan informasi campaign untuk logging
+        $campaignInfo = [
+            'id' => $campaign->id,
+            'name' => $campaign->name,
+            'status' => $campaign->status
+        ];
+        
         if(!$campaign->contact->isEmpty()) {
             foreach ($campaign->contact as $key => $contact) {
                 $campaign->contact()->detach($contact->id);
@@ -429,9 +518,18 @@ class CampaignController extends Controller
             }
         }
         $campaign->delete();
+        
+        // Log aktivitas penghapusan setelah campaign berhasil dihapus
+        $this->logActivity(
+           'delete',
+           Campaign::class,
+           $request->id,
+           $campaignInfo,
+           null,
+           'Deleted campaign: ' . $campaignInfo['name']
+        );
 
         return response('ok');
-
     }
 
     public function getRecepient(Request $seg){
@@ -554,8 +652,25 @@ class CampaignController extends Controller
         return response(['status'=>'success','id'=>$schedule->id,'campstatus'=>$campaign->status,'schedule'=>$schedule->schedule,'campaignid'=>$campaign_id],200);
     }
     public function updateschedule(Request $seg){
-
-        $this->setSheduleFunc($seg->id,$seg->value);
+        // Mendapatkan campaign dan schedule lama sebelum diupdate
+        $campaign = Campaign::find($seg->id);
+        $oldSchedule = $campaign->schedule ? $campaign->schedule->schedule : null;
+        
+        // Memanggil fungsi untuk update schedule dengan parameter yang benar ($seg->value)
+        $result = $this->setSheduleFunc($seg->id, $seg->value);
+        
+        // Log perubahan schedule
+        $this->logActivity(
+            'update_campaign_schedule',
+            Campaign::class,
+            $seg->id,
+            ['schedule' => $oldSchedule],
+            ['schedule' => Carbon::parse($seg->value)->format('Y-m-d H:i')],
+            'User updated schedule for campaign: ' . $campaign->name . ' from ' . 
+            ($oldSchedule ?: 'unscheduled') . ' to ' . Carbon::parse($seg->value)->format('Y-m-d H:i')
+        );
+        
+        return $result;
     }
 
     public function getSegment(Request $seg){
@@ -589,39 +704,117 @@ class CampaignController extends Controller
 
         return response([$campaign,$country,$guestsatus,$gender,$booking,$area],200);
     }
-    public function newCampaign(Request $seg){
+    // public function newCampaign(Request $seg){
 
+    //     $rules=[
+    //        'cname'=>'required',
+    //       'schedule'=>'required',
+    //     ];
+    //     $messages=[
+    //         'cname.required'=>'Campaign name Required',
+    //        'schedule.required'=>'Schedule Required',
+    //     ];
+
+    //     $validator =Validator::make($seg->all(),$rules,$messages);
+    //     if(!$validator->fails()){
+    //         $campaign=new Campaign();
+    //         $campaign->name=$seg->cname;
+    //         $campaign->status='Draft';
+    //         $campaign->type='Promo';
+    //         // $campaign->segment_id=$seg->segment_id;
+    //         $campaign->template_id=$seg->template_id;
+    //         $campaign->save();
+
+    //         foreach ($seg->contacts as $cid){
+    //             $contact=Contact::find($cid['value']);
+    //             $campaign->contact()->attach($contact);
+    //             $campaign->contact()->updateExistingPivot($contact,['status'=>'queue']);
+    //         }
+    //         $campaign->template()->attach($seg->template_id);
+    //         $this->setSheduleFunc($campaign->id,$seg->schedule);
+    //         return response('success',200);
+    //     } else{
+    //         return response(['errors'=>$validator->errors()]);
+    //     }
+
+    // }
+
+    public function newCampaign(Request $seg){
         $rules=[
            'cname'=>'required',
-          'schedule'=>'required',
+           'schedule'=>'required',
+           'template_id' => 'required',
+           'contacts' => 'required|array'
         ];
         $messages=[
             'cname.required'=>'Campaign name Required',
-           'schedule.required'=>'Schedule Required',
+            'schedule.required'=>'Schedule Required',
+            'template_id.required' => 'Template Required',
+            'contacts.required' => 'Contacts Required',
+            'contacts.array' => 'Contacts must be array'
         ];
 
-        $validator =Validator::make($seg->all(),$rules,$messages);
+        $validator = Validator::make($seg->all(), $rules, $messages);
+        
         if(!$validator->fails()){
-            $campaign=new Campaign();
-            $campaign->name=$seg->cname;
-            $campaign->status='Draft';
-            $campaign->type='Promo';
-            $campaign->segment_id=$seg->segment_id;
-            $campaign->template_id=$seg->template_id;
-            $campaign->save();
+            try {
+                DB::beginTransaction();
+                
+                $campaign = new Campaign();
+                $campaign->name = $seg->cname;
+                $campaign->status = 'Draft';
+                $campaign->type = 'Promo';
+                $campaign->template_id = $seg->template_id;
+                $campaign->save();
 
-            foreach ($seg->contacts as $cid){
-                $contact=Contact::find($cid['value']);
-                $campaign->contact()->attach($contact);
-                $campaign->contact()->updateExistingPivot($contact,['status'=>'queue']);
+                // Pastikan contacts adalah array sebelum di-loop
+                if(is_array($seg->contacts)) {
+                    foreach ($seg->contacts as $contactId) {
+                        // Ambil ID contact langsung jika format data berbeda
+                        $id = is_array($contactId) ? $contactId['value'] : $contactId;
+                        $contact = Contact::find($id);
+                        
+                        if($contact) {
+                            $campaign->contact()->attach($contact, ['status' => 'queue']);
+                        }
+                    }
+                }
+                
+                $campaign->template()->attach($seg->template_id);
+                $this->setSheduleFunc($campaign->id, $seg->schedule);
+                
+                // Add user activity log
+                $this->logActivity(
+                    'create',
+                    Campaign::class,
+                    $campaign->id,
+                    null,
+                    [
+                        'name' => $campaign->name,
+                        'type' => $campaign->type,
+                        'template_id' => $campaign->template_id,
+                        'contacts_count' => is_array($seg->contacts) ? count($seg->contacts) : 0
+                    ],
+                    'Created new campaign: ' . $campaign->name
+                );
+                
+                DB::commit();
+                return response()->json(['success' => true, 'message' => 'Campaign created successfully']);
+                
+            } catch(\Exception $e) {
+                DB::rollback();
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Failed to create campaign',
+                    'error' => $e->getMessage()
+                ], 500);
             }
-            $campaign->template()->attach($seg->template_id);
-            $this->setSheduleFunc($campaign->id,$seg->schedule);
-            return response('success',200);
-        } else{
-            return response(['errors'=>$validator->errors()]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
         }
-
     }
     public function saveSegment(Request $seg){
 
@@ -689,6 +882,17 @@ class CampaignController extends Controller
                 $segment->wedding_bday_to=NULL;
             }
             $segment->save();
+            
+            // Log the segment creation activity
+            $this->logActivity(
+                'create',
+                'Segment',
+                $segment->id,
+                null,
+                $segment->toArray(),
+                'Created new segment: ' . $segment->name
+            );
+            
             return response(['success'=>['id'=>$segment->id,'name'=>$seg->name]],200);
         }else{
             return response(['error'=>$validator->errors()],200);

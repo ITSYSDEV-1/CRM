@@ -17,8 +17,13 @@
                                     </li>
                                 </ul>
                                 <div class="clearfix"></div>
+                                @can('6.1.7_view_list_template')
+                                @can('6.1.1_create_new_template') 
                                 <a href="{{ url('email/create') }}" title="Create New Template" class=" btn btn-sm btn-success"> <i class="fa fa-plus"></i> Create New Template</a>
+                                @endcan
+                                @endcan
                             </div>
+                            @can('6.1.7_view_list_template')
                             <div class="x_content">
                                 <table class="table table-bordered table-striped table-hover dataTable js-basic-example" width="100%">
                                     <thead>
@@ -35,6 +40,7 @@
                                             <td>{{ $tem->type }}</td>
                                             <td>{!! Form::open(['method' => 'DELETE','route' => ['email.destroy', $tem->id],'id'=>'form'.$tem->id]) !!}
                                                 {!! Form::close() !!}
+                                                @can('6.1.2_delete_template')
                                                 <a href="#" title="Delete Template" onclick="
                                                         return swal({title:'Delete Confirmation',text:'This Template will permanently deleted',type:'warning',                                                        showCancelButton: true,
                                                             confirmButtonColor: '#DD6B55',
@@ -71,22 +77,33 @@
                                                         swal('Cancelled', 'Delete Template Cancelled','error');
                                                         }
                                                         });"><i class="fa  fa-trash" style="font-size: 1.5em"></i> </a>
+                                                @endcan
+                                                @can('6.1.3_edit_template')
                                                 <a href="{{ url('email/'.$tem->id.'/edit') }}" title="Edit"><i class="fa  fa-edit" style="font-size: 1.5em"></i> </a>
+                                                @endcan
+                                                @can('6.1.4_view_template')
                                                 <a href="#myModal{{$tem->id}}" data-toggle="modal" data-target="#myModal{{$tem->id}}"><i class="fa  fa-eye" style="font-size: 1.5em"></i> </a>
+                                                @endcan
+                                                @can('6.1.5_duplicate_template')
                                                 <a href="#cloneTemplate{{$tem->id}}" data-toggle="modal" data-target="#cloneTemplate{{$tem->id}}" id="copyTempalte" title="Copy Template" ><i class="fa fa-copy" style="font-size: 1.5em"></i> </a>
+                                                @endcan
+                                                @can('6.1.6_test_send_email')
                                                 <a href="#testEmail{{ $tem->id }}" data-toggle="modal" data-target="#testEmail{{ $tem->id }}" id="testSendEmail" title="Send Email Test"> <i class="fa fa-send"></i>   </a>
+                                                @endcan
                                             </td>
                                         </tr>
                                     @endforeach
                                     </tbody>
                                 </table>
                             </div>
+                            @endcan
                         </div>
                     </div>
                 </div>
             </div>
         </section>
     </div>
+    @can('6.1.4_view_template')
     @foreach($template as $item)
         <div  class="modal " id="myModal{{ $item->id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
             <div class="modal-dialog modal-lg" role="document">
@@ -105,7 +122,11 @@
                 </div>
             </div>
         </div>
+    @endforeach
+    @endcan
 
+    @can('6.1.5_duplicate_template')
+    @foreach($template as $item)
         <div class="modal fade" id="cloneTemplate{{ $item->id }}" tabindex="-1" role="dialog" aria-labelledby="cloneTemplateLable" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
@@ -148,7 +169,11 @@
                 </div>
             </div>
         </div>
+    @endforeach
+    @endcan
 
+    @can('6.1.6_test_send_email')
+    @foreach($template as $item)
         <div class="modal fade" id="testEmail{{ $item->id }}" tabindex="-1" role="dialog" aria-labelledby="testEmailLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
@@ -192,6 +217,7 @@
             </div>
         </div>
     @endforeach
+    @endcan
 
 @endsection
 @section('script')

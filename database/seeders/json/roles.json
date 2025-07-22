@@ -1,0 +1,58 @@
+{
+  "roles": [
+    {
+      "id": 1,
+      "name": "Super Admin",
+      "code": "SUPER_ADMIN",
+      "description": "Administrator with full system access and control",
+      "permissions": [],
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    },
+    {
+      "id": 2,
+      "name": "Executive",
+      "code": "EXECUTIVE",
+      "description": "Senior management with strategic oversight",
+      "permissions": [],
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    },
+    {
+      "id": 3,
+      "name": "Sales",
+      "code": "SALES",
+      "description": "Sales team responsible for revenue generation",
+      "permissions": [],
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    },
+    {
+      "id": 4,
+      "name": "Marketing",
+      "code": "MARKETING",
+      "description": "Marketing team for promotional activities and brand management",
+      "permissions": [],
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    },
+    {
+      "id": 5,
+      "name": "Reservations",
+      "code": "RESERVATIONS",
+      "description": "Reservation management and booking operations",
+      "permissions": [],
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    },
+    {
+      "id": 6,
+      "name": "Front Office",
+      "code": "FRONT_OFFICE",
+      "description": "Front desk operations and guest services",
+      "permissions": [],
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  ]
+}

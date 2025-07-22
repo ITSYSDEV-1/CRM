@@ -23,8 +23,11 @@ use League\Csv\Reader;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Pagination\LengthAwarePaginator;
 
+use App\Traits\UserLogsActivity;
+
 class ContactController extends Controller
 {
+    use UserLogsActivity;
     /**
      * Display a listing of the resource.
      *
@@ -210,9 +213,20 @@ class ContactController extends Controller
      */
     public function create()
     {
-        $contact=new Contact();
-        $act='add';
-        return view('contacts.detail',['data'=>$contact,'action'=>$act]);
+        $contact = new Contact();
+        $act = 'add';
+        
+        // Log the activity
+        $this->logActivity(
+            'create_contact_form',
+            Contact::class,
+            null,
+            null,
+            null,
+            'Accessed contact creation form'
+        );
+        
+        return view('contacts.detail', ['data' => $contact, 'action' => $act]);
     }
 
     /**
@@ -234,17 +248,44 @@ class ContactController extends Controller
         return $this->show($contact[0]->contactid);
     }
 
-    public  function updateexcluded(Request $request){
-        $val=$request->val;
-        $email=Contact::find($request->id)->email;
+    public function updateexcluded(Request $request)
+    {
+        $val = $request->val;
+        $contact = Contact::find($request->id);
+        $email = $contact->email;
 
-        if($val==0){
-            $em=ExcludedEmail::where('email','=',$email)->first();
+        $oldData = [
+            'excluded' => $val == 1 ? false : true,
+            'email' => $email
+        ];
+
+        $newData = [
+            'excluded' => $val == 1 ? true : false,
+            'email' => $email
+        ];
+
+        if($val == 0) {
+            $em = ExcludedEmail::where('email', '=', $email)->first();
             $em->delete();
-        }else{
-            ExcludedEmail::insert(['email'=>$email,'contact_id'=>$request->id,'reason'=>'Email blacklisted manually']);
+        } else {
+            ExcludedEmail::insert([
+                'email' => $email,
+                'contact_id' => $request->id,
+                'reason' => 'Email blacklisted manually'
+            ]);
         }
-        return response('success',200);
+
+        // Log the activity
+        $this->logActivity(
+            $val == 1 ? 'exclude_email' : 'include_email',
+            Contact::class,
+            $contact->contactid,
+            $oldData,
+            $newData,
+            $val == 1 ? "Email {$email} was excluded" : "Email {$email} was included"
+        );
+
+        return response('success', 200);
     }
 public function loadcontacts(Request $request){
     $contacts=Contact::with(['transaction'=>function($qq){
@@ -276,10 +317,10 @@ public function contactslist(Request $request){
         4 =>'wedding_bday',
         5 =>'country_id',
         6 =>'area',
-//        7 =>'status',
+    //        7 =>'status',
         7 =>'campaign_count',
         8 =>'transaction_count',
-        9 =>'checkin',
+        9 =>'profilesfolio.dateci', // Ubah ini untuk mereferensikan tabel yang benar
         10=>'revenue'
     );
     $totalData = $contacts->count();
@@ -289,10 +330,26 @@ public function contactslist(Request $request){
     $order = $columns[$request->input('order.0.column')];
     $dir = $request->input('order.0.dir');
     $search=$request->input('search.value');
+    
+    // Tambahkan penanganan khusus untuk sorting pada kolom checkin
+    $orderBy = $order;
+    $orderJoin = "";
+    
+    // Jika sorting pada kolom checkin (Last Stay)
+    if($order == 'profilesfolio.dateci') {
+        $orderBy = 'pf.dateci';
+        $orderJoin = " LEFT JOIN profilesfolio as pf ON pf.profileid = contacts.contactid ";
+    }
+    
     if(empty($search)){
-        $contactslist=Contact::whereHas('transaction')->join(DB::raw('(select id,sum(revenue) as revenue,contact_id from transactions left join contact_transaction on contact_transaction.transaction_id=transactions.id group by id) as revenue'),'revenue.contact_id','=','contactid')
+        $contactslist=Contact::whereHas('transaction')
+            ->join(DB::raw('(select id,sum(revenue) as revenue,contact_id from transactions left join contact_transaction on contact_transaction.transaction_id=transactions.id group by id) as revenue'),'revenue.contact_id','=','contactid')
+            ->when($order == 'profilesfolio.dateci', function($query) use ($orderJoin) {
+                return $query->leftJoin(DB::raw('profilesfolio as pf'), 'pf.profileid', '=', 'contactid');
+            })
             ->withCount('campaign')->withCount('transaction')
-            ->offset($start)->limit($limit)->orderBy($order,$dir)
+            ->offset($start)->limit($limit)
+            ->orderBy($orderBy, $dir)
             ->withCount('campaign')->withCount('transaction')->when(!empty($request->gender),function($qq) use ($request){
                 return $qq->where('gender','=',$request->gender);
             })->withCount('excluded')->groupBy('contactid')->get();
@@ -307,7 +364,7 @@ public function contactslist(Request $request){
             })->orWhere('area','LIKE',"%{$search}%")
             ->offset($start)
             ->limit($limit)
-            ->orderBy($order,$dir)
+            ->orderBy($orderBy,$dir)
             ->when(!empty($request->gender),function($qq) use ($request){
                 return $qq->where('gender','=',$request->gender);
             })->withCount('excluded')->groupBy('contactid')->get();
@@ -381,26 +438,57 @@ public function contactslist(Request $request){
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+         public function show($id)
     {
+        // Coba dapatkan kontak dengan transaksi
         $contacts = Contact::leftJoin('contact_transaction','contact_transaction.contact_id','=','contacts.contactid')
             ->leftJoin('transactions','contact_transaction.transaction_id','=','transactions.id')
-            ->leftJoin('profilesfolio','profilesfolio.folio_master','=','transactions.resv_id')
+            ->leftJoin('profilesfolio', function($join) {
+                $join->on('profilesfolio.folio_master','=','transactions.resv_id')
+                     ->on('profilesfolio.profileid','=','contacts.contactid');
+            })
             ->leftJoin('room_type','room_type.room_code','=','profilesfolio.roomtype')
-            ->where('contact_transaction.contact_id',$id)
-            ->whereColumn('profilesfolio.folio_master','profilesfolio.folio')
+            ->where('contact_transaction.contact_id', $id)
+            ->where('profilesfolio.profileid', '=', DB::raw('contacts.contactid'))
+            ->groupBy('transactions.resv_id', 'profilesfolio.profileid', 'contacts.contactid')
             ->get();
-        $totalnight = 0;
-//        dd($contacts);
-        foreach ($contacts[0]->transaction as $transaction)
-        {
-            $night = ProfileFolio::select('dateci','dateco')->where('folio_master', $transaction->resv_id)->first();
-            $night = Carbon::parse($night->dateco)->diffInDays(Carbon::parse($night->dateci));
-            $totalnight += $night;
+
+        // Jika tidak ada data transaksi, ambil data kontak langsung
+        if (empty($contacts) || count($contacts) == 0 || !isset($contacts[0]->transaction) || count($contacts[0]->transaction) == 0) {
+            // Ambil data kontak langsung tanpa join ke transaksi
+            $contact = Contact::where('contactid', $id)->first();
+            
+            if ($contact) {
+                // Ambil profilesfolio langsung dari relasi
+                $profilesfolios = ProfileFolio::where('profileid', $id)
+                    ->leftJoin('room_type', 'room_type.room_code', '=', 'profilesfolio.roomtype')
+                    ->get();
+                
+                // Jika ada profilesfolio, gunakan data tersebut
+                if ($profilesfolios && count($profilesfolios) > 0) {
+                    $contacts = collect([$contact]);
+                    // Pastikan property yang diperlukan tersedia
+                    $contact->transaction = collect([]);
+                }
+            }
         }
-//        dd($totalnight);
-       return view('contacts.detail',['data'=>$contacts,'totalnight'=>$totalnight]);
+
+        $totalnight = 0;
+
+        // Hitung total malam jika ada transaksi
+        if (!empty($contacts) && count($contacts) > 0 && isset($contacts[0]->transaction) && count($contacts[0]->transaction) > 0) {
+            foreach ($contacts[0]->transaction as $transaction) {
+                $night = ProfileFolio::select('dateci','dateco')->where('folio_master', $transaction->resv_id)->first();
+                if ($night) {
+                    $night = Carbon::parse($night->dateco)->diffInDays(Carbon::parse($night->dateci));
+                    $totalnight += $night;
+                }
+            }
+        }
+
+        return view('contacts.detail',['data'=>$contacts,'totalnight'=>$totalnight]);
     }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -417,164 +505,282 @@ public function contactslist(Request $request){
         return response($country);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function update(Request $request)
-    {
-        $contact=Contact::where('contactid','=',$request->id)->first();
-       $contact->fname=$request->fname;
-       $contact->lname=$request->lname;
-       $contact->salutation=$request->salutation;
-       $contact->marital_status=$request->marital_status;
-       $contact->gender=$request->gender;
-       if($request->birthday){
-           $contact->birthday=Carbon::parse($request->birthday)->format('Y-m-d');
-       }else{
-           $contact->birthday=NULL;
-       }
 
-       if($request->wedding_bday){
-           $contact->wedding_bday=Carbon::parse($request->wedding_bday)->format('Y-m-d');
-       } else{
-           $contact->wedding_bday=NULL;
-       }
+/**
+ * Update the specified resource in storage.
+ *
+ * @param  \Illuminate\Http\Request  $request
+ * @param  int  $id
+ * @return \Illuminate\Http\RedirectResponse
+ */
+public function update(Request $request)
+{
+    $contact = Contact::where('contactid', '=', $request->id)->first();
+    
+    // Capture old data before changes
+    $oldData = [
+        'fname' => $contact->fname,
+        'lname' => $contact->lname,
+        'salutation' => $contact->salutation,
+        'marital_status' => $contact->marital_status,
+        'gender' => $contact->gender,
+        'birthday' => $contact->birthday,
+        'wedding_bday' => $contact->wedding_bday,
+        'country_id' => $contact->country_id,
+        'area' => $contact->area,
+        'email' => $contact->email,
+        'idnumber' => $contact->idnumber,
+        'mobile' => empty($contact->mobile) ? null : $contact->mobile,
+        'address1' => $contact->address1->isEmpty() ? null : $contact->address1[0]->pivot->value,
+        'address2' => $contact->address2->isEmpty() ? null : $contact->address2[0]->pivot->value
+    ];
 
-       $contact->country_id=$request->country_id;
-       $contact->area=$request->area;
-       $contact->email=$request->email;
-       $contact->idnumber=$request->idnumber;
-       $contact->save();
-
-       if(!$contact->companyname->isEmpty() && $request->company_name != NULL) {
-           $contact->companyname[0]->pivot->value=$request->company_name;
-           $contact->companyname[0]->pivot->save();
-       }elseif($request->company_name != NULL){
-           $attr = Attribute::where('attr_name', '=', 'company_name')->first();
-           $contact->companyname()->attach($attr->id, ['value' => $request->company_name]);
-       }else{
-           $attr = Attribute::where('attr_name', '=', 'company_name')->first();
-           $contact->companyname()->detach($attr->id);
-       }
-       if (!$contact->companyphone->isEmpty() && $request->company_phone !=NULL){
-           $contact->companyphone[0]->pivot->value = $request->company_phone;
-           $contact->companyname[0]->pivot->save();
-       }elseif($request->company_phone !=NULL) {
-           $attr = Attribute::where('attr_name', '=', 'company_phone')->first();
-           $contact->companyphone()->attach($attr->id, ['value' => $request->company_phone]);
-       }else{
-           $attr=Attribute::where('attr_name','=','company_phone')->first();
-           $contact->companyphone()->detach($attr->id);
-       }
-        if (!$contact->companyemail->isEmpty() && $request->company_email !=NULL){
-            $contact->companyemail[0]->pivot->value = $request->company_email;
-            $contact->companyname[0]->pivot->save();
-        }elseif($request->company_email !=NULL) {
-            $attr = Attribute::where('attr_name', '=', 'company_email')->first();
-            $contact->companyemail()->attach($attr->id, ['value' => $request->company_email]);
-        }else{
-            $attr=Attribute::where('attr_name','=','company_email')->first();
-            $contact->companyemail()->detach($attr->id);
-        }
-        if (!$contact->companyarea->isEmpty() && $request->company_area !=NULL){
-            $contact->companyarea[0]->pivot->value = $request->company_area;
-            $contact->companyname[0]->pivot->save();
-        }elseif($request->company_area !=NULL) {
-            $attr = Attribute::where('attr_name', '=', 'company_area')->first();
-            $contact->companyarea()->attach($attr->id, ['value' => $request->company_area]);
-        }else{
-            $attr=Attribute::where('attr_name','=','company_area')->first();
-            $contact->companyarea()->detach($attr->id);
-        }
-        if (!$contact->companystatus->isEmpty() && $request->company_status !=NULL){
-            $contact->companystatus[0]->pivot->value = $request->company_status;
-            $contact->companyname[0]->pivot->save();
-        }elseif($request->company_status !=NULL) {
-            $attr = Attribute::where('attr_name', '=', 'company_status')->first();
-            $contact->companystatus()->attach($attr->id, ['value' => $request->company_status]);
-        }else{
-            $attr=Attribute::where('attr_name','=','company_status')->first();
-            $contact->companystatus()->detach($attr->id);
-        }
-        if (!$contact->companyaddress->isEmpty() && $request->company_address !=NULL){
-            $contact->companyaddress[0]->pivot->value = $request->company_address;
-            $contact->companyname[0]->pivot->save();
-        }elseif($request->company_address !=NULL) {
-            $attr = Attribute::where('attr_name', '=', 'company_address')->first();
-            $contact->companyaddress()->attach($attr->id, ['value' => $request->company_address]);
-        }else{
-            $attr=Attribute::where('attr_name','=','company_address')->first();
-            $contact->companyaddress()->detach($attr->id);
-        }
-        if (!$contact->companyfax->isEmpty() && $request->company_fax !=NULL){
-            $contact->companyfax[0]->pivot->value = $request->company_fax;
-            $contact->companyname[0]->pivot->save();
-        }elseif($request->company_fax !=NULL) {
-            $attr = Attribute::where('attr_name', '=', 'company_fax')->first();
-            $contact->companyfax()->attach($attr->id, ['value' => $request->company_fax]);
-        }else{
-            $attr=Attribute::where('attr_name','=','company_fax')->first();
-            $contact->companyfax()->detach($attr->id);
-        }
-        if (!$contact->companytype->isEmpty() && $request->company_type !=NULL){
-            $contact->companytype[0]->pivot->value = $request->company_type;
-            $contact->companyname[0]->pivot->save();
-        }elseif($request->company_type !=NULL) {
-            $attr = Attribute::where('attr_name', '=', 'company_type')->first();
-            $contact->companytype()->attach($attr->id, ['value' => $request->company_type]);
-        }else{
-            $attr=Attribute::where('attr_name','=','company_type')->first();
-            $contact->companytype()->detach($attr->id);
-        }
-        if (!$contact->companynationality->isEmpty() && $request->company_nationality !=NULL){
-            $contact->companynationality[0]->pivot->value = $request->company_nationality;
-            $contact->companyname[0]->pivot->save();
-        }elseif($request->company_nationality !=NULL) {
-            $attr = Attribute::where('attr_name', '=', 'company_nationality')->first();
-            $contact->companynationality()->attach($attr->id, ['value' => $request->company_nationality]);
-        }else{
-            $attr=Attribute::where('attr_name','=','company_nationality')->first();
-            $contact->companynationality()->detach($attr->id);
-        }
-
-        if($contact->address1->isEmpty() and $request->address1 !='') {
-           $attr = Attribute::where('attr_name', '=', 'address1')->first();
-            $contact->address1()->attach($attr->id, ['value' => $request->address1]);
-        }elseif ($request->address1==''){
-            $attr = Attribute::where('attr_name', '=', 'address1')->first();
-            $contact->address1()->detach($attr->id);
-        } else {
-            $contact->address1[0]->pivot->value=$request->address1;
-            $contact->address1[0]->pivot->save();
-        }
-
-        if($contact->address2->isEmpty() and $request->address2 !=''){
-            $attr = Attribute::where('attr_name', '=', 'address2')->first();
-            $contact->address2()->attach($attr->id, ['value' => $request->address2]);
-        }elseif($request->address2==''){
-            $attr = Attribute::where('attr_name', '=', 'address2')->first();
-            $contact->address2()->detach($attr->id);
-        } else {
-            $contact->address2[0]->pivot->value=$request->address2;
-            $contact->address2[0]->pivot->save();
-        }
-        if($contact->mobile==null and $request->mobile !='') {
-            $attr = Attribute::where('attr_name', '=', 'mobile')->first();
-            $contact->mobile()->attach($attr->id, ['value' => $request->mobile]);
-        }elseif($request->mobile==''){
-            $attr = Attribute::where('attr_name', '=', 'mobile')->first();
-            $contact->mobile()->detach($attr->id);
-        } else {
-            $contact->mobile[0]->pivot->value=$request->mobile;
-            $contact->mobile[0]->pivot->save();
-        }
-        return redirect()->back();
-
+     // Capture old company data before changes
+     $oldCompanyData = [
+        'company_name' => $contact->companyname->isEmpty() ? null : $contact->companyname[0]->pivot->value,
+        'company_phone' => $contact->companyphone->isEmpty() ? null : $contact->companyphone[0]->pivot->value,
+        'company_email' => $contact->companyemail->isEmpty() ? null : $contact->companyemail[0]->pivot->value,
+        'company_area' => $contact->companyarea->isEmpty() ? null : $contact->companyarea[0]->pivot->value,
+        'company_status' => $contact->companystatus->isEmpty() ? null : $contact->companystatus[0]->pivot->value,
+        'company_address' => $contact->companyaddress->isEmpty() ? null : $contact->companyaddress[0]->pivot->value,
+        'company_fax' => $contact->companyfax->isEmpty() ? null : $contact->companyfax[0]->pivot->value,
+        'company_type' => $contact->companytype->isEmpty() ? null : $contact->companytype[0]->pivot->value,
+        'company_nationality' => $contact->companynationality->isEmpty() ? null : $contact->companynationality[0]->pivot->value
+    ];
+        // Pastikan gender dan salutation tidak berubah menjadi null
+        $request->merge([
+            'gender' => $request->gender ?: $contact->gender,
+            'salutation' => $request->salutation ?: $contact->salutation,
+            'marital_status' => $request->has('marital_status') && $request->marital_status === '' ? '' : ($request->marital_status ?: $contact->marital_status)
+        ]);
+        
+    // Update contact data (EXCLUDING readonly fields)
+    // Don't update fname, lname, salutation, gender, birthday, country_id, area, idnumber, email, mobile, address1
+    // $contact->fname = $request->fname;
+    // $contact->lname = $request->lname;
+    // $contact->salutation = $request->salutation;
+    // Perbaikan untuk marital_status - gunakan nilai dari request yang sudah di-merge
+    $contact->marital_status = $request->marital_status;
+        
+    // Jika nilai adalah string kosong, gunakan pendekatan yang lebih kuat untuk database
+    if ($request->marital_status === '') {
+        // Force the database to treat it as an empty string, not NULL
+        DB::statement("UPDATE contacts SET marital_status = '' WHERE contactid = ?", [$contact->contactid]);
+        
+        // Refresh model untuk memastikan nilai benar
+        $contact->refresh();
     }
+
+    // $contact->gender = $request->gender;
+ // Only update wedding_bday
+ if($request->wedding_bday) {
+    $contact->wedding_bday = Carbon::parse($request->wedding_bday)->format('Y-m-d');
+} else {
+    $contact->wedding_bday = NULL;
+}
+
+// Tambahkan debug untuk melihat nilai yang diterima
+\Log::debug('Wedding_bday request value: ' . ($request->wedding_bday ?? 'NULL'));
+\Log::debug('Birthday request value: ' . ($request->birthday ?? 'NULL'));
+
+// Pastikan tidak ada nilai birthday yang tidak sengaja masuk ke wedding_bday
+// Cek apakah request->birthday sama dengan nilai yang akan disimpan ke wedding_bday
+if ($contact->wedding_bday && $request->birthday && 
+    Carbon::parse($request->birthday)->format('Y-m-d') === $contact->wedding_bday) {
+    // Jika sama, kemungkinan terjadi kesalahan, reset wedding_bday
+    \Log::warning('Detected potential error: birthday value copied to wedding_bday');
+    $contact->wedding_bday = $oldData['wedding_bday']; // Kembalikan ke nilai asli
+}
+    
+
+    // Don't update these fields
+    // $contact->country_id = $request->country_id;
+    // $contact->area = $request->area;
+    // $contact->idnumber = $request->idnumber;
+    // $contact->email = $request->email;
+    
+    $contact->save();
+
+   if(!$contact->companyname->isEmpty() && $request->company_name != NULL) {
+       $contact->companyname[0]->pivot->value=$request->company_name;
+       $contact->companyname[0]->pivot->save();
+   }elseif($request->company_name != NULL){
+       $attr = Attribute::where('attr_name', '=', 'company_name')->first();
+       $contact->companyname()->attach($attr->id, ['value' => $request->company_name]);
+   }else{
+       $attr = Attribute::where('attr_name', '=', 'company_name')->first();
+       $contact->companyname()->detach($attr->id);
+   }
+   if (!$contact->companyphone->isEmpty() && $request->company_phone !=NULL){
+       $contact->companyphone[0]->pivot->value = $request->company_phone;
+       $contact->companyname[0]->pivot->save();
+   }elseif($request->company_phone !=NULL) {
+       $attr = Attribute::where('attr_name', '=', 'company_phone')->first();
+       $contact->companyphone()->attach($attr->id, ['value' => $request->company_phone]);
+   }else{
+       $attr=Attribute::where('attr_name','=','company_phone')->first();
+       $contact->companyphone()->detach($attr->id);
+   }
+    if (!$contact->companyemail->isEmpty() && $request->company_email !=NULL){
+        $contact->companyemail[0]->pivot->value = $request->company_email;
+        $contact->companyname[0]->pivot->save();
+    }elseif($request->company_email !=NULL) {
+        $attr = Attribute::where('attr_name', '=', 'company_email')->first();
+        $contact->companyemail()->attach($attr->id, ['value' => $request->company_email]);
+    }else{
+        $attr=Attribute::where('attr_name','=','company_email')->first();
+        $contact->companyemail()->detach($attr->id);
+    }
+    if (!$contact->companyarea->isEmpty() && $request->company_area !=NULL){
+        $contact->companyarea[0]->pivot->value = $request->company_area;
+        $contact->companyname[0]->pivot->save();
+    }elseif($request->company_area !=NULL) {
+        $attr = Attribute::where('attr_name', '=', 'company_area')->first();
+        $contact->companyarea()->attach($attr->id, ['value' => $request->company_area]);
+    }else{
+        $attr=Attribute::where('attr_name','=','company_area')->first();
+        $contact->companyarea()->detach($attr->id);
+    }
+    if (!$contact->companystatus->isEmpty() && $request->company_status !=NULL){
+        $contact->companystatus[0]->pivot->value = $request->company_status;
+        $contact->companyname[0]->pivot->save();
+    }elseif($request->company_status !=NULL) {
+        $attr = Attribute::where('attr_name', '=', 'company_status')->first();
+        $contact->companystatus()->attach($attr->id, ['value' => $request->company_status]);
+    }else{
+        $attr=Attribute::where('attr_name','=','company_status')->first();
+        $contact->companystatus()->detach($attr->id);
+    }
+    if (!$contact->companyaddress->isEmpty() && $request->company_address !=NULL){
+        $contact->companyaddress[0]->pivot->value = $request->company_address;
+        $contact->companyname[0]->pivot->save();
+    }elseif($request->company_address !=NULL) {
+        $attr = Attribute::where('attr_name', '=', 'company_address')->first();
+        $contact->companyaddress()->attach($attr->id, ['value' => $request->company_address]);
+    }else{
+        $attr=Attribute::where('attr_name','=','company_address')->first();
+        $contact->companyaddress()->detach($attr->id);
+    }
+    if (!$contact->companyfax->isEmpty() && $request->company_fax !=NULL){
+        $contact->companyfax[0]->pivot->value = $request->company_fax;
+        $contact->companyname[0]->pivot->save();
+    }elseif($request->company_fax !=NULL) {
+        $attr = Attribute::where('attr_name', '=', 'company_fax')->first();
+        $contact->companyfax()->attach($attr->id, ['value' => $request->company_fax]);
+    }else{
+        $attr=Attribute::where('attr_name','=','company_fax')->first();
+        $contact->companyfax()->detach($attr->id);
+    }
+    if (!$contact->companytype->isEmpty() && $request->company_type !=NULL){
+        $contact->companytype[0]->pivot->value = $request->company_type;
+        $contact->companyname[0]->pivot->save();
+    }elseif($request->company_type !=NULL) {
+        $attr = Attribute::where('attr_name', '=', 'company_type')->first();
+        $contact->companytype()->attach($attr->id, ['value' => $request->company_type]);
+    }else{
+        $attr=Attribute::where('attr_name','=','company_type')->first();
+        $contact->companytype()->detach($attr->id);
+    }
+    if (!$contact->companynationality->isEmpty() && $request->company_nationality !=NULL){
+        $contact->companynationality[0]->pivot->value = $request->company_nationality;
+        $contact->companyname[0]->pivot->save();
+    }elseif($request->company_nationality !=NULL) {
+        $attr = Attribute::where('attr_name', '=', 'company_nationality')->first();
+        $contact->companynationality()->attach($attr->id, ['value' => $request->company_nationality]);
+    }else{
+        $attr=Attribute::where('attr_name','=','company_nationality')->first();
+        $contact->companynationality()->detach($attr->id);
+    }
+
+    if($contact->address1->isEmpty() and $request->address1 !='') {
+       $attr = Attribute::where('attr_name', '=', 'address1')->first();
+        $contact->address1()->attach($attr->id, ['value' => $request->address1]);
+    }elseif ($request->address1==''){
+        $attr = Attribute::where('attr_name', '=', 'address1')->first();
+        $contact->address1()->detach($attr->id);
+    } else {
+        $contact->address1[0]->pivot->value=$request->address1;
+        $contact->address1[0]->pivot->save();
+    }
+
+    if($contact->address2->isEmpty() and $request->address2 !=''){
+        $attr = Attribute::where('attr_name', '=', 'address2')->first();
+        $contact->address2()->attach($attr->id, ['value' => $request->address2]);
+    }elseif($request->address2==''){
+        $attr = Attribute::where('attr_name', '=', 'address2')->first();
+        $contact->address2()->detach($attr->id);
+    } else {
+        $contact->address2[0]->pivot->value=$request->address2;
+        $contact->address2[0]->pivot->save();
+    }
+    if (!empty($contact->mobile) && $request->mobile != NULL) {
+        $contact->mobile = $request->mobile;
+        $contact->save();
+    } elseif($request->mobile != NULL) {
+        $contact->mobile = $request->mobile;
+        $contact->save();
+    } else {
+        $contact->mobile = NULL;
+        $contact->save();
+    }
+    
+    // Capture new data after changes (using existing values for protected fields)
+    $newData = [
+        'fname' => $request->fname,
+        'lname' => $request->lname,
+        'salutation' => $request->salutation,
+        'marital_status' => $request->marital_status,
+        'gender' => $request->gender,
+        'birthday' => $request->birthday ? Carbon::parse($request->birthday)->format('Y-m-d') : $contact->birthday,
+        'wedding_bday' => $contact->wedding_bday, // Gunakan nilai dari model yang sudah diupdate
+        'country_id' => $contact->country_id, // Keep existing value
+        'area' => $contact->area,             // Keep existing value
+        'email' => $request->email,
+        'idnumber' => $contact->idnumber,     // Keep existing value
+        'mobile' => $request->mobile ?? null,
+        'address1' => $request->address1 ?? null,
+        'address2' => $request->address2 ?? null
+    ];
+    
+    // Log the activity
+    if ($oldData !== $newData) {
+        $this->logActivity(
+            'update_contact',
+            Contact::class,
+            $contact->contactid,
+            $oldData,
+            $newData,
+            "Contact {$contact->fname} {$contact->lname} was updated"
+        );
+    }
+    
+    // Capture new company data
+    $newCompanyData = [
+        'company_name' => $request->company_name ?? null,
+        'company_phone' => $request->company_phone ?? null,
+        'company_email' => $request->company_email ?? null,
+        'company_area' => $request->company_area ?? null,
+        'company_status' => $request->company_status ?? null,
+        'company_address' => $request->company_address ?? null,
+        'company_fax' => $request->company_fax ?? null,
+        'company_type' => $request->company_type ?? null,
+        'company_nationality' => $request->company_nationality ?? null
+    ];
+    
+    // Log company information update if any changes occurred
+    if ($oldCompanyData !== $newCompanyData) {
+        $this->logActivity(
+            'update_company_info',
+            Contact::class,
+            $contact->contactid,
+            $oldCompanyData,
+            $newCompanyData,
+            "Company information for contact {$contact->fname} {$contact->lname} was updated"
+        );
+    }
+
+    return redirect()->back();
+}
 
     /**
      * Remove the specified resource from storage.
@@ -730,15 +936,20 @@ public function contactslist(Request $request){
                 )->whereHas('transaction',function($q){
                 return $q->havingRaw('sum(revenue)>=0');
                 })
+                ->withCount('transaction')
                 ->get();
+                $status = 'In House';
         }
         elseif ($stat=='Confirm'){
-            $contacts = Contact::whereHas('profilesfolio', function ($q) {
+              $contacts = Contact::whereHas('profilesfolio', function ($q) {
                return $q->where('foliostatus', '=', 'C');
            })->get();
+            $status = 'Confirm';
         }
 
-            return view('contacts.list', ['data' => $contacts]);
+        // dd($contacts[17]);
+        //return view('contacts.list', ['data' => $contacts]);
+        return view('contacts.list', ['data' => $contacts, 'status' => $status]);
         }
 
     public function male(){
@@ -913,45 +1124,168 @@ public function contactslist(Request $request){
         $review=$review->toJson();
         return view('review.feedback',['contacts'=>$contacts,'review'=>$review]);
     }
-    public function incomplete(){
-        $from = Carbon::now()->format('Y-m-d');
-        $to = Carbon::now()->addDays(30)->format('Y-m-d');
+    public function incomplete()
+    {
+        $today = Carbon::now()->format('Y-m-d');
+        $nextWeek = Carbon::now()->addDays(7)->format('Y-m-d');
 
-        $incomplete=CheckContact::where('checked','=','N')
-            ->orWhere('checked','=',NULL)
-            ->Where('foliostatus','!=','X')
-            ->whereBetween('dateci',[$from, $to])
-            ->orderBy('dateci','asc')
+        $incomplete = CheckContact::where(function($query) {
+                $query->where('checked', '=', 'N')
+                      ->orWhereNull('checked');
+            })
+            ->where('foliostatus', '!=', 'X')
+            ->where('foliostatus', '=', 'I') // Hanya tampilkan status I, tidak termasuk G, C, T
+            ->where(function($query) use ($today, $nextWeek) {
+                $query->where(function($q) use ($today) {
+                        // Tamu yang akan check-out dalam 3 hari ke depan
+                        $q->where('dateco', '>=', $today)
+                          ->where('dateco', '<=', Carbon::now()->addDays(3)->format('Y-m-d'));
+                    })
+                    ->orWhere(function($q) use ($today, $nextWeek) {
+                        // Tamu yang akan check-in dalam 7 hari ke depan
+                        $q->where('dateci', '>=', $today)
+                          ->where('dateci', '<=', $nextWeek);
+                    });
+            })
+            ->orderByRaw(
+                "CASE 
+                    WHEN foliostatus = 'I' AND problems = 'ID Number need to check' THEN 0
+                    WHEN foliostatus = 'I' THEN 1
+                    ELSE 8
+                END"
+            )
+            ->orderByRaw(
+                "CASE 
+                    WHEN dateco <= DATE_ADD(CURRENT_DATE, INTERVAL 3 DAY) THEN 0
+                    ELSE 1
+                END"
+            )
+            ->orderBy('dateco', 'asc')
+            ->orderBy('dateci', 'asc')
             ->get();
-        return view('contacts.incomplete',['incompletes'=>$incomplete]);
+
+        return view('contacts.incomplete', ['incompletes' => $incomplete]);
     }
     public function updateStatus(Request $request){
-      $contact=CheckContact::where('folio','=',$request->id)->first();
-      $contact->checked='Y';
-      $contact->update();
-      return response('success',200);
+        $contact = CheckContact::where('folio', '=', $request->id)->first();
+        
+        // Capture old data before changes
+        $oldData = [
+            'folio' => $contact->folio,
+            'checked' => $contact->checked,
+            'dateci' => $contact->dateci,
+            'foliostatus' => $contact->foliostatus
+        ];
+        
+        $contact->checked = 'Y';
+        $contact->update();
+        
+        // Capture new data after changes
+        $newData = [
+            'folio' => $contact->folio,
+            'checked' => $contact->checked,
+            'dateci' => $contact->dateci,
+            'foliostatus' => $contact->foliostatus
+        ];
+        
+        // Log the activity
+        $this->logActivity(
+            'update_incomplete_contact',
+            CheckContact::class,
+            $contact->id,
+            $oldData,
+            $newData,
+            "Incomplete contact data completed for folio #{$contact->folio}"
+        );
+        
+        return response('success', 200);
     }
     public function excluded(){
        $excs=ExcludedEmail::all();
        return view('contacts.excluded',['data'=>$excs]);
     }
-    public  function addEmail(Request $request){
-        $rules=[
-            'email'=>'unique:excluded_emails'
+    public function addEmail(Request $request)
+    {
+        $rules = [
+            'email' => 'required|unique:excluded_emails,email'
         ];
-        $message=['email.unique'=>'Email/Domain exists in dataset'];
-        $validator=Validator::make($request->all(),$rules,$message);
-        if(!$validator->fails()){
-            $exc=new ExcludedEmail();
-            $exc->email=$request->email;
-            $exc->reason='Email blacklisted manually';
+        $message = ['email.unique' => 'Email/Domain exists in dataset'];
+        
+        $validator = Validator::make($request->all(), $rules, $message);
+        
+        if (!$validator->fails()) {
+            $exc = new ExcludedEmail();
+            $exc->email = $request->email;
+            $exc->reason = 'Email blacklisted manually';
             $exc->save();
+            
+            // Add user activity log
+            $this->logActivity(
+                'add_excluded_email',
+                ExcludedEmail::class,
+                $exc->id,
+                null,
+                [
+                    'email' => $exc->email,
+                    'reason' => $exc->reason
+                ],
+                'User added email/domain to exclusion list: ' . $exc->email
+            );
+            
             return response('success');
-        } else{
-            return response(['errors'=>$validator->errors()]);
+        } else {
+            return response(['errors' => $validator->errors()]);
         }
-
     }
+
+    public function deleteExcludedEmail(Request $request)
+{
+    $rules = [
+        'id' => 'required|exists:excluded_emails,id',
+        'reason' => 'required|string|min:3'
+    ];
+    
+    $validator = Validator::make($request->all(), $rules);
+    
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 422);
+    }
+    
+    try {
+        $excludedEmail = ExcludedEmail::find($request->id);
+        
+        if (!$excludedEmail) {
+            return response()->json(['errors' => ['id' => 'Email not found']], 404);
+        }
+        
+        // Capture old data before deletion for logging
+        $oldData = [
+            'id' => $excludedEmail->id,
+            'email' => $excludedEmail->email,
+            'reason_for_exclusion' => $excludedEmail->reason
+        ];
+        
+        // Delete the excluded email
+        $excludedEmail->delete();
+        
+        // Log the activity
+        $this->logActivity(
+            'delete_excluded_email',
+            ExcludedEmail::class,
+            $request->id,
+            $oldData,
+            [
+                'removal_reason' => $request->reason
+            ],
+            'User removed email/domain from exclusion list: ' . $oldData['email'] . ' (Reason: ' . $request->reason . ')'
+        );
+        
+        return response()->json(['status' => 'success']);
+    } catch (\Exception $e) {
+        \Log::error('Error deleting excluded email: ' . $e->getMessage());
+        return response()->json(['errors' => ['general' => 'An error occurred while processing your request: ' . $e->getMessage()]], 500);
+    }
+}
     public function type($ty){
         $type=RoomType::where('room_name',$ty)->first();
 

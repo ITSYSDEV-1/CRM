@@ -16,6 +16,7 @@
                                     <li><a class="close-link"><i class="fa fa-close"></i></a>
                                     </li>
                                 </ul>
+                                @can('7.1.1_view_delivery_status')
                                 <div class="clearfix">
                                     <div class="card">
                                         <div class="header">
@@ -34,8 +35,10 @@
                                         </div>
                                     </div>
                                 </div>
+                                @endcan
                                 {{--<a href="{{ url('email/create') }}" title="Create New Template" class=" btn btn-sm btn-success"> <i class="fa fa-plus"></i> Create New Template</a>--}}
                             </div>
+                            @can('7.1.1_view_delivery_status')
                             <div class="x_content">
                                 <div class="panel-group full-body" id="accordion_18" role="tablist" aria-multiselectable="true">
                                     <div class="panel">
@@ -135,6 +138,7 @@
                                     </div>
                                 </div>
                             </div>
+                            @endcan
                         </div>
                     </div>
                 </div>
@@ -178,8 +182,20 @@
         return arr
     }
 
-    $(document).ready(function () {
+    // Function to censor recipient email
+    function censorRecipient(email) {
+        @can('7.1.3_view_email_address_recipient')
+            return email;
+        @else
+            if (email && email.length > 3) {
+                return '***' + email.substring(3);
+            }
+            return email;
+        @endcan
+    }
 
+    $(document).ready(function () {
+        @can('7.1.1_view_delivery_status')
         $.each(['poststay','birthday','missyou'],function (i,v) {
             $.ajax({
                 url:"{{ route('deliverychart') }}" ,
@@ -226,7 +242,7 @@
                             formatter: function (y) {
                                 var xx=y/d.length * 100;
                                 xx=Math.round(xx);
-                                return v.toUpperCase()+' \n'+ xx  + '%'
+                                return v.toUpperCase()+'\n'+ xx  + '%'
                             }
                         })
                     }
@@ -259,7 +275,10 @@
                     },
                     {
                         "targets":3,
-                        "width":"25px"
+                        "width":"25px",
+                        "render":function (d,t,r) {
+                            return censorRecipient(d);
+                        }
                     },{
                         "targets":5,
                         "render":function (d) {
@@ -280,14 +299,26 @@
                                  text+='<li class="list-group-item">'+tt[i].url+'</li>'
                              }
                              text+='</ul>'
-                                return " <a href='#' onclick='event.preventDefault()' class='' data-toggle='popover' title='Detail' data-content='"+text+"'>Detail</a>"
+                                @can('7.1.2_click_detail')
+                                    return " <a href='#' onclick='event.preventDefault()' class='' data-toggle='popover' title='Detail' data-content='"+text+"'>Detail</a>"
+                                @else
+                                    return "Detail"
+                                @endcan
                             }else if(r.event==='failed'){
                               var txt=r.delivery_status
-                                return " <a href='#' onclick='event.preventDefault()' class='' data-toggle='popover' title='Detail' data-content='"+escapeHtml(txt)+"'>Detail</a>"
+                                @can('7.1.2_click_detail')
+                                    return " <a href='#' onclick='event.preventDefault()' class='' data-toggle='popover' title='Detail' data-content='"+escapeHtml(txt)+"'>Detail</a>"
+                                @else
+                                    return "Detail"
+                                @endcan
                             }else if(r.event==='delivered'){
                                 return ''
                             } else if(r.event==='unsubscribed') {
-                                return  " <a href='#' onclick='event.preventDefault()' class='' data-toggle='popover' title='Detail' data-content='Unsubscribed'>Detail</a>"
+                                @can('7.1.2_click_detail')
+                                    return  " <a href='#' onclick='event.preventDefault()' class='' data-toggle='popover' title='Detail' data-content='Unsubscribed'>Detail</a>"
+                                @else
+                                    return "Detail"
+                                @endcan
                             } else if(r.event==='opened'){
                                 return " "
                             }else if(r.event==='processed'){
@@ -355,6 +386,7 @@
                 $('[data-original-title]').popover('hide');
             }
         });
+        @endcan
     })
 </script>
 @endsection

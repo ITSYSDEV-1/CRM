@@ -14,6 +14,7 @@ use App\Models\MissYou;
 use App\Models\Configuration;
 use App\Models\PreStayActivate;
 use App\Models\PreStayActive;
+use App\Traits\UserLogsActivity; // Tambahkan import trait
 use DOMDocument;
 use FtpClient\FtpClient;
 use Illuminate\Http\Request;
@@ -23,6 +24,8 @@ use SebastianBergmann\Comparator\FactoryTest;
 
 class Emailtemplate extends Controller
 {
+    use UserLogsActivity; // Tambahkan penggunaan trait
+    
     /**
      * Display a listing of the resource.
      *
@@ -69,6 +72,21 @@ class Emailtemplate extends Controller
         $templ->type=$request->type;
         $templ->subject=$request->subject;
         $templ->save();
+        
+        // Tambahkan logging aktivitas pengguna
+        $this->logActivity(
+            'create_email_template',
+            MailEditor::class,
+            $templ->id,
+            [],
+            [
+                'name' => $templ->name,
+                'type' => $templ->type,
+                'subject' => $templ->subject
+            ],
+            'Created new email template: ' . $templ->name
+        );
+        
         return redirect('email/template');
     }
 
@@ -80,9 +98,14 @@ class Emailtemplate extends Controller
      */
     public function show($id)
     {
-        $temp=MailEditor::find($id);
-
-        $name=$temp->name;
+        $temp = MailEditor::find($id);
+        
+        if (!$temp) {
+            // Template not found, redirect with error message
+            return redirect('email/template')->with('error', 'Email template not found');
+        }
+    
+        $name = $temp->name;
         return view('email.templates.'.$name);
     }
 
@@ -108,7 +131,6 @@ class Emailtemplate extends Controller
      */
     public function update(Request $request, $id)
     {
-
         if ($request->file('file') != null && $request->active==2){
             $detail=file_get_contents($request->file('file'));
         }else{
@@ -118,12 +140,55 @@ class Emailtemplate extends Controller
         $detail = str_replace('%7D','}',$detail);
 
         $templ=MailEditor::find($id);
+        
+        // Simpan data lama untuk logging
+        $oldData = [
+            'name' => $templ->name,
+            'type' => $templ->type,
+            'subject' => $templ->subject,
+            'content_hash' => md5($templ->content) // Tambahkan hash konten untuk perbandingan
+        ];
+        
         $str=str_replace(' ','_',$request->name);
         $templ->content=$detail;
         $templ->name=$str;
         $templ->type=$request->type;
         $templ->subject=$request->subject;
+        
+        // Buat data baru untuk perbandingan
+        $newData = [
+            'name' => $str,
+            'type' => $request->type,
+            'subject' => $request->subject,
+            'content_hash' => md5($detail)
+        ];
+        
+        // Cek apakah ada perubahan nyata
+        $hasChanges = false;
+        foreach(['name', 'type', 'subject', 'content_hash'] as $field) {
+            if ($oldData[$field] !== $newData[$field]) {
+                $hasChanges = true;
+                break;
+            }
+        }
+        
         $templ->save();
+        
+        // Tambahkan logging aktivitas pengguna hanya jika ada perubahan
+        if ($hasChanges) {
+            // Hapus hash dari data yang akan disimpan di log
+            unset($oldData['content_hash']);
+            unset($newData['content_hash']);
+            
+            $this->logActivity(
+                'update_email_template',
+                MailEditor::class,
+                $templ->id,
+                $oldData,
+                $newData,
+                'Updated email template: ' . $templ->name
+            );
+        }
 
         return redirect('email/template');
     }
@@ -142,7 +207,25 @@ class Emailtemplate extends Controller
         $birthday=$template->birthday;
         $miss=$template->miss;
         if($campaign->isEmpty() && empty($poststay) && empty($birthday) && empty($miss)){
+            // Simpan data template sebelum dihapus untuk logging
+            $templateData = [
+                'name' => $template->name,
+                'type' => $template->type,
+                'subject' => $template->subject
+            ];
+            
             $template->delete();
+            
+            // Tambahkan logging aktivitas pengguna
+            $this->logActivity(
+                'delete_email_template',
+                MailEditor::class,
+                $request->id,
+                $templateData,
+                [],
+                'Deleted email template: ' . $templateData['name']
+            );
+            
             return response(['status'=>'success']);
         }else{
             return response(['status'=>'error']);
@@ -157,6 +240,8 @@ class Emailtemplate extends Controller
         $images = $dom->getElementsByTagName('img');
 
         $s=[];
+        $uploadedImages = []; // Array untuk melacak gambar yang diupload
+        
         foreach($images as $k => $img) {
             $data = $img->getAttribute('src');
             //$data = "https://crm.ramayanasuites.com/themes/kuta/assets/mail-template/poststay/logo-rms.png"
@@ -187,6 +272,14 @@ class Emailtemplate extends Controller
 
                 $base='public_html/'.env('FTP_TEMPLATE_PATH').'';
                 $image_name = $base.'/'.$pth.'/'.$name;
+                $image_url = 'https://'.env('FTP_TEMPLATE_PATH').'/'.$pth.'/'.$name;
+                
+                // Tambahkan informasi gambar ke array untuk logging
+                $uploadedImages[] = [
+                    'name' => $name,
+                    'path' => $pth,
+                    'url' => $image_url
+                ];
 
                 if (Storage::disk('ftp')->exists($image_name)){
                    Storage::disk('ftp')->delete($image_name);
@@ -196,16 +289,28 @@ class Emailtemplate extends Controller
                 }
 
                 $img->removeAttribute('src');
-                $img->setAttribute('src', 'https://'.env('FTP_TEMPLATE_PATH').'/'.$pth.'/'.$name);
+                $img->setAttribute('src', $image_url);
                 $img->setAttribute('url','');
                 $img->setAttribute('target','_blank');
-
             }
-
+        }
+        
+        // Log aktivitas upload gambar jika ada gambar yang diupload
+        if (!empty($uploadedImages)) {
+            $this->logActivity(
+                'upload_template_images',
+                null,
+                null,
+                [],
+                [
+                    'template_type' => $request->type,
+                    'images' => $uploadedImages
+                ],
+                'Uploaded ' . count($uploadedImages) . ' images for ' . $request->type . ' email template'
+            );
         }
 
         return $detail = $dom->saveHTML($dom->documentElement);
-
     }
     public function templateNew(){
         $action='create';
@@ -246,9 +351,30 @@ class Emailtemplate extends Controller
     }
     public function postStayUpdate(Request $request){
         $poststay=PostStay::find(1);
+        
+        // Simpan data lama untuk logging
+        $oldData = [
+            'sendafter' => $poststay->sendafter,
+            'template_id' => $poststay->template_id
+        ];
+        
         $poststay->sendafter=$request->sendafter+1;
         $poststay->template_id=$request->template;
         $poststay->save();
+        
+        // Tambahkan logging aktivitas pengguna
+        $this->logActivity(
+            'update_poststay_config',
+            PostStay::class,
+            $poststay->id,
+            $oldData,
+            [
+                'sendafter' => $poststay->sendafter,
+                'template_id' => $poststay->template_id
+            ],
+            'Updated poststay email configuration'
+        );
+        
         return redirect()->back();
     }
 
@@ -260,14 +386,38 @@ class Emailtemplate extends Controller
         return redirect()->back();
     }
     public function poststayActivate(Request $request){
-    $poststay=PostStay::find(1);
-    if ($request->state=='on'){
-        $poststay->update(['active'=>'y']);
-        return response(['active'=>true],200);
-    }else{
-        $poststay->update(['active'=>'n']);
-        return response(['active'=>false],200);
-    }
+        $poststay=PostStay::find(1);
+        $oldStatus = $poststay->active; // Simpan status lama untuk logging
+        
+        if ($request->state=='on'){
+            $poststay->update(['active'=>'y']);
+            
+            // Tambahkan logging aktivitas pengguna
+            $this->logActivity(
+                'update_poststay_status',
+                PostStay::class,
+                $poststay->id,
+                ['active' => $oldStatus],
+                ['active' => 'y'],
+                'Poststay email notification activated'
+            );
+            
+            return response(['active'=>true],200);
+        }else{
+            $poststay->update(['active'=>'n']);
+            
+            // Tambahkan logging aktivitas pengguna
+            $this->logActivity(
+                'update_poststay_status',
+                PostStay::class,
+                $poststay->id,
+                ['active' => $oldStatus],
+                ['active' => 'n'],
+                'Poststay email notification deactivated'
+            );
+            
+            return response(['active'=>false],200);
+        }
     }
     public function surveyActivate(Request $request){
     $poststay=PostStay::find(1);
@@ -280,14 +430,38 @@ class Emailtemplate extends Controller
     }
     }
     public function prestayActivate(Request $request){
-    $prestay=PreStayActivate::find(1);
-    if ($request->state=='on'){
-        $prestay->update(['active'=>'y']);
-        return response(['active'=>true],200);
-    }else{
-        $prestay->update(['active'=>'n']);
-        return response(['active'=>false],200);
-    }
+        $prestay=PreStayActivate::find(1);
+        $oldStatus = $prestay->active; // Simpan status lama untuk logging
+        
+        if ($request->state=='on'){
+            $prestay->update(['active'=>'y']);
+            
+            // Tambahkan logging aktivitas pengguna
+            $this->logActivity(
+                'update_prestay_status',
+                PreStayActivate::class,
+                $prestay->id,
+                ['active' => $oldStatus],
+                ['active' => 'y'],
+                'Prestay email notification activated'
+            );
+            
+            return response(['active'=>true],200);
+        }else{
+            $prestay->update(['active'=>'n']);
+            
+            // Tambahkan logging aktivitas pengguna
+            $this->logActivity(
+                'update_prestay_status',
+                PreStayActivate::class,
+                $prestay->id,
+                ['active' => $oldStatus],
+                ['active' => 'n'],
+                'Prestay email notification deactivated'
+            );
+            
+            return response(['active'=>false],200);
+        }
     }
     //BIRTHDAY CONFIG
     public function birthdayConfig(){
@@ -301,21 +475,72 @@ class Emailtemplate extends Controller
     }
     public function birthdayUpdate(Request $request){
         $birthday=Birthday::find(1);
-        $birthday->sendafter=$request->sendafter;
-        $birthday->template_id=$request->template;
-        $birthday->save();
+        
+        // Simpan data lama untuk logging
+        $oldData = [
+            'sendafter' => $birthday->sendafter,
+            'template_id' => $birthday->template_id
+        ];
+        
+        // Cek apakah ada perubahan sebenarnya
+        $newSendafter = (int)$request->sendafter;
+        $newTemplateId = (int)$request->template; // Konversi ke integer untuk konsistensi
+        
+        // Hanya update dan log jika ada perubahan nyata
+        if ($birthday->sendafter != $newSendafter || $birthday->template_id != $newTemplateId) {
+            $birthday->sendafter = $newSendafter;
+            $birthday->template_id = $newTemplateId;
+            $birthday->save();
+            
+            // Tambahkan logging aktivitas pengguna
+            $this->logActivity(
+                'update_birthday_config',
+                Birthday::class,
+                $birthday->id,
+                $oldData,
+                [
+                    'sendafter' => $birthday->sendafter,
+                    'template_id' => $birthday->template_id
+                ],
+                'Updated birthday email configuration'
+            );
+        }
+        
         return redirect()->back();
     }
     public function birthdayActivate(Request $request){
         $birthday=Birthday::find(1);
+        $oldStatus = $birthday->active; // Simpan status lama untuk logging
+        
         if ($request->state=='on'){
             $birthday->update(['active'=>'y']);
+            
+            // Tambahkan logging aktivitas pengguna
+            $this->logActivity(
+                'update_birthday_status',
+                Birthday::class,
+                $birthday->id,
+                ['active' => $oldStatus],
+                ['active' => 'y'],
+                'Birthday email notification activated'
+            );
+            
             return response(['active'=>true],200);
         }else{
             $birthday->update(['active'=>'n']);
+            
+            // Tambahkan logging aktivitas pengguna
+            $this->logActivity(
+                'update_birthday_status',
+                Birthday::class,
+                $birthday->id,
+                ['active' => $oldStatus],
+                ['active' => 'n'],
+                'Birthday email notification deactivated'
+            );
+            
             return response(['active'=>false],200);
         }
-
     }
 
     public function prestayConfig()
@@ -325,9 +550,30 @@ class Emailtemplate extends Controller
     }
     public function preStayUpdate(Request $request){
         $prestay=ConfigPrestay::find(1);
+        
+        // Simpan data lama untuk logging
+        $oldData = [
+            'sendafter' => $prestay->sendafter,
+            'template_id' => $prestay->template_id
+        ];
+        
         $prestay->sendafter=$request->sendafter;
         $prestay->template_id=$request->template;
         $prestay->save();
+        
+        // Tambahkan logging aktivitas pengguna
+        $this->logActivity(
+            'update_prestay_config',
+            ConfigPrestay::class,
+            $prestay->id,
+            $oldData,
+            [
+                'sendafter' => $prestay->sendafter,
+                'template_id' => $prestay->template_id
+            ],
+            'Updated prestay email configuration'
+        );
+        
         return redirect()->back();
     }
 
@@ -342,12 +588,28 @@ class Emailtemplate extends Controller
            $new = $old->replicate();
            $new->name = $request->name;
            $new->save();
+           
+           // Tambahkan logging aktivitas pengguna
+           $this->logActivity(
+               'clone_email_template',
+               MailEditor::class,
+               $new->id,
+               [
+                   'source_template_id' => $old->id,
+                   'source_template_name' => $old->name
+               ],
+               [
+                   'name' => $new->name,
+                   'type' => $new->type,
+                   'subject' => $new->subject
+               ],
+               'Cloned email template from "' . $old->name . '" to "' . $new->name . '"'
+           );
+           
            return response('success', 200);
        }else{
-
           return response(['errors'=>$validator->errors()]);
         }
-
     }
     //We Miss You
     public function missConfig(){
@@ -360,23 +622,74 @@ class Emailtemplate extends Controller
         return response($templ,200);
     }
     public function missUpdate(Request $request){
-
         $miss=MissYou::find(1);
-        $miss->sendafter=$request->sendafter+1;
-        $miss->template_id=$request->template;
-        $miss->save();
+        
+        // Simpan data lama untuk logging
+        $oldData = [
+            'sendafter' => $miss->sendafter,
+            'template_id' => $miss->template_id
+        ];
+        
+        // Cek apakah ada perubahan sebenarnya
+        $newSendafter = $request->sendafter+1;
+        $newTemplateId = (int)$request->template; // Konversi ke integer untuk konsistensi
+        
+        // Hanya update dan log jika ada perubahan nyata
+        if ($miss->sendafter != $newSendafter || $miss->template_id != $newTemplateId) {
+            $miss->sendafter = $newSendafter;
+            $miss->template_id = $newTemplateId;
+            $miss->save();
+            
+            // Tambahkan logging aktivitas pengguna
+            $this->logActivity(
+                'update_miss_you_config',
+                MissYou::class,
+                $miss->id,
+                $oldData,
+                [
+                    'sendafter' => $miss->sendafter,
+                    'template_id' => $miss->template_id
+                ],
+                'Updated We Miss You email configuration'
+            );
+        }
+        
         return redirect()->back();
     }
+    
     public function missActivate(Request $request){
         $miss=MissYou::find(1);
+        $oldStatus = $miss->active; // Simpan status lama untuk logging
+        
         if ($request->state=='on'){
             $miss->update(['active'=>'y']);
+            
+            // Tambahkan logging aktivitas pengguna
+            $this->logActivity(
+                'update_miss_you_status',
+                MissYou::class,
+                $miss->id,
+                ['active' => $oldStatus],
+                ['active' => 'y'],
+                'We Miss You email notification activated'
+            );
+            
             return response(['active'=>true],200);
         }else{
             $miss->update(['active'=>'n']);
+            
+            // Tambahkan logging aktivitas pengguna
+            $this->logActivity(
+                'update_miss_you_status',
+                MissYou::class,
+                $miss->id,
+                ['active' => $oldStatus],
+                ['active' => 'n'],
+                'We Miss You email notification deactivated'
+            );
+            
             return response(['active'=>false],200);
         }
-
     }
     public function saveRating(Request $request,$id){
         $review=EmailReview::where('contact_id','=',$id)->first();
@@ -417,11 +730,26 @@ class Emailtemplate extends Controller
                 $pp->sendCC($template,'Testing,'.env('UNIT').'',$rc);
             }
             $email->testmail($request);
+            
+            // Tambahkan logging aktivitas pengguna
+            $this->logActivity(
+                'send_test_email',
+                MailEditor::class,
+                $template->id,
+                [],
+                [
+                    'template_name' => $template->name,
+                    'template_type' => $template->type,
+                    'test_email' => $request->email,
+                    'cc_recipients' => $recipients
+                ],
+                'Sent test email using template: ' . $template->name . ' to email: ' . $request->email
+            );
+            
             return response('success', 200);
         }else{
             return response(['errors'=>$validator->errors()]);
         }
-
     }
     public function blast(){
         return view('contacts.blast');

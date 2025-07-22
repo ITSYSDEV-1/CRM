@@ -23,42 +23,64 @@
                                     {{ Form::model($poststay,['route'=>['poststay.update',$poststay->id],'files'=>'true','id'=>'templateForm']) }}
                                     <div class="row">
                                         <div class="form-group">
+                                            @can('5.2.1_view_email_post_stay')
+                                            @can('5.2.2_active_deactive_post_stay')
                                             <div class="col-lg-12 col-md-12">
                                                 <label class="control-label">
                                                     Deactivate  <input type="checkbox" name="activate" class="js-switch"  id="myonoffswitch">  Activate
                                                 </label>
                                             </div>
+                                            @endcan
+                                            @endcan
                                         </div>
-                                        <div class="form-group">
+                                        <!-- <div class="form-group">
                                             <div class="col-lg-12 col-md-12">
                                                 <label class="control-label">
                                                     Deactivate Survey  <input type="checkbox" name="activate" class="js-switch"  id="mysurveyswitch">  Activate Survey
                                                 </label>
                                             </div>
-                                        </div>
+                                        </div> -->
+                                        @can('5.2.1_view_email_post_stay')
+                                        @can('5.2.3_set_time_email_post_stay')
                                         <div class="form-group">
                                             <div class="col-lg-12 col-md-12">
                                                 <label class="control-label">Send after checkout (days):</label>
                                                 {{ Form::select('sendafter',[''=>'Day/s after']+range(1,7,1),$poststay->sendafter-1,['class'=>'form-control selectpicker']) }}
                                             </div>
                                         </div>
+                                        @endcan
+                                        @endcan
+                                        @can('5.2.1_view_email_post_stay')
+                                        @can('5.2.4_select_email_template_post_stay')
                                         <div class="form-group">
                                             <div class="col-lg-12 col-md-12">
                                                 <label class="control-label">Select Email Template</label>
                                                 {{ Form::select('template',[''=>'Select Template']+\App\Models\MailEditor::where('type','Poststay')->pluck('name','id')->all(),$poststay->template_id,['id'=>'templateChose','class'=>'selectpicker form-control','onchange'=>'selectTemplate(this.value)']) }}
                                             </div>
                                         </div>
+                                        @endcan
+                                        @endcan
                                     </div>
                                     <br>
                                     <br>
+                                    @can('5.2.1_view_email_post_stay')
                                     <div class="well" id="templatepreview">
                                         {!! $poststay->template->content !!}
                                     </div>
+                                    @endcan
                                     <div class="form-group">
                                         <div class="row clearfix">
                                             <div class="col-lg-12 ">
                                                 <a class="btn bg-sm btn-success" href="{{ url('email/template') }}" title="Back"><i class="fa fa-arrow-circle-o-left"></i> Back</a>
+                                                @can('5.2.1_view_email_post_stay')
+                                                @can('5.2.2_active_deactive_post_stay')
+                                                @can('5.2.3_set_time_email_post_stay')
+                                                @can('5.2.4_select_email_template_post_stay')
                                                 <button class="btn btn-sm btn-success" type="submit"> <i class="fa fa-save"></i> Save</button>
+                                                @endcan
+                                                @endcan
+                                                @endcan
+                                                @endcan
                                             </div>
                                         </div>
                                     </div>

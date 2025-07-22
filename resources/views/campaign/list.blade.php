@@ -131,7 +131,9 @@
                                     </li>
                                 </ul>
                                 <div class="clearfix"></div>
+                            @can('4.1.1_add_new_campaign')
                                 <a href="{{ url('campaign/create') }}" title="Create New Campaign" class=" btn btn-success"><i class="fa fa-plus"> </i> Create New Campaign</a>
+                            @endcan
                             </div>
                             <div class="x_content" >
 
@@ -151,7 +153,12 @@
                                             <th>Unsubscribed</th>
                                             <th>Failed</th>
                                             <th>Rejected</th>
+                                            @if(auth()->user()->can('4.1.2_preview_campaign') || 
+                                            auth()->user()->can('4.1.3_set_schedule') || 
+                                            auth()->user()->can('4.1.4_show_recipient') || 
+                                            auth()->user()->can('4.1.5_delete_campaign'))
                                             <th>Manage</th>
+                                            @endif
                                         </tr>
                                         </thead>
 
@@ -169,7 +176,7 @@
     <script>
         $(document).ready(function () {
             var t= $('#campaigntable').DataTable({
-                "autoWidth": true,
+                "autoWidth": false,
                 "processing": true,
                 "language": {
                     processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> '
@@ -200,8 +207,12 @@
                     { "data": "unsubscribed"},
                     { "data": "failed"},
                     { "data": "rejected"},
+                    @if(auth()->user()->can('4.1.2_preview_campaign') || 
+                    auth()->user()->can('4.1.3_set_schedule') || 
+                    auth()->user()->can('4.1.4_show_recipient') || 
+                    auth()->user()->can('4.1.5_delete_campaign'))
                     { "data": null},
-
+                    @endif
                 ],
                 "columnDefs":[
                     {
@@ -260,8 +271,12 @@
 
                         }
                     },
+                    @if(auth()->user()->can('4.1.2_preview_campaign') || 
+                    auth()->user()->can('4.1.3_set_schedule') || 
+                    auth()->user()->can('4.1.4_show_recipient') || 
+                    auth()->user()->can('4.1.5_delete_campaign'))
                     {
-                    "targets":12,
+                        "targets":12,
                         "sortable":false,
                         "render":function(data,type,row){
                         // console.log(data.id)
@@ -270,17 +285,30 @@
                                 }else{
                                     str=''
                                 }
-
+                    
                             var id=data.id
+                            var actions = ''
+                            
+                            // Preview Template - 4.1.2_preview_campaign
+                            @can('4.1.2_preview_campaign')
+                            actions += '<a href="javascript:void(0)"  title="Preview Template" onclick="openModalTemplate(\''+str+'\')" style="margin-right: 5px;"> <i class="fa fa-eye" style="font-size: 1.5em"></i></a>'
+                            @endcan
+                            
+                            // Set Schedule - 4.1.3_set_schedule
                             if(data.status==='Draft' || data.status==='Scheduled'){
-                                var sc=' <a href="javascript:void(0)" title="Set Schedule"  onclick="openModalSchedule(\''+id+'\')"> <i class="fa fa-calendar-check-o " style="font-size: 1.5em"></i></a>'
-                            }else{
-                                sc=' '
+                                @can('4.1.3_set_schedule')
+                                actions += ' <a href="javascript:void(0)" title="Set Schedule"  onclick="openModalSchedule(\''+id+'\')" style="margin-right: 5px;"> <i class="fa fa-calendar-check-o " style="font-size: 1.5em"></i></a>'
+                                @endcan
                             }
-                            return '<a href="javascript:void(0)"  title="Preview Template" onclick="openModalTemplate(\''+str+'\')"> <i class="fa fa-eye" style="font-size: 1.5em"></i></a>'+ sc+
-                                   // ' <a href="javascript:void(0)" title="Show Recepient" onclick="openModalRecepient(\''+escape(recepient)+'\')"><i class="fa fa-users" style="font-size: 1.5em"></i> </a>'+
-                                   ' <a href="javascript:void(0)" title="Show Recepient" onclick="selectRecepient(\''+data.id+'\')"><i class="fa fa-users" style="font-size: 1.5em"></i> </a>'+
-                                    '<a href="#" title="Delete Template" onclick="return swal({title:\'Delete Confirmation\',text:\'This Template will permanently deleted\',type:\'warning\',\n' +
+                            
+                            // Show Recipient - 4.1.4_show_recipient
+                            @can('4.1.4_show_recipient')
+                            actions += ' <a href="javascript:void(0)" title="Show Recepient" onclick="selectRecepient(\''+data.id+'\')" style="margin-right: 5px;"><i class="fa fa-users" style="font-size: 1.5em"></i> </a>'
+                            @endcan
+                            
+                            // Delete Campaign - 4.1.5_delete_campaign
+                            @can('4.1.5_delete_campaign')
+                            actions += '<a href="#" title="Delete Template" onclick="return swal({title:\'Delete Confirmation\',text:\'This Template will permanently deleted\',type:\'warning\',\n' +
                                 '                                                            showCancelButton: true,\n' +
                                 '                                                            confirmButtonColor: \'#DD6B55\',\n' +
                                 '                                                            confirmButtonText:\'Delete\',\n' +
@@ -296,8 +324,12 @@
                                 '                                                            }\n' +
                                 '                                                            });"><i class="fa fa-trash" style="font-size: 1.5em">  </i>\n' +
                                 '                                                    </a>'
+                            @endcan
+                            
+                            return actions
                         }
-                    }
+                    },
+                    @endif
                 ]
             });
         })
@@ -391,7 +423,8 @@
                 success: function(data){
                     var recepient=''
                     $.each(data,function(i,v){
-                        recepient+="<tr><td>"+parseInt(i)+1+"</td><td>"+v.fname+" "+v.lname+"</td><td>"+v.pivot.status+"</td></tr>"
+                        // recepient+="<tr><td>"+parseInt(i)+1+"</td><td>"+v.fname+" "+v.lname+"</td><td>"+v.pivot.status+"</td></tr>"
+                        recepient+="<tr><td>"+(i+1)+"</td><td>"+v.fname+" "+v.lname+"</td><td>"+v.pivot.status+"</td></tr>"
                     })
                     $('#recepientModal tbody').empty()
                     $('#recepientModal tbody').append(recepient)

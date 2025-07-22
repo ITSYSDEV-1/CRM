@@ -9,18 +9,44 @@ use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpSpreadsheet\Reader\Xls;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use Illuminate\Support\Facades\DB;
+use App\Traits\UserLogsActivity;
 
 class ExternalEmailController extends Controller
 {
+    use UserLogsActivity;
+    
     //
     public function delcontact(Request $request){
-        $contact=ExternalContact::find($request->id);
-        $categories=$contact->category;
+        $contact = ExternalContact::find($request->id);
+        
+        // Capture old data before deletion for logging
+        $oldData = [
+            'id' => $contact->id,
+            'email' => $contact->email,
+            'fname' => $contact->fname,
+            'address' => $contact->address,
+            'phone' => $contact->phone,
+            'categories' => $contact->category->pluck('category')->toArray()
+        ];
+        
+        $categories = $contact->category;
         foreach($categories as $category){
             $contact->category()->detach($category->id);
         }
+        
         $contact->delete();
-        return response('success',200);
+        
+        // Log the deletion activity
+        $this->logActivity(
+            'delete_external_contact',
+            ExternalContact::class,
+            $request->id,
+            $oldData,
+            null,
+            'User deleted external contact: ' . $contact->email
+        );
+        
+        return response('success', 200);
     }
     public function contacts(){
         $contacts=ExternalContact::with('category')->get();
@@ -29,7 +55,7 @@ class ExternalEmailController extends Controller
     public function index(){
         return view('contacts.external');
     }
-    public  function saveexternalcontact(Request $request){
+    public function saveexternalcontact(Request $request){
 
         if ($request->getcategory==='on') {
             $rules = [
@@ -69,6 +95,10 @@ class ExternalEmailController extends Controller
             for ($j=1;$j<=count($spreadsheet)-1;$j++){
                 $emails[]=$spreadsheet[$j];
             }
+            
+            // Initialize data array to avoid undefined variable error
+            $data = [];
+            
             if ($request->getcategory!=='on'){
                 $categories=$request->new_category;
                 foreach ($categories as $category){
@@ -79,9 +109,22 @@ class ExternalEmailController extends Controller
                             $external->category()->syncWithoutDetaching($cat->id);
                             $data[]=$external;
                         }
-
                     }
                 }
+                
+                // Log activity for new category
+                $this->logActivity(
+                    'upload_external_contacts_new_category',
+                    ExternalContact::class,
+                    null,
+                    null,
+                    [
+                        'file_name' => $path->getClientOriginalName(),
+                        'categories' => $categories,
+                        'external_contacts_count' => count($data)
+                    ],
+                    'User uploaded external contacts with new categories: ' . implode(', ', $categories)
+                );
             } else{
                 $categories=$request->pick_category;
                 foreach ($emails as $list){
@@ -92,17 +135,43 @@ class ExternalEmailController extends Controller
                         }
                         $data[]=$external;
                     }
-
                 }
+                
+                // Get category names for logging
+                $categoryNames = ExternalContactCategory::whereIn('id', $categories)->pluck('category')->toArray();
+                
+                // Log activity for existing category
+                $this->logActivity(
+                    'upload_external_contacts_existing_category',
+                    ExternalContact::class,
+                    null,
+                    null,
+                    [
+                        'file_name' => $path->getClientOriginalName(),
+                        'category_ids' => $categories,
+                        'category_names' => $categoryNames,
+                        'external_contacts_count' => count($data)
+                    ],
+                    'User uploaded external contacts to existing categories: ' . implode(', ', $categoryNames)
+                );
             }
 
             return response(['success'=>$data],200);
         }else{
-            //return back()->withErrors($val->messages())->withInput();
+            // Log validation failure
+            $this->logActivity(
+                'upload_external_contacts_failed',
+                ExternalContact::class,
+                null,
+                null,
+                [
+                    'validation_errors' => $val->errors()->toArray()
+                ],
+                'External contact upload failed due to validation errors'
+            );
+            
             return response(['errors'=>$val->messages()]);
         }
-
-
     }
     public function categorylist(Request $request){
         $category=ExternalContactCategory::withCount('email')->get();
@@ -110,14 +179,47 @@ class ExternalEmailController extends Controller
     }
 
     public function delcategory(Request $request){
-        $contact=ExternalContactCategory::find($request->id);
+        $contact = ExternalContactCategory::find($request->id);
+        
+        // Capture old data before deletion for logging
+        $oldData = [
+            'id' => $contact->id,
+            'category' => $contact->category,
+            'email_count' => $contact->email()->count()
+        ];
+        
         $contact->email()->detach();
         $contact->delete();
-        return response('success',200);
+        
+        // Log the deletion activity
+        $this->logActivity(
+            'delete_external_contact_category',
+            ExternalContactCategory::class,
+            $request->id,
+            $oldData,
+            null,
+            'User deleted external contact category: ' . $oldData['category']
+        );
+        
+        return response('success', 200);
     }
 
     public function template(){
-        $file=public_path().'/'.'contact-template.xls';
+        $file = public_path().'/'.'contact-template.xls';
+        
+        // Log the template download activity
+        $this->logActivity(
+            'download_template',
+            ExternalContact::class,
+            null,
+            null,
+            [
+                'template_name' => 'contact-template.xls',
+                'template_path' => $file
+            ],
+            'User downloaded external contact template'
+        );
+        
         return response()->download($file);
     }
     public function contactsbycategory($category){

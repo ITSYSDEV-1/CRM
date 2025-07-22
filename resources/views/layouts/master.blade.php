@@ -111,6 +111,8 @@
   @yield('main-content')
   <!-- /page content -->
 
+  @include('layouts._help_guidelines')
+
     <!-- footer content -->
   @include('layouts._footer')
   <!-- /footer content -->
@@ -193,6 +195,7 @@
 
 <!-- Custom Theme Scripts -->
 <script src="{{ asset('build/js/custom.js') }}"></script>
+
 
 
 @yield('script')

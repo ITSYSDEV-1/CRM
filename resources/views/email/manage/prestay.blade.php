@@ -22,38 +22,60 @@
                                 <div class="form-inline">
                                     {{ Form::model($prestay,['route'=>['prestay.update',$prestay->id],'files'=>'true','id'=>'templateForm']) }}
                                     <div class="form-group">
+                                        @can('5.1.1_view_email_pre_stay')
+                                        @can('5.1.2_active_deactive_pre_stay')
                                         <div class="pull-right">
                                             <label>
                                                 Deactivate  <input type="checkbox" name="activate" class="js-switch"  id="myonoffswitch"  />  Activate
                                             </label>
 
                                         </div>
+                                        @endcan
+                                        @endcan
+                                        @can('5.1.1_view_email_pre_stay')
+                                        @can('5.1.3_set_time_email_pre_stay')
                                         <div class="col-lg-12 col-md-12">
                                             <div class="form-group">
                                                 <label class="control-label">Send before checkin (days):</label>
                                                 {{ Form::select('sendafter',[''=>'Day/s before']+[-8=>-8,-7=>-7,-6=>-6,-5=>-5,-4=>-4,-3=>-3,-2=>-2,-1=>-1,0=>0],$prestay->sendafter,['class'=>'form-control selectpicker']) }}
                                             </div>
                                         </div>
+                                        @endcan
+                                        @endcan
+                                        @can('5.1.1_view_email_pre_stay')
+                                        @can('5.1.4_select_email_template_pre_stay')
                                         <div class="col-lg-6 col-md-6">
                                             <div id="templateSelection">
                                                 <label class="control-label">Select Email Template</label>
                                                 {{ Form::select('template',[''=>'Select Template']+\App\Models\MailEditor::where('type','Prestay')->pluck('name','id')->all(),$prestay->template_id,['id'=>'templateChose','class'=>'selectpicker form-control','onchange'=>'selectTemplate(this.value)']) }}
                                             </div>
                                         </div>
+                                        @endcan
+                                        @endcan
 
                                     </div>
 
 
                                     <br>
                                     <br>
+                                    @can('5.1.1_view_email_pre_stay')
                                     <div class="well" id="templatepreview">
                                         {!! $prestay->template->content !!}
                                     </div>
+                                    @endcan
                                     <div class="form-group">
                                         <div class="row clearfix">
                                             <div class="col-lg-12 ">
                                                 <a class="btn bg-sm btn-success" href="{{ url('email/template') }}" title="Back"><i class="fa fa-arrow-circle-o-left"></i> Back</a>
-                                                <button class="btn btn-sm btn-success" type="submit"> <i class="fa fa-save"></i> Save</button>
+                                                    @can('5.1.1_view_email_pre_stay')
+                                                        @can('5.1.2_active_deactive_pre_stay')
+                                                            @can('5.1.3_set_time_email_pre_stay')
+                                                                @can('5.1.4_select_email_template_pre_stay')
+                                                                    <button class="btn btn-sm btn-success" type="submit"> <i class="fa fa-save"></i> Save</button>
+                                                                @endcan
+                                                            @endcan
+                                                        @endcan
+                                                    @endcan
                                             </div>
                                         </div>
                                     </div>

@@ -1,0 +1,586 @@
+{
+  "permission_groups": [
+    {
+      "id": "1_aplikasi",
+      "group_number": "1",
+      "name": "Application",
+      "description": "Application management",
+      "status": "disabled",
+      "sub_groups": [
+        {
+          "id": "1.1_preferences",
+          "sub_group_number": "1.1",
+          "name": "Preferences",
+          "permissions": [
+            {
+              "id": "1.1.1_view_preferences",
+              "permission_number": "1.1.1",
+              "name": "View Preferences",
+              "action": "view"
+            },
+            {
+              "id": "1.1.2_edit_preferences",
+              "permission_number": "1.1.2",
+              "name": "Edit Preferences",
+              "action": "edit"
+            },
+            {
+              "id": "1.1.3_manage_roles",
+              "permission_number": "1.1.3",
+              "name": "Manage Roles",
+              "action": "manage"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2_statistic",
+      "group_number": "2",
+      "name": "Statistic",
+      "description": "Statistic permissions",
+      "sub_groups": [
+        {
+          "id": "2.1_dashboard",
+          "sub_group_number": "2.1",
+          "name": "Dashboard",
+          "permissions": [
+            {
+              "id": "2.1.1_view_dashboard",
+              "permission_number": "2.1.1",
+              "name": "View Dashboard",
+              "action": "view"
+            }
+          ]
+        },
+        {
+          "id": "2.2_incoming_birthdays",
+          "sub_group_number": "2.2",
+          "name": "Incoming Birthdays",
+          "permissions": [
+            {
+              "id": "2.2.1_view_incoming_birthdays",
+              "permission_number": "2.2.1",
+              "name": "View Incoming Birthdays",
+              "action": "view"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "3_contact_management",
+      "group_number": "3",
+      "name": "Contact Management",
+      "description": "Contact and customer management permissions",
+      "sub_groups": [
+        {
+          "id": "3.1_view_contacts",
+          "sub_group_number": "3.1",
+          "name": "View Contacts",
+          "permissions": [
+            {
+              "id": "3.1.1_view_contacts_list",
+              "permission_number": "3.1.1",
+              "name": "View Contacts",
+              "action": "view"
+            },
+            {
+              "id": "3.1.2_view_detail",
+              "permission_number": "3.1.2",
+              "name": "View Detail",
+              "action": "view"
+            },
+            {
+              "id": "3.1.3_excluded_detail",
+              "permission_number": "3.1.3",
+              "name": "Excluded Detail",
+              "action": "view"
+            }
+          ]
+        },
+        {
+          "id": "3.2_detail_contacts",
+          "sub_group_number": "3.2",
+          "name": "Detail Contacts",
+          "permissions": [
+            {
+              "id": "3.2.1_edit_detail",
+              "permission_number": "3.2.1",
+              "name": "Edit Detail",
+              "action": "edit"
+            },
+            {
+              "id": "3.2.2_add_company_information",
+              "permission_number": "3.2.2",
+              "name": "Add Company Information",
+              "action": "add"
+            },
+            {
+              "id": "3.2.3_edit_company_information",
+              "permission_number": "3.2.3",
+              "name": "Edit Company Information",
+              "action": "edit"
+            }
+          ]
+        },
+        {
+          "id": "3.3_filter_contacts",
+          "sub_group_number": "3.3",
+          "name": "Filter Contacts",
+          "permissions": [
+            {
+              "id": "3.3.1_save_filter_contacts",
+              "permission_number": "3.3.1",
+              "name": "Save Filter Contacts",
+              "action": "filter"
+            },
+            {
+              "id": "3.3.2_create_segment",
+              "permission_number": "3.3.2",
+              "name": "Create Segment",
+              "action": "create"
+            },
+            {
+              "id": "3.3.3_create_campaign",
+              "permission_number": "3.3.3",
+              "name": "Create Campaign",
+              "action": "create"
+            }
+          ]
+        },
+        {
+          "id": "3.4_incomplete_contacts",
+          "sub_group_number": "3.4",
+          "name": "Incomplete Contacts",
+          "permissions": [
+            {
+              "id": "3.4.1_view_detail_incomplete",
+              "permission_number": "3.4.1",
+              "name": "View Detail Incomplete Contacts",
+              "action": "view"
+            },
+            {
+              "id": "3.4.2_checked_incomplete_contacts",
+              "permission_number": "3.4.2",
+              "name": "Checked Incomplete Contacts",
+              "action": "check"
+            }
+          ]
+        },
+        {
+          "id": "3.5_external_contacts",
+          "sub_group_number": "3.5",
+          "name": "External Contacts",
+          "permissions": [
+            {
+              "id": "3.5.1_download_template",
+              "permission_number": "3.5.1",
+              "name": "Download Template",
+              "action": "download"
+            },
+            {
+              "id": "3.5.2_import_file_new_category",
+              "permission_number": "3.5.2",
+              "name": "Import File & New Category",
+              "action": "import"
+            },
+            {
+              "id": "3.5.3_delete_external_contatcs_category",
+              "permission_number": "3.5.3",
+              "name": "Delete External Contacts Category",
+              "action": "delete"
+            },
+            {
+              "id": "3.5.4_view_detail_external_contatcs",
+              "permission_number": "3.5.4",
+              "name": "View Detail External Contacts",
+              "action": "view"
+            }
+          ]
+        },
+        {
+          "id": "3.6_excluded_email",
+          "sub_group_number": "3.6",
+          "name": "Excluded Email",
+          "permissions": [
+            {
+              "id": "3.6.1_add_exclude_email",
+              "permission_number": "3.6.1",
+              "name": "Add Exclude Email",
+              "action": "add"
+            },
+            {
+              "id": "3.6.2_delete_exclude_email",
+              "permission_number": "3.6.2",
+              "name": "Delete Exclude Email",
+              "action": "delete"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "4_marketing",
+      "group_number": "4",
+      "name": "Marketing",
+      "description": "Marketing and campaign management permissions",
+      "sub_groups": [
+        {
+          "id": "4.1_campaign_management",
+          "sub_group_number": "4.1",
+          "name": "Campaign Management",
+          "permissions": [
+            {
+              "id": "4.1.1_add_new_campaign",
+              "permission_number": "4.1.1",
+              "name": "Add New Campaign",
+              "action": "add"
+            },
+            {
+              "id": "4.1.2_preview_campaign",
+              "permission_number": "4.1.2",
+              "name": "Preview Campaign",
+              "action": "view"
+            },
+            {
+              "id": "4.1.3_set_schedule",
+              "permission_number": "4.1.3",
+              "name": "Set Schedule",
+              "action": "edit"
+            },
+            {
+              "id": "4.1.4_show_recipient",
+              "permission_number": "4.1.4",
+              "name": "Show Recipient",
+              "action": "view"
+            },
+            {
+              "id": "4.1.5_delete_campaign",
+              "permission_number": "4.1.5",
+              "name": "Delete Campaign",
+              "action": "delete"
+            }
+          ]
+        },
+        {
+          "id": "4.2_segment_management",
+          "sub_group_number": "4.2",
+          "name": "Segment Management",
+          "permissions": [
+            {
+              "id": "4.2.1_add_new_segment",
+              "permission_number": "4.2.1",
+              "name": "Add New Segment",
+              "action": "add"
+            },
+            {
+              "id": "4.2.2_view_detail_segment",
+              "permission_number": "4.2.2",
+              "name": "View Detail Segment",
+              "action": "view"
+            },
+            {
+              "id": "4.2.3_delete_segment",
+              "permission_number": "4.2.3",
+              "name": "Delete Segment",
+              "action": "delete"
+            },
+            {
+              "id": "4.2.4_view_list_segment",
+              "permission_number": "4.2.4",
+              "name": "View List Segment",
+              "action": "view"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "5_email_configurations",
+      "group_number": "5",
+      "name": "Email Configurations",
+      "description": "Email template and automation configurations",
+      "sub_groups": [
+        {
+          "id": "5.1_pre_stay_configuration",
+          "sub_group_number": "5.1",
+          "name": "Pre Stay Configuration",
+          "permissions": [
+            {
+              "id": "5.1.1_view_email_pre_stay",
+              "permission_number": "5.1.1",
+              "name": "View Email Pre Stay",
+              "action": "view"
+            },
+            {
+              "id": "5.1.2_active_deactive_pre_stay",
+              "permission_number": "5.1.2",
+              "name": "Active/Deactive Pre Stay",
+              "action": "toggle"
+            },
+            {
+              "id": "5.1.3_set_time_email_pre_stay",
+              "permission_number": "5.1.3",
+              "name": "Set Time Email Pre Stay",
+              "action": "edit"
+            },
+            {
+              "id": "5.1.4_select_email_template_pre_stay",
+              "permission_number": "5.1.4",
+              "name": "Select Email Template Pre Stay",
+              "action": "select"
+            }
+          ]
+        },
+        {
+          "id": "5.2_post_stay_configuration",
+          "sub_group_number": "5.2",
+          "name": "Post Stay Configuration",
+          "permissions": [
+            {
+              "id": "5.2.1_view_email_post_stay",
+              "permission_number": "5.2.1",
+              "name": "View Email Post Stay",
+              "action": "view"
+            },
+            {
+              "id": "5.2.2_active_deactive_post_stay",
+              "permission_number": "5.2.2",
+              "name": "Active/Deactive Post Stay",
+              "action": "toggle"
+            },
+            {
+              "id": "5.2.3_set_time_email_post_stay",
+              "permission_number": "5.2.3",
+              "name": "Set Time Email Post Stay",
+              "action": "edit"
+            },
+            {
+              "id": "5.2.4_select_email_template_post_stay",
+              "permission_number": "5.2.4",
+              "name": "Select Email Template Post Stay",
+              "action": "select"
+            }
+          ]
+        },
+        {
+          "id": "5.3_birthday_configuration",
+          "sub_group_number": "5.3",
+          "name": "Birthday Configuration",
+          "permissions": [
+            {
+              "id": "5.3.1_view_email_birthday",
+              "permission_number": "5.3.1",
+              "name": "View Email Birthday",
+              "action": "view"
+            },
+            {
+              "id": "5.3.2_active_deactive_birthday",
+              "permission_number": "5.3.2",
+              "name": "Active/Deactive Birthday",
+              "action": "toggle"
+            },
+            {
+              "id": "5.3.3_set_time_email_birthday",
+              "permission_number": "5.3.3",
+              "name": "Set Time Email Birthday",
+              "action": "edit"
+            },
+            {
+              "id": "5.3.4_select_email_template_birthday",
+              "permission_number": "5.3.4",
+              "name": "Select Email Template Birthday",
+              "action": "select"
+            }
+          ]
+        },
+        {
+          "id": "5.4_miss_you_configuration",
+          "sub_group_number": "5.4",
+          "name": "Miss You Configuration",
+          "permissions": [
+            {
+              "id": "5.4.1_view_email_miss_you",
+              "permission_number": "5.4.1",
+              "name": "View Email Miss You",
+              "action": "view"
+            },
+            {
+              "id": "5.4.2_active_deactive_miss_you",
+              "permission_number": "5.4.2",
+              "name": "Active/Deactive Miss You",
+              "action": "toggle"
+            },
+            {
+              "id": "5.4.3_set_time_email_miss_you",
+              "permission_number": "5.4.3",
+              "name": "Set Time Email Miss You",
+              "action": "edit"
+            },
+            {
+              "id": "5.4.4_select_email_template_miss_you",
+              "permission_number": "5.4.4",
+              "name": "Select Email Template Miss You",
+              "action": "select"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "6_email_template",
+      "group_number": "6",
+      "name": "Email Template",
+      "description": "Email template management permissions",
+      "sub_groups": [
+        {
+          "id": "6.1_template_management",
+          "sub_group_number": "6.1",
+          "name": "Template Management",
+          "permissions": [
+            {
+              "id": "6.1.1_create_new_template",
+              "permission_number": "6.1.1",
+              "name": "Create New Template",
+              "action": "create"
+            },
+            {
+              "id": "6.1.2_delete_template",
+              "permission_number": "6.1.2",
+              "name": "Delete Template",
+              "action": "delete"
+            },
+            {
+              "id": "6.1.3_edit_template",
+              "permission_number": "6.1.3",
+              "name": "Edit Template",
+              "action": "edit"
+            },
+            {
+              "id": "6.1.4_view_template",
+              "permission_number": "6.1.4",
+              "name": "View Template",
+              "action": "view"
+            },
+            {
+              "id": "6.1.5_duplicate_template",
+              "permission_number": "6.1.5",
+              "name": "Duplicate Template",
+              "action": "duplicate"
+            },
+            {
+              "id": "6.1.6_test_send_email",
+              "permission_number": "6.1.6",
+              "name": "Test Send Email",
+              "action": "test"
+            },
+            {
+              "id": "6.1.7_view_list_template",
+              "permission_number": "6.1.7",
+              "name": "View List Template",
+              "action": "view"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "7_email_delivery",
+      "group_number": "7",
+      "name": "Email Delivery",
+      "description": "Email delivery and tracking permissions",
+      "sub_groups": [
+        {
+          "id": "7.1_delivery_status",
+          "sub_group_number": "7.1",
+          "name": "Delivery Status",
+          "permissions": [
+            {
+              "id": "7.1.1_view_delivery_status",
+              "permission_number": "7.1.1",
+              "name": "View Delivery Status",
+              "action": "view"
+            },
+            {
+              "id": "7.1.2_click_detail",
+              "permission_number": "7.1.2",
+              "name": "Click Detail",
+              "action": "view"
+            },
+            {
+              "id": "7.1.3_view_email_address_recipient",
+              "permission_number": "7.1.3",
+              "name": "View Email Address Recipient",
+              "action": "view"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "8_reservations_operations",
+      "group_number": "8",
+      "name": "Hotel Reservations",
+      "description": "Hotel reservations and guest management permissions",
+      "sub_groups": [
+        {
+          "id": "8.1_pre_stay_operations",
+          "sub_group_number": "8.1",
+          "name": "Pre-Stay Operations",
+          "permissions": [
+            {
+              "id": "8.1.1_view_prestay_contact_list",
+              "permission_number": "8.1.1",
+              "name": "View PreStay Contact List",
+              "action": "view"
+            },
+            {
+              "id": "8.1.2_download_form_registration",
+              "permission_number": "8.1.2",
+              "name": "Download Form Registration",
+              "action": "download"
+            }
+          ]
+        },
+        {
+          "id": "8.2_pre_stay_promo",
+          "sub_group_number": "8.2",
+          "name": "Pre-Stay Promo Configuration",
+          "permissions": [
+            {
+              "id": "8.2.1_create_new_pre_stay_promo",
+              "permission_number": "8.2.1",
+              "name": "Create New Pre Stay Promo",
+              "action": "create"
+            },
+            {
+              "id": "8.2.2_delete_pre_stay_promo",
+              "permission_number": "8.2.2",
+              "name": "Delete Pre Stay Promo",
+              "action": "delete"
+            },
+            {
+              "id": "8.2.3_edit_pre_stay_promo",
+              "permission_number": "8.2.3",
+              "name": "Edit Pre Stay Promo",
+              "action": "edit"
+            },
+            {
+              "id": "8.2.4_view_pre_stay_promo",
+              "permission_number": "8.2.4",
+              "name": "View Pre Stay Promo",
+              "action": "view"
+            },
+            {
+              "id": "8.2.5_view_pre_stay_promo_list",
+              "permission_number": "8.2.5",
+              "name": "View Pre Stay Promo List",
+              "action": "view"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

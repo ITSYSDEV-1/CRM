@@ -34,7 +34,9 @@
                                         <th class="align-center">Total Stays</th>
                                         <th class="align-center">Last Stay</th>
                                         <th class="align-center">Total Spending (Rp.)</th>
+                                        @can('3.1.3_excluded_detail')
                                         <th class="align-center">Excluded</th>
+                                        @endcan
                                     </tr>
                                     </thead>
 
@@ -85,10 +87,12 @@
                     { "data": "stay"},
                     { "data": "checkin"},
                     { "data": "revenue","name":"transaction.revenue"},
+                    @can('3.1.3_excluded_detail')
                     { "data": null},
-
-
+                    @endcan
                 ],
+
+
                 "columnDefs":[
                     {
                         "targets":0,
@@ -109,7 +113,11 @@
                                 lname=row.lname
                             }
 
-                            return '<a href="{{ url('contacts/detail/') }}'+'/'+id+'" >'+ data +' ' +lname+'</a>'
+                            @can('3.1.2_view_detail')
+                                return '<a href="{{ url('contacts/detail/') }}'+'/'+id+'" >'+ data +' ' +lname+'</a>'
+                            @else
+                                return data + ' ' + lname;
+                            @endcan
                         }
                     },
                      {
@@ -154,6 +162,7 @@
                             return "Rp. "+Math.round(data).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")
                         }
                     },
+                    @can('3.1.3_excluded_detail')
                     {
                         'targets': 11,
                         'searchable': false,
@@ -167,9 +176,11 @@
                             }
                         }
                     }
+                    @endcan
                 ],
 
             });
+            @can('3.1.3_excluded_detail')
             $('#loadcontacts tbody').on('change', 'input[type="checkbox"]', function(e){
                 var chkid=e.target.id.replace('complaint','')
                 var el=$(this)
@@ -206,9 +217,8 @@
                         location.reload();
                     }
                 })
-
-
             })
+            @endcan
         });
     </script>
 @endsection

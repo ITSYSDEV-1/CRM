@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\ConfigPrestay;
 use App\Models\MailEditor;
 use App\Models\Promoprestay;
+use App\Traits\UserLogsActivity; // Tambahkan import trait
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 
 class PromoprestayController extends Controller
 {
+    use UserLogsActivity; // Tambahkan penggunaan trait
     /**
      * Display a listing of the resource.
      *
@@ -109,7 +111,21 @@ class PromoprestayController extends Controller
         $promoprestay->event_text = $request->eventtext;
         $promoprestay->save();
 
-
+        // Tambahkan logging aktivitas pengguna
+        $this->logActivity(
+            'create_prestay_promo',
+            Promoprestay::class,
+            $promoprestay->id,
+            [],
+            [
+                'name' => $promoprestay->name,
+                'event_duration' => $promoprestay->event_duration,
+                'event_url' => $promoprestay->event_url,
+                'event_picture' => $promoprestay->event_picture,
+                'event_text' => $promoprestay->event_text
+            ],
+            'Created new prestay promo: ' . $promoprestay->name
+        );
 
         Session::flash("flash_notification", [
             "level"=>"success",
@@ -197,6 +213,15 @@ class PromoprestayController extends Controller
         }
 
 
+        // Simpan data lama untuk logging
+        $oldData = [
+            'name' => $promoprestay->name,
+            'event_duration' => $promoprestay->event_duration,
+            'event_picture' => $promoprestay->event_picture,
+            'event_url' => $promoprestay->event_url,
+            'event_text' => $promoprestay->event_text
+        ];
+
         $promoprestay->update([
             'name' => $request->name,
             'event_duration' => $request->eventduration,
@@ -204,6 +229,23 @@ class PromoprestayController extends Controller
             'event_url' => $request->eventurl,
             'event_text' => $request->eventtext,
         ]);
+        
+        // Tambahkan logging aktivitas pengguna
+        $this->logActivity(
+            'update_prestay_promo',
+            Promoprestay::class,
+            $promoprestay->id,
+            $oldData,
+            [
+                'name' => $request->name,
+                'event_duration' => $request->eventduration,
+                'event_picture' => $eventpicture,
+                'event_url' => $request->eventurl,
+                'event_text' => $request->eventtext
+            ],
+            'Updated prestay promo: ' . $request->name
+        );
+        
         return redirect()->route('promo-configuration.index');
     }
 
@@ -218,7 +260,26 @@ class PromoprestayController extends Controller
         $promo=Promoprestay::find($request->id);
         $contactpromo = $promo->promoprestaycontact;
         if($contactpromo->isEmpty()){
+            // Simpan data promo sebelum dihapus untuk logging
+            $promoData = [
+                'name' => $promo->name,
+                'event_duration' => $promo->event_duration,
+                'event_picture' => $promo->event_picture,
+                'event_url' => $promo->event_url
+            ];
+            
             $promo->delete();
+            
+            // Tambahkan logging aktivitas pengguna
+            $this->logActivity(
+                'delete_prestay_promo',
+                Promoprestay::class,
+                $request->id,
+                $promoData,
+                [],
+                'Deleted prestay promo: ' . $promoData['name']
+            );
+            
             return response(['status'=>'success']);
         }else{
             return response(['status'=>'error']);

@@ -57,7 +57,9 @@
                                         </td>
                                         <td>{{ $contact->area }}</td>
                                         <td>
-                                            @if(count($contact->profilesfolio)<>0)
+                                            @if(isset($status))
+                                                {{ $status }}
+                                            @elseif(count($contact->profilesfolio)<>0)
                                                 @if($contact->profilesfolio->max()->foliostatus=='I')
                                                     Inhouse
                                                 @elseif($contact->profilesfolio->max()->foliostatus=='C')
@@ -74,6 +76,8 @@
                                             @endif
                                         </td>
 
+                                        
+
 
                                         <td> @if(count($contact->campaign) <> 0)
                                                     <i class="fa fa-envelope success"></i>
@@ -82,7 +86,11 @@
                                         </td>
 
                                         <td>
-                                            {{ $contact->profilesfolio->whereIn('foliostatus',['O','I'])->count() }}
+                                            @if($contact->transaction_count)
+                                                {{ $contact->transaction_count }}
+                                            @elseif($contact->transaction->count())
+                                                {{ $contact->transaction->count() }}
+                                            @endif
                                         </td>
                                         <td>
                                             {{ $contact->profilesfolio->max('dateci')==NULL ? "": \Carbon\Carbon::parse($contact->profilesfolio->max('dateci'))->format('d M Y') }}

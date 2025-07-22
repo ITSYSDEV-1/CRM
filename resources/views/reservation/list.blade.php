@@ -11,13 +11,13 @@
                         <div class="card">
                             <div class="header">
                                 <h2>Prestay Contact List</h2>
-
                             </div>
                             <div class="row clearfix">
                                 <div class="col-lg-12">
                                 </div>
                             </div>
 
+                            @can('8.1.1_view_prestay_contact_list')
                             <div class="body">
                                 <table style="font-size: 13px"
                                        class="table table-bordered table-striped table-hover responsive"
@@ -40,9 +40,11 @@
                                     <tbody>
                                     @foreach($contacts as $key=>$contact)
                                         <tr>
+
+                                        
                                             <td>{{$key+1}}</td>
                                             <td>{{$contact->folio_master}}</td>
-                                            <td>{{strtoupper($contact->salutation)}}. {{$contact->fname}} {{$contact->lname}}</td>
+                                            <td>{{rtrim(strtoupper($contact->salutation), '.')}}. {{$contact->fname}} {{$contact->lname}}</td>
                                             <td>{{$contact->email}}</td>
                                             <td>{{\Carbon\Carbon::parse($contact->dateci)->format('d M Y')}}</td>
                                             <td>{{\Carbon\Carbon::parse($contact->dateco)->format('d M Y')}}</td>
@@ -75,9 +77,17 @@
                                                         <i class="fa fa-check-square" style="font-size: x-large;" data-toggle="tooltip" data-placement="top" title="Data ready to send"></i>
                                                         <i class="fa fa-envelope-square" style="font-size: x-large;" data-toggle="tooltip" data-placement="top" title="Data sent to guest"></i>
                                                         @if($contact->registration_code != null)
-                                                            <a href="{{route('registrationformprint',$contact->registration_code['registration_code'])}}"><i class="fa fa-file-pdf-o" style="font-size: x-large;" data-toggle="tooltip" data-placement="top" title="Pre Stay Completed, click to generate registration form"></i></a>
+                                                            @can('8.1.2_download_form_registration')
+                                                                <a href="{{route('registrationformprint',$contact->registration_code['registration_code'])}}"><i class="fa fa-file-pdf-o" style="font-size: x-large;" data-toggle="tooltip" data-placement="top" title="Pre Stay Completed, click to generate registration form"></i></a>
+                                                            @else
+                                                                <i class="fa fa-file-pdf-o" style="font-size: x-large; color: #ccc;" data-toggle="tooltip" data-placement="top" title="No permission to download registration form"></i>
+                                                            @endcan
                                                         @else
-                                                            <a href="#"><i class="fa fa-file-pdf-o" style="font-size: x-large;" data-toggle="tooltip" data-placement="top" title="Pre Stay Completed, click to generate registration form"></i></a>
+                                                            @can('8.1.2_download_form_registration')
+                                                                <a href="#"><i class="fa fa-file-pdf-o" style="font-size: x-large;" data-toggle="tooltip" data-placement="top" title="Pre Stay Completed, click to generate registration form"></i></a>
+                                                            @else
+                                                                <i class="fa fa-file-pdf-o" style="font-size: x-large; color: #ccc;" data-toggle="tooltip" data-placement="top" title="No permission to download registration form"></i>
+                                                            @endcan
                                                         @endif
                                                     @else
                                                         <i class="fa fa-times-circle" style="font-size: x-large;" data-toggle="tooltip" data-placement="top" title="Pre Stay Canceled"></i>
@@ -91,6 +101,11 @@
                                     </tbody>
                                 </table>
                             </div>
+                            @else
+                                <div class="body">
+                                    
+                                </div>
+                            @endcan
                         </div>
                     </div>
                 </div>
@@ -99,9 +114,11 @@
     </div>
 @endsection
 @section('script')
+    @can('8.1.1_view_prestay_contact_list')
     <script>
         $(document).ready(function () {
             $('#reservationTable').DataTable();
         });
     </script>
+    @endcan
 @endsection

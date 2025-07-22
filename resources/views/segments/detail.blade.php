@@ -407,7 +407,11 @@
                     'searchable': false,
                     'orderable': false,
                     'render': function (data, type, full, meta){
-                        return '<a href="../contacts/detail/'+data.contactid+'" >'+data.fname+' '+data.lname+'</a>';
+                        @can('3.1.2_view_detail')
+                            return '<a href="../contacts/detail/'+data.contactid+'" >'+data.fname+' '+data.lname+'</a>';
+                        @else
+                            return data.fname+' '+data.lname;
+                        @endcan
                     }
                 }],
             });

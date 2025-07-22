@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Segment;
+use App\Traits\UserLogsActivity; // Tambahkan import trait
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class SegmentController extends Controller
 {
+    use UserLogsActivity; // Gunakan trait
+    
     public function index (){
         return view('segments.index');
     }
@@ -28,7 +31,25 @@ class SegmentController extends Controller
     }
     public function destroy($id){
         $segment=Segment::find($id);
+        
+        // Simpan data untuk logging sebelum dihapus
+        $segmentData = [
+            'id' => $segment->id,
+            'name' => $segment->name
+        ];
+        
         $segment->delete();
+        
+        // Tambahkan logging aktivitas pengguna
+        $this->logActivity(
+            'delete',
+            Segment::class,
+            $id,
+            $segmentData,
+            null,
+            'Deleted segment: ' . $segmentData['name']
+        );
+        
         return redirect()->back();
     }
 
@@ -79,18 +100,32 @@ class SegmentController extends Controller
             $segment->age_from = $request->age_from;
             $segment->age_to = $request->age_to;
             $segment->save();
+            
+            // Hitung jumlah kontak yang termasuk dalam segment ini
+            $contactCount = $this->countContactsInSegment($segment);
+            
+            // Tambahkan logging aktivitas pengguna dengan jumlah kontak
+            $this->logActivity(
+                'create',
+                Segment::class,
+                $segment->id,
+                null,
+                $segment->toArray(),
+                'Created new segment: ' . $segment->name . ' (Contains ' . $contactCount . ' contacts)'
+            );
 
             return response('success',200);
         }else{
             return response(['errors'=>$validator->errors()],200);
         }
     }
-    public function show($id){
-        $segment=Segment::find($id);
-        return view('segments.detail',['segment'=>$segment]);
-    }
+    
     public function update(Request $request){
         $segment=Segment::find($request->id);
+        
+        // Simpan data lama untuk logging
+        $oldData = $segment->toArray();
+        
         $rules=['name'=>'required'];
         $message=['name.required'=>'Segment Name Required'];
         $validator=Validator::make($request->all(),$rules,$message);
@@ -153,10 +188,93 @@ class SegmentController extends Controller
                 $segment->wedding_bday_to=NULL;
             }
             $segment->save();
+            
+            // Hitung jumlah kontak yang termasuk dalam segment ini setelah update
+            $contactCount = $this->countContactsInSegment($segment);
+            
+            // Tambahkan logging aktivitas pengguna dengan jumlah kontak
+            $this->logActivity(
+                'update',
+                Segment::class,
+                $segment->id,
+                $oldData,
+                $segment->toArray(),
+                'Updated segment: ' . $segment->name . ' (Contains ' . $contactCount . ' contacts)'
+            );
 
             return response('success',200);
         }else{
             return response(['errors'=>$validator->errors()],200);
         }
+    }
+    
+    /**
+     * Menghitung jumlah kontak yang termasuk dalam segment
+     *
+     * @param  \App\Models\Segment  $segment
+     * @return int
+     */
+    private function countContactsInSegment($segment)
+    {
+        // Import model Contact
+        $contacts = \App\Models\Contact::query();
+        
+        // Filter berdasarkan guest_status jika ada
+        $guest_status = unserialize($segment->guest_status);
+        if (!empty($guest_status)) {
+            $contacts->whereIn('guest_status', $guest_status);
+        }
+        
+        // Filter berdasarkan country_id jika ada
+        $country_id = unserialize($segment->country_id);
+        if (!empty($country_id)) {
+            $contacts->whereIn('country_id', $country_id);
+        }
+        
+        // Filter berdasarkan gender jika ada
+        $gender = unserialize($segment->gender);
+        if (!empty($gender)) {
+            $contacts->whereIn('gender', $gender);
+        }
+        
+        // Filter berdasarkan area jika ada
+        $area = unserialize($segment->area);
+        if (!empty($area)) {
+            $contacts->whereIn('area', $area);
+        }
+        
+        // Filter berdasarkan tanggal stay jika ada
+        if ($segment->stay_from && $segment->stay_to) {
+            $contacts->whereHas('transaction', function($query) use ($segment) {
+                $query->whereHas('profilefolio', function($q) use ($segment) {
+                    $q->whereBetween('dateci', [$segment->stay_from, $segment->stay_to]);
+                });
+            });
+        }
+        
+        // Filter berdasarkan umur jika ada
+        if ($segment->age_from && $segment->age_to) {
+            $contacts->whereRaw('TIMESTAMPDIFF(YEAR, birthday, CURDATE()) BETWEEN ? AND ?', 
+                [$segment->age_from, $segment->age_to]);
+        }
+        
+        // Filter berdasarkan birthday jika ada
+        if ($segment->bday_from && $segment->bday_to) {
+            $contacts->whereRaw("DATE_FORMAT(birthday, '%m-%d') BETWEEN DATE_FORMAT(?, '%m-%d') AND DATE_FORMAT(?, '%m-%d')", 
+                [$segment->bday_from, $segment->bday_to]);
+        }
+        
+        // Filter berdasarkan wedding_bday jika ada
+        if ($segment->wedding_bday_from && $segment->wedding_bday_to) {
+            $contacts->whereRaw("DATE_FORMAT(wedding_bday, '%m-%d') BETWEEN DATE_FORMAT(?, '%m-%d') AND DATE_FORMAT(?, '%m-%d')", 
+                [$segment->wedding_bday_from, $segment->wedding_bday_to]);
+        }
+        
+        // Hitung total kontak yang memenuhi kriteria
+        return $contacts->count();
+    }
+    public function show($id){
+        $segment=Segment::find($id);
+        return view('segments.detail',['segment'=>$segment]);
     }
 }

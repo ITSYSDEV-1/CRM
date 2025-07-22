@@ -47,4 +47,14 @@ class Handler extends ExceptionHandler
             //
         });
     }
+
+    // Tambahkan method ini di dalam class Handler
+    public function render($request, Throwable $exception)
+    {
+        if ($exception instanceof \Illuminate\Auth\Access\AuthorizationException) {
+            return redirect()->route('unauthorized');
+        }
+        
+        return parent::render($request, $exception);
+    }
 }
