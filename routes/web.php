@@ -70,7 +70,11 @@ Route::get('apitest',function (){
 
 
 
-Route::get('email/quota/{month?}', function($month = null) {
+Route::get('email/quota/usage', [App\Http\Controllers\PepipostMail::class, 'quotaUsageList'])->name('email.quota.usage');
+Route::get('email/quota/usage/{month}', [App\Http\Controllers\PepipostMail::class, 'quotaUsageDetail'])->name('email.quota.usage.detail');
+
+
+Route::get('api/email/quota/{month?}', function($month = null) {
     $mail = new PepipostMail();
     return $mail->getEmailQuota($month);
 });
