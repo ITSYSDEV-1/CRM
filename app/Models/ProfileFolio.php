@@ -9,7 +9,7 @@ class ProfileFolio extends Model
     //
     protected $table='profilesfolio';
 	protected $primaryKey = 'profileid';
-    protected $fillable=['profileid','folio_master','folio','source','foliostatus'];
+    protected $fillable=['profileid','folio_master','folio','source','foliostatus','room','roomtype','pax','dateci','dateco'];
 
     public function contact(){
         return $this->belongsTo('\App\Models\Contact','profileid','contactid');

@@ -186,6 +186,19 @@ Route::get('/logs', 'App\Http\Controllers\LogController@index')->name('logs.inde
     Route::get('contacts/f/country/{country}',[ContactController::class,'country']);
     Route::get('contacts/f/created/{dateadded}',[ContactController::class,'dateadded']);
     Route::get('contacts/f/status/{status}',[ContactController::class,'dstatus']);
+    Route::get('contacts/repeaters', [ContactController::class, 'repeaters']);
+    Route::get('contacts/inhouse-repeaters', [ContactController::class, 'inhouseRepeaters']);
+    Route::get('contacts/f/repeater-month/{month}', [ContactController::class, 'repeaterByMonth']);
+    Route::post('dashboard/repeater-data', [ContactController::class, 'getRepeaterDataAjax'])->name('dashboard.repeater.data');
+    Route::get('/contacts/inhouse-birthday-today', function() {
+    $contacts = \App\Models\Contact::whereRaw('DATE_FORMAT(birthday,"%m-%d") = ?', [\Carbon\Carbon::now()->format('m-d')])
+        ->whereHas('profilesfolio', function($q) {
+            return $q->where('foliostatus', '=', 'I');
+        })
+        ->get();
+    
+    return view('contacts.list', ['data' => $contacts, 'title' => 'In-House Guests Birthday Today']);
+})->name('contacts.inhouse.birthday.today');
     Route::get('contacts/f/longest/{contact}',[ContactController::class,'longest']);
     Route::get('contacts/f/spending/{spending}',[ContactController::class,'spending']);
     Route::get('contacts/f/roomtype/{type}',[ContactController::class,'type']);
@@ -354,6 +367,9 @@ Route::get('list',function (){
 Route::post('contactslist',[ContactController::class,'contactslist'])->name('contactslist');
 Route::get('contacts/list',function (){
     return view('contacts.list3',['gender'=>NULL,'country'=>NULL]);
+});
+Route::get('contacts/repeaters/list',function (){
+    return view('contacts.list3',['gender'=>NULL,'repeater_only'=>true]);
 });
 Route::post('loadcontacts',[ContactController::class,'loadcontacts'])->name('loadcontacts');
 Auth::routes();
