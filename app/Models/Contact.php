@@ -94,5 +94,30 @@ class Contact extends Model
     {
         return $this->hasMany('\App\Models\ProfileFolio', 'profileid')->orderByDesc('updated_at');
     }
+
+    public function isRepeater()
+    {
+        return $this->transaction()->count() > 1;
+    }
+
+    public function scopeRepeaters($query)
+    {
+        return $query->whereHas('transaction', function($q) {
+            $q->select(DB::raw('contact_id'))
+            ->groupBy('contact_id')
+            ->havingRaw('COUNT(*) > 1');
+        });
+    }
+
+    public function scopeInhouseRepeaters($query)
+    {
+        return $query->whereHas('profilesfolio', function($q) {
+            return $q->where('foliostatus', '=', 'I')->groupBy('profileid');
+        })->whereHas('transaction', function($q) {
+            return $q->select(DB::raw('contact_id'))
+                ->groupBy('contact_id')
+                ->havingRaw('COUNT(*) > 1 AND SUM(revenue) >= 0');
+        });
+    }
     
 }

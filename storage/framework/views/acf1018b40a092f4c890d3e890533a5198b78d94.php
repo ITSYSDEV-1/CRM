@@ -29,9 +29,9 @@
                                         <th class="align-center">Wedding Anniversary</th>
                                         <th class="align-center">Country</th>
                                         <th class="align-center">Area/Origin</th>
-
                                         <th class="align-center">Campaign</th>
                                         <th class="align-center">Total Stays</th>
+                                        <th class="align-center">Guest Type</th>
                                         <th class="align-center">Last Stay</th>
                                         <th class="align-center">Total Spending (Rp.)</th>
                                         <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('3.1.3_excluded_detail')): ?>
@@ -85,6 +85,7 @@
                     { "data": "area"},
                     { "data": "campaign"},
                     { "data": "stay"},
+                    { "data": "is_repeater"},
                     { "data": "checkin"},
                     { "data": "revenue","name":"transaction.revenue"},
                     <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('3.1.3_excluded_detail')): ?>
@@ -149,6 +150,16 @@
                     },{
                         "targets":9,
                         "render":function (data,type,row) {
+                            if(data == 1){
+                                return '<i class="fa fa-refresh"></i> Repeater'
+                            }else {
+                                return 'New Guest'
+                            }
+                        }
+                    },
+                    {
+                        "targets":10,
+                        "render":function (data,type,row) {
                             if(moment(data).isValid()){
                                 return moment(data).format('DD MMM YYYY')
                             }else {
@@ -157,14 +168,14 @@
                         }
                     },
                     {
-                        "targets":10,
+                        "targets":11,
                         "render":function (data,type,row) {
                             return "Rp. "+Math.round(data).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")
                         }
                     },
                     <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('3.1.3_excluded_detail')): ?>
                     {
-                        'targets': 11,
+                        'targets': 12,
                         'searchable': false,
                         'orderable': false,
                         'className': 'dt-body-center',

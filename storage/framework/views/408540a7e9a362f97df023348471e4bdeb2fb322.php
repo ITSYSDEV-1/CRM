@@ -339,11 +339,14 @@ document.addEventListener('DOMContentLoaded', function() {
                                                                                                 $salutationOptions = [
                                                                                                     '' => 'Select Salutation',
                                                                                                     'Mr' => 'Mr',
+                                                                                                    'Mr.' => 'Mr',
+                                                                                                    'MR.' => 'Mr',
                                                                                                     'Mrs' => 'Mrs', 
+                                                                                                    'Mrs.' => 'Mrs',
+                                                                                                    'MRS.' => 'MRS.',
                                                                                                     'Ms' => 'Miss', 
                                                                                                     'Miss' => 'Miss',
-                                                                                                    'MR.' => 'MR.',
-                                                                                                    'MRS.' => 'MRS.',
+                                                                                                    'Miss.' => 'Miss',
                                                                                                     'MISS' => 'MISS',
                                                                                                 ];
                                                                                                 ?>

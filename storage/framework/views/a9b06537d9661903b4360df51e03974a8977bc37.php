@@ -31,6 +31,7 @@
 										<th class="align-center">Status</th>
 										<th class="align-center">Campaign</th>
 										<th class="align-center">Total Stays</th>
+										<th class="align-center">Guest Type</th>
 										<th class="align-center">Last Stay</th>
 										<th class="align-center">Total Spending (Rp.)</th>
 									</tr>
@@ -52,9 +53,22 @@
                                         </td>
                                         <td><?php echo e($contact->birthday=='' ? "": \Carbon\Carbon::parse($contact->birthday)->format('M d')); ?></td>
                                         <td><?php echo e($contact->wedding_bday=='' ? "": \Carbon\Carbon::parse($contact->wedding_bday)->format('M d')); ?></td>
-                                        <td><?php echo e(\App\Models\Country::where(env('COUNTRY_ISO'),$contact->country_id)->first()['country']); ?>
+                                        <td>
+                                            <?php
+                                                $countryData = \App\Models\Country::where(env('COUNTRY_ISO'), $contact->country_id)->first();
+                                            ?>
+                                            
+                                            <?php if($countryData): ?>
+                                                <?php echo e($countryData['country']); ?>
 
-                                            <img src="<?php echo e(asset('flags/blank.gif')); ?>" class="flag flag-<?php echo e(strtolower($contact->country['iso2'])); ?> pull-right" alt="<?php echo e($contact->country['country']); ?>" />
+                                                <img src="<?php echo e(asset('flags/blank.gif')); ?>" class="flag flag-<?php echo e(strtolower($countryData['iso2'])); ?> pull-right" alt="<?php echo e($countryData['country']); ?>" />
+                                            <?php elseif($contact->country): ?>
+                                                <?php echo e($contact->country->country); ?>
+
+                                                <img src="<?php echo e(asset('flags/blank.gif')); ?>" class="flag flag-<?php echo e(strtolower($contact->country->iso2)); ?> pull-right" alt="<?php echo e($contact->country->country); ?>" />
+                                            <?php else: ?>
+                                                Unknown Country
+                                            <?php endif; ?>
                                         </td>
                                         <td><?php echo e($contact->area); ?></td>
                                         <td>
@@ -94,6 +108,13 @@
                                             <?php elseif($contact->transaction->count()): ?>
                                                 <?php echo e($contact->transaction->count()); ?>
 
+                                            <?php endif; ?>
+                                        </td>
+                                        <td>
+                                            <?php if(($contact->transaction_count ?? $contact->transaction->count()) > 1): ?>
+                                                <i class="fa fa-refresh"></i> Repeater
+                                            <?php else: ?>
+                                                New Guest
                                             <?php endif; ?>
                                         </td>
                                         <td>
