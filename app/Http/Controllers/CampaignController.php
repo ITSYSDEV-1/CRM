@@ -45,56 +45,149 @@ class CampaignController extends Controller
     }
 
     public function campaignlist(Request $request){
-        $campaign=Campaign::whereHas('schedule')->get();
-
-        $totalData = $campaign->count();
+        // Define column mapping for DataTables sorting
+        $columns = [
+            0 => 'id', // Row number (handled separately)
+            1 => 'name',
+            2 => 'segment', // Requires special handling due to relationship
+            3 => 'status',
+            4 => 'schedule', // Requires special handling due to relationship
+            5 => 'accepted', // Calculated field from email responses
+            6 => 'delivered', // Calculated field from email responses
+            7 => 'opened', // Calculated field from email responses
+            8 => 'clicked', // Calculated field from email responses
+            9 => 'unsubscribed', // Calculated field from email responses
+            10 => 'failed', // Calculated field from email responses
+            11 => 'rejected' // Calculated field from email responses
+        ];
+    
+        // Get total count of campaigns with schedules
+        $totalData = Campaign::whereHas('schedule')->count();
         $totalFiltered = $totalData;
         $limit = $request->input('length');
         $start = $request->input('start');
-        $search=$request->input('search.value');
-
+        $search = $request->input('search.value');
+        
+        // Extract sorting parameters
+        $orderColumnIndex = $request->input('order.0.column');
+        $orderDirection = $request->input('order.0.dir');
+        $orderColumn = isset($columns[$orderColumnIndex]) ? $columns[$orderColumnIndex] : 'created_at';
+    
+        // Build base query with eager loading for performance
+        $query = Campaign::with(['schedule', 'segment', 'externalSegment', 'emailresponse'])
+                    ->whereHas('schedule');
+    
+        // Apply search filter if provided
         if(!empty($search)){
-            $campaignlist=Campaign::where('name','LIKE',"%$search%")->offset($start)->limit($limit)->orderBy('created_at','desc')->get();
-            $totalFiltered=count($campaignlist);
-        }else{
-            $campaignlist=Campaign::select()->offset($start)->limit($limit)->orderBy('created_at','desc')->get();
+            $query->where('name','LIKE',"%$search%");
+            $totalFiltered = $query->count();
         }
-
-
+    
+        // Check if sorting is needed for calculated columns
+        $isCalculatedColumn = in_array($orderColumn, ['accepted', 'delivered', 'opened', 'clicked', 'unsubscribed', 'failed', 'rejected']);
+        
+        if (!$isCalculatedColumn) {
+            // Handle sorting for database columns
+            switch($orderColumn) {
+                case 'name':
+                case 'status':
+                    $query->orderBy($orderColumn, $orderDirection);
+                    break;
+                case 'schedule':
+                    // Join with schedules table for sorting
+                    $query->leftJoin('schedules', 'campaigns.id', '=', 'schedules.campaign_id')
+                          ->orderBy('schedules.schedule', $orderDirection)
+                          ->select('campaigns.*');
+                    break;
+                case 'segment':
+                    // Join with segment tables for sorting by first segment name
+                    $query->leftJoin('campaign_segment', 'campaigns.id', '=', 'campaign_segment.campaign_id')
+                          ->leftJoin('segments', 'campaign_segment.segment_id', '=', 'segments.id')
+                          ->orderBy('segments.name', $orderDirection)
+                          ->select('campaigns.*')
+                          ->distinct();
+                    break;
+                default:
+                    // Default sorting by creation date
+                    $query->orderBy('created_at', $orderDirection);
+                    break;
+            }
+            
+            // Apply pagination for non-calculated columns
+            $campaignlist = $query->offset($start)->limit($limit)->get();
+        } else {
+            // For calculated columns, fetch all data first (pagination applied later)
+            $campaignlist = $query->get();
+        }
+    
+        $data = [];
+    
         if(!empty($campaignlist)){
             foreach ($campaignlist as $item){
+                // Determine segment name based on campaign type
                 if($item->type=='internal'){
-                    $segment=count($item->segment) ? $item->segment[0]->name:'';
+                    $segment = $item->segment->isNotEmpty() ? $item->segment[0]->name : '';
                 }else{
-                    $segment=count($item->externalSegment) ? $item->externalSegment[0]->category:'';
+                    $segment = $item->externalSegment->isNotEmpty() ? $item->externalSegment[0]->category : '';
                 }
-                $nestedData['type']=$item->type;
-//                $nestedData['contact']=$contact;
-                $nestedData['id']=$item->id;
-                $nestedData['name']=$item->name;
-                $nestedData['segment']=$segment;
-                $nestedData['status']=$item->status;
-                $nestedData['schedule']= $item->schedule ? $item->schedule->schedule:'';
-                $nestedData['accepted']=count($item->emailresponse->where('campaign_id','=',$item->id)->whereIn('event',['processed','sent','open','click'])->groupBy('email_id'));
-                $nestedData['delivered']=count($item->emailresponse->where('campaign_id','=',$item->id)->whereIn('event',['sent','open','click'])->groupBy('email_id'));
-                $nestedData['opened']=count($item->emailresponse->where('campaign_id','=',$item->id)->whereIn('event',['open','click'])->groupBy('email_id'));
-                $nestedData['clicked']=$item->emailresponse->where('campaign_id','=',$item->id)->whereIn('event',['click']);
-                $nestedData['unsubscribed']=count($item->emailresponse->where('campaign_id','=',$item->id)->where('event','=','unsubscribe'));
-                $nestedData['failed']=count($item->emailresponse->where('campaign_id','=',$item->id)->whereIn('event',['hardbounce','softbounce','invalid']));
-                $nestedData['rejected']=count($item->emailresponse->where('campaign_id','=',$item->id)->whereIn('event',['dropped'])->groupBy('email_id'));
-                $nestedData['template']=$item->template;
-                $data[]=$nestedData;
-
+                
+                // Filter email responses for current campaign
+                $campaignResponses = $item->emailresponse->where('campaign_id', $item->id);
+                
+                // Calculate email statistics using efficient grouping
+                $processedEvents = $campaignResponses->whereIn('event', ['processed','sent','open','click'])->groupBy('email_id');
+                $sentEvents = $campaignResponses->whereIn('event', ['sent','open','click'])->groupBy('email_id');
+                $openEvents = $campaignResponses->whereIn('event', ['open','click'])->groupBy('email_id');
+                $clickEvents = $campaignResponses->whereIn('event', ['click']);
+                $unsubscribeEvents = $campaignResponses->where('event', 'unsubscribe');
+                $failedEvents = $campaignResponses->whereIn('event', ['hardbounce','softbounce','invalid']);
+                $rejectedEvents = $campaignResponses->whereIn('event', ['dropped'])->groupBy('email_id');
+                
+                // Build response data structure
+                $nestedData['type'] = $item->type;
+                $nestedData['id'] = $item->id;
+                $nestedData['name'] = $item->name;
+                $nestedData['segment'] = $segment;
+                $nestedData['status'] = $item->status;
+                $nestedData['schedule'] = $item->schedule ? $item->schedule->schedule : '';
+                $nestedData['accepted'] = $processedEvents->count();
+                $nestedData['delivered'] = $sentEvents->count();
+                $nestedData['opened'] = $openEvents->count();
+                $nestedData['clicked'] = $clickEvents;
+                $nestedData['unsubscribed'] = $unsubscribeEvents->count();
+                $nestedData['failed'] = $failedEvents->count();
+                $nestedData['rejected'] = $rejectedEvents->count();
+                $nestedData['template'] = $item->template;
+                $data[] = $nestedData;
             }
-
         }
+    
+        // Handle sorting for calculated columns
+        if ($isCalculatedColumn) {
+            // Sort data based on selected calculated column
+            usort($data, function($a, $b) use ($orderColumn, $orderDirection) {
+                $valueA = $orderColumn === 'clicked' ? count($a[$orderColumn]) : $a[$orderColumn];
+                $valueB = $orderColumn === 'clicked' ? count($b[$orderColumn]) : $b[$orderColumn];
+                
+                if ($orderDirection === 'asc') {
+                    return $valueA <=> $valueB;
+                } else {
+                    return $valueB <=> $valueA;
+                }
+            });
+            
+            // Apply pagination after sorting
+            $data = array_slice($data, $start, $limit);
+        }
+    
+        // Prepare JSON response for DataTables
         $json_data=array(
             "draw"=>intval($request->input('draw')),
             "recordsTotal"=>intval($totalData),
             "recordsFiltered"=>intval($totalFiltered),
             "data"=>$data
         );
-
+    
         return response($json_data);
     }
     public function campaignrecepient(Request $request){
