@@ -215,62 +215,54 @@
                     @endif
                 ],
                 "columnDefs":[
-                    {
-                        "targets":0,
-                        "sortable":false,
-                        "render":function (data,type,row,meta) {
-                            return meta.row+1
+                {
+                    "targets":0,
+                    "render":function (data,type,row,meta) {
+                        return meta.row+1
+                    }
+                },
+                {
+                "targets":3,
+                "render":function (data,type,row) {
+                    var status = ''
+                        if (data==='Scheduled'){
+                        status='Scheduled @ '+ moment(row.schedule).format('YYYY MMMM DD HH:mm')
+                        }else{
+                            status=data
                         }
-                    },
-                    {
-                      "targets":3,
-                      "sortable":false,
-                      "render":function (data,type,row) {
-                          var status = ''
-                            if (data==='Scheduled'){
-                              status='Scheduled @ '+ moment(row.schedule).format('YYYY MMMM DD HH:mm')
-                            }else{
-                                status=data
-                            }
-                          return status
-                      }
-                    },
-                    {
-                        "targets":4,
-                        "sortable":false,
-                        "render":function (data,type,row) {
-                            var date =moment(data).format('YYYY MMMM DD HH:mm')
-                            return date
-                        }
-                    },
-                    {
-                        "targets":[2,5,6,7,9,10,11],
-                        "sortable":false,
-                    },
-                    {
-                        "targets":[8],
-                        "sortable":false,
-                        "render":function (data,type,row) {
-                            var result=[]
-                            var urls=[]
-                            var res=''
-                            $.each(data,function(k,v){
-                                urls=v.url.split(';')
-                                $.each(urls, function(i, e) {
-                                    if ($.inArray(e, result) == -1) result.push(e);
-                                });
-                                var list='<ul>'
-                                $.each(result,function(i,v){
-                                    list+='<li>'+v+'</li>'
-                                })
-                                list+='</ul>'
-                                res+='<tr><td>'+v.recepient+'</td><td>'+list+'</td></tr>'
+                    return status
+                }
+                },
+                {
+                    "targets":4,
+                    "render":function (data,type,row) {
+                        var date =moment(data).format('YYYY MMMM DD HH:mm')
+                        return date
+                    }
+                },
+                {
+                    "targets":[8],
+                    "render":function (data,type,row) {
+                        var result=[]
+                        var urls=[]
+                        var res=''
+                        $.each(data,function(k,v){
+                            urls=v.url.split(';')
+                            $.each(urls, function(i, e) {
+                                if ($.inArray(e, result) == -1) result.push(e);
+                            });
+                            var list='<ul>'
+                            $.each(result,function(i,v){
+                                list+='<li>'+v+'</li>'
                             })
-                                var count = $.map(data, function(n, i) { return i; }).length;
-                                return '<a href="javascript:void(0)" id="'+row.id+'" title="" onclick="openModal2(\'' + res + '\') "> '+count+'</a> '
+                            list+='</ul>'
+                            res+='<tr><td>'+v.recepient+'</td><td>'+list+'</td></tr>'
+                        })
+                            var count = $.map(data, function(n, i) { return i; }).length;
+                            return '<a href="javascript:void(0)" id="'+row.id+'" title="" onclick="openModal2(\'' + res + '\') "> '+count+'</a> '
 
-                        }
-                    },
+                    }
+                },
                     @if(auth()->user()->can('4.1.2_preview_campaign') || 
                     auth()->user()->can('4.1.3_set_schedule') || 
                     auth()->user()->can('4.1.4_show_recipient') || 
