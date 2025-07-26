@@ -85,23 +85,38 @@ class ContactController extends Controller
         return view('review.index',['tripadvisor'=>$ta,'ta_reviews'=>$ta_reviews,'booking'=>$databooking,'booking_reviews'=>$resultsbooking,'hotels'=>$ht,'hotelreview'=>$resutlsHotel,'poststay'=>$poststay,'poststaydata'=>$poststaydata]);
     }
     public function dashboard(){
+        // Dapatkan tanggal data terakhir yang tersedia
+        $latestDataDate = $this->getLatestDataDate();
+        $dashboardMonths = env('DASHBOARD_MONTHS_PERIOD', 3);
+        $useLatestData = env('DASHBOARD_USE_LATEST_DATA', true);
+        
+        // Tentukan periode dashboard
+        if ($useLatestData && $latestDataDate) {
+            $endDate = Carbon::parse($latestDataDate);
+            $startDate = $endDate->copy()->subMonths($dashboardMonths);
+        } else {
+            $endDate = Carbon::now();
+            $startDate = $endDate->copy()->subMonths($dashboardMonths);
+        }
+        
         $total=0;
         $contact=Contact::whereRaw('DATE_FORMAT(birthday,"%m-%d") >= ?',[Carbon::now()->format('m-d')])
             ->whereRaw('DATE_FORMAT(birthday,"%m-%d") <= ?',[Carbon::now()->addDays(7)->format('m-d')])
             ->orderBy(DB::raw('ABS( DATEDIFF( birthday, NOW() ) )'),'asc')->limit(10)
             ->get();
 
-        $contacts=DB::select(DB::raw('select country as label, count(*) as value from contacts left join countries on contacts.country_id=countries.iso3 left join contact_transaction on contact_transaction.contact_id=contacts.contactid left join transactions on transactions.id=contact_transaction.transaction_id LEFT JOIN profilesfolio on profilesfolio.profileid = contacts.contactid where profilesfolio.dateci between DATE_FORMAT(DATE_SUB(now(),INTERVAL 3 month),\'%Y-%m-%d\') and DATE_FORMAT(Now(),\'%Y-%m-%d\')  group by label order by value DESC'));
-//        $contacts=DB::select(DB::raw('select country as label, count(*) as value from contacts left join countries on contacts.country_id=countries.iso3 left join contact_transaction on contact_transaction.contact_id=contacts.contactid left join transactions on transactions.id=contact_transaction.transaction_id where transactions.checkin between DATE_FORMAT(DATE_SUB(now(),INTERVAL 90 day),\'%Y-%m-%d\') and DATE_FORMAT(Now(),\'%Y-%m-%d\')  group by label order by value asc'));
+        // Update query untuk menggunakan periode yang ditentukan
+        $contacts=DB::select(DB::raw('select country as label, count(*) as value from contacts left join countries on contacts.country_id=countries.iso3 left join contact_transaction on contact_transaction.contact_id=contacts.contactid left join transactions on transactions.id=contact_transaction.transaction_id LEFT JOIN profilesfolio on profilesfolio.profileid = contacts.contactid where profilesfolio.dateci between ? and ? group by label order by value DESC'), [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')]);
+        
         $country=json_encode($contacts);
 
         foreach ($contacts as $value){
             $total=$total+$value->value;
         }
 
-//        $added=DB::select(DB::raw('select DATE_FORMAT(created_at,\'%Y %M\') as created,count(*) as count from contacts where created_at between DATE_SUB(now(),INTERVAL 90 day) and now() group by DATE_FORMAT(created_at,\'%Y %M\')'));
-        $dateS = Carbon::now()->startOfMonth()->subMonths(2);
-        $dateE = Carbon::now()->startOfMonth()->addMonths(1);
+        // Update query untuk contacts added
+        $dateS = $startDate->copy()->startOfMonth();
+        $dateE = $endDate->copy()->endOfMonth();
         $added=Contact::select(DB::raw('DATE_FORMAT(created_at,\'%Y %M\') as created,count(*) as count'))
             ->whereBetween('created_at',[$dateS,$dateE])
             ->groupBy(DB::raw('DATE_FORMAT(created_at,\'%Y %M\')'))
@@ -135,7 +150,7 @@ class ContactController extends Controller
         }
         $datastatus=json_encode($datastatus);
 
-        $spending=DB::select(DB::raw('SELECT distinct c.contactid, c.fname,c.lname,a.revenue from transactions a left join contact_transaction b on b.transaction_id=a.id left JOIN contacts c on b.contact_id=c.contactid left JOIN profilesfolio d ON d.profileid=c.contactid WHERE b.contact_id is not NULL and d.dateci BETWEEN  DATE_FORMAT(DATE_SUB(now(),INTERVAL 90 day),\'%Y-%m-%d\') and DATE_FORMAT(Now(),\'%Y-%m-%d\') order by revenue desc limit 10;'));
+        $spending=DB::select(DB::raw('SELECT distinct c.contactid, c.fname,c.lname,a.revenue from transactions a left join contact_transaction b on b.transaction_id=a.id left JOIN contacts c on b.contact_id=c.contactid left JOIN profilesfolio d ON d.profileid=c.contactid WHERE b.contact_id is not NULL and d.dateci BETWEEN ? and ? order by revenue desc limit 10;'), [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')]);
         $dataspending=[];
         foreach ($spending as $sp){
               $temspend=['x'=>$sp->fname.' '.$sp->lname,'y'=>$sp->revenue];
@@ -144,7 +159,7 @@ class ContactController extends Controller
 
        $dataspending=json_encode($dataspending);
 
-        $stays=DB::select(DB::raw('SELECT cpt.contactid, cpt.fname, cpt.lname, COUNT(cpt.contactid) AS stays, sum(cpt.revenue) AS revenue FROM contact_transaction ct JOIN  (SELECT cp.contactid, cp.fname, cp.lname, cp.folio_master,t.revenue, t.id AS transid FROM transactions t LEFT join (SELECT a.contactid, a.fname, a.lname, b.dateci, b.folio_master FROM contacts a JOIN profilesfolio b ON a.contactid=b.profileid WHERE b.folio_master=b.folio AND b.foliostatus = \'O\' order BY a.contactid ASC) cp ON t.resv_id = cp.folio_master WHERE cp.contactid IS NOT NULL AND cp.dateci BETWEEN DATE_FORMAT(DATE_SUB(now(),INTERVAL 90 day),\'%Y-%m-%d\') and DATE_FORMAT(Now(),\'%Y-%m-%d\') ) cpt ON cpt.contactid = ct.contact_id AND ct.transaction_id = transid GROUP BY contactid ORDER BY stays DESC,revenue DESC LIMIT 10'));
+        $stays=DB::select(DB::raw('SELECT cpt.contactid, cpt.fname, cpt.lname, COUNT(cpt.contactid) AS stays, sum(cpt.revenue) AS revenue FROM contact_transaction ct JOIN (SELECT cp.contactid, cp.fname, cp.lname, cp.folio_master,t.revenue, t.id AS transid FROM transactions t LEFT join (SELECT a.contactid, a.fname, a.lname, b.dateci, b.folio_master FROM contacts a JOIN profilesfolio b ON a.contactid=b.profileid WHERE b.folio_master=b.folio AND b.foliostatus = \'O\' order BY a.contactid ASC) cp ON t.resv_id = cp.folio_master WHERE cp.contactid IS NOT NULL AND cp.dateci BETWEEN ? and ?) cpt ON cpt.contactid = ct.contact_id AND ct.transaction_id = transid GROUP BY contactid ORDER BY stays DESC,revenue DESC LIMIT 10'), [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')]);
         $datastays=[];
         foreach ($stays as $stay){
             $tempstay=['x'=>$stay->fname.' '.$stay->lname,'y'=>$stay->stays];
@@ -152,7 +167,7 @@ class ContactController extends Controller
         }
 
         $datatrx=[];
-        $trx=DB::select(DB::raw('select fname,lname,datediff(dateco,dateci) as hari ,sum(revenue) as rev from transactions a left join contact_transaction b on b.transaction_id=a.id left join contacts c on c.contactid=b.contact_id left JOIN profilesfolio d ON c.contactid=d.profileid where contact_id is not null AND d.dateci BETWEEN DATE_FORMAT(DATE_SUB(now(),INTERVAL 90 day),\'%Y-%m-%d\') and DATE_FORMAT(Now(),\'%Y-%m-%d\') group by fname order by hari desc, rev desc limit 10 '));
+        $trx=DB::select(DB::raw('select fname,lname,datediff(dateco,dateci) as hari ,sum(revenue) as rev from transactions a left join contact_transaction b on b.transaction_id=a.id left join contacts c on c.contactid=b.contact_id left JOIN profilesfolio d ON c.contactid=d.profileid where contact_id is not null AND d.dateci BETWEEN ? and ? group by fname order by hari desc, rev desc limit 10'), [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')]);
         foreach ($trx as $tr){
             $tmp=['x'=>$tr->fname .' '.$tr->lname,'y'=>$tr->hari ];
             array_push($datatrx,$tmp);
@@ -160,14 +175,14 @@ class ContactController extends Controller
 
         $datatrx=json_encode($datatrx);
 
-        $contacts_age=DB::select(DB::raw('select  sum(if(floor(datediff(DATE_FORMAT(now(),\'%Y-%m-%d\'),birthday)/365) <30,1,0)) as low, sum(if(floor(datediff(DATE_FORMAT(now(),\'%Y-%m-%d\'),birthday)/365) >=30  and floor(datediff(DATE_FORMAT(now(),\'%Y-%m-%d\'),birthday)/365)<=60,1,0)) as mid,sum(if(floor(datediff(DATE_FORMAT(now(),\'%Y-%m-%d\'),birthday)/365) >=60,1,0)) as high from contacts where created_at BETWEEN (DATE_SUB(now(),INTERVAL 90 day)) and (Now())'));
+        $contacts_age=DB::select(DB::raw('select sum(if(floor(datediff(?,birthday)/365) <30,1,0)) as low, sum(if(floor(datediff(?,birthday)/365) >=30 and floor(datediff(?,birthday)/365)<=60,1,0)) as mid,sum(if(floor(datediff(?,birthday)/365) >=60,1,0)) as high from contacts where created_at BETWEEN ? and ?'), [$endDate->format('Y-m-d'), $endDate->format('Y-m-d'), $endDate->format('Y-m-d'), $endDate->format('Y-m-d'), $startDate->format('Y-m-d'), $endDate->format('Y-m-d')]);
         $data_age=[];
         array_push($data_age,['label'=>'Under 30','value'=>$contacts_age[0]->low,'type'=>'low']);
         array_push($data_age,['label'=>'Between 30 and 60','value'=>$contacts_age[0]->mid,'type'=>'mid']);
         array_push($data_age,['label'=>'Higher than 60','value'=>$contacts_age[0]->high,'type'=>'high']);
         $data_age=json_encode($data_age);
         $tages=$contacts_age[0]->low+$contacts_age[0]->mid+$contacts_age[0]->high;
-        $room_type=DB::select(DB::raw('select room_name as label, count(*)  as value from profilesfolio,room_type where roomtype is not null and room_type.room_code=profilesfolio.roomtype and profilesfolio.dateci between DATE_FORMAT(DATE_SUB(now(),INTERVAL 90 day),\'%Y-%m-%d\') and DATE_FORMAT(Now(),\'%Y-%m-%d\') group by roomtype order by value ASC'));
+        $room_type=DB::select(DB::raw('select room_name as label, count(*) as value from profilesfolio,room_type where roomtype is not null and room_type.room_code=profilesfolio.roomtype and profilesfolio.dateci between ? and ? group by roomtype order by value ASC'), [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')]);
         $data_room_type=[];
         $troom=0;
         foreach ($room_type as $item) {
@@ -182,7 +197,7 @@ class ContactController extends Controller
         //dd($databooking["reviews"]["total"]);
         $bookingsource=[];
 	 $tbookingsource=0;
-        $booking=DB::select(DB::raw('select count(*) as count ,source from contacts left join contact_transaction on contact_transaction.contact_id=contacts.contactid LEFT JOIN transactions on contact_transaction.transaction_id=transactions.id LEFT JOIN profilesfolio on contactid=profileid  where contacts.created_at between DATE_SUB(now(),INTERVAL 90 day) and Now() group by source order by count ASC'));
+        $booking=DB::select(DB::raw('select count(*) as count ,source from contacts left join contact_transaction on contact_transaction.contact_id=contacts.contactid LEFT JOIN transactions on contact_transaction.transaction_id=transactions.id LEFT JOIN profilesfolio on contactid=profileid where contacts.created_at between ? and ? group by source order by count ASC'), [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')]);
         foreach ($booking as $b){
         	if($b->source!=null){
 		   array_push($bookingsource,['label'=>$b->source,'value'=>$b->count]);
@@ -195,7 +210,7 @@ class ContactController extends Controller
         $databookingsource=json_encode($bookingsource);
         $temailcount=0;
         $dataemail=[];
-        $emails=DB::select(DB::raw('select event,count(*) as count from (select event from mailgun_logs  where timestamp in (select timestamp from mailgun_logs where timestamp between DATE_SUB(now(),INTERVAL 90 day) and Now() group by message_id,recipient)  and event<>\'Testing\' group by recipient,message_id ) a group by EVENT'));
+        $emails=DB::select(DB::raw('select event,count(*) as count from (select event from mailgun_logs where timestamp in (select timestamp from mailgun_logs where timestamp between ? and ? group by message_id,recipient) and event<>\'Testing\' group by recipient,message_id ) a group by EVENT'), [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')]);
 
         foreach ($emails as $email){
             array_push($dataemail,['label'=>ucfirst($email->event),'value'=>$email->count]);
@@ -218,6 +233,8 @@ class ContactController extends Controller
             })
             ->count();
         
+        // Format tanggal untuk ditampilkan di view
+        $dateRangeDisplay = $startDate->format('M d, Y') . ' - ' . $endDate->format('M d, Y');
             
             return view('main.index',[
                 'data'=>$contact,
@@ -241,14 +258,26 @@ class ContactController extends Controller
                 'inhouseRepeaterCount'=>$inhouseRepeaterCount,
                 'totalRepeaterCount'=>$totalRepeaterCount,
                 'inhouseBirthdayTodayCount'=>$inhouseBirthdayTodayCount,
+                'dateRangeDisplay'=>$dateRangeDisplay,
+                'latestDataDate'=>$latestDataDate,
                
             ]);
         }
             
 
  public function getRepeaterMonthlyData($months = 3) {
-    $dateS = Carbon::now()->startOfMonth()->subMonths($months - 1);
-    $dateE = Carbon::now()->endOfMonth();
+    // Dapatkan tanggal data terakhir yang tersedia
+    $latestDataDate = $this->getLatestDataDate();
+    $useLatestData = env('DASHBOARD_USE_LATEST_DATA', true);
+    
+    // Tentukan periode berdasarkan konfigurasi
+    if ($useLatestData && $latestDataDate) {
+        $dateE = Carbon::parse($latestDataDate)->endOfMonth();
+        $dateS = $dateE->copy()->startOfMonth()->subMonths($months - 1);
+    } else {
+        $dateS = Carbon::now()->startOfMonth()->subMonths($months - 1);
+        $dateE = Carbon::now()->endOfMonth();
+    }
     
     // Query yang dioptimalkan - mengurangi redundant operations
     $repeaterData = DB::select(DB::raw("
@@ -1508,6 +1537,24 @@ if ($contact->wedding_bday && $request->birthday &&
         }
 
         return view('contacts.list',['data'=>$contact]);
+    }
+
+    // Tambahkan method baru untuk mendapatkan tanggal data terakhir
+    private function getLatestDataDate() {
+        $latestTransaction = DB::select(DB::raw('SELECT MAX(dateci) as latest_date FROM profilesfolio WHERE dateci IS NOT NULL'));
+        
+        if (!empty($latestTransaction) && $latestTransaction[0]->latest_date) {
+            return $latestTransaction[0]->latest_date;
+        }
+        
+        // Fallback ke tanggal transaksi terakhir jika profilesfolio kosong
+        $latestTransactionFallback = DB::select(DB::raw('SELECT MAX(checkout) as latest_date FROM transactions WHERE checkout IS NOT NULL'));
+        
+        if (!empty($latestTransactionFallback) && $latestTransactionFallback[0]->latest_date) {
+            return $latestTransactionFallback[0]->latest_date;
+        }
+        
+        return null;
     }
 
 }

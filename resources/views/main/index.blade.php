@@ -1,15 +1,24 @@
 @extends('layouts.master')
 @section('title')
    Dashboard | {{ $configuration->hotel_name.' '.$configuration->app_title }}
-    @endsection
+@endsection
 @section('content')
     @can('2.1.1_view_dashboard')
     <div class="right_col" role="main">
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel tile " >
+                <div class="x_panel tile">
                     <div class="x_title">
-                        <h2>Last 3 months data</h2>
+                        <h2>
+                            @if(isset($latestDataDate) && $latestDataDate)
+                                Data Period: {{ $dateRangeDisplay ?? 'Last 3 months data' }}
+                                <small style="display: block; font-size: 12px; color: #666; margin-top: 5px;">
+                                    <i class="fa fa-info-circle"></i> Latest available data: {{ \Carbon\Carbon::parse($latestDataDate)->format('M d, Y') }}
+                                </small>
+                            @else
+                                Last 3 months data
+                            @endif
+                        </h2>
                         <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                             </li>
