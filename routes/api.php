@@ -105,3 +105,18 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::post('updateprestay', [PrestayController::class,'update']);
     Route::post('deleteprestay', [PrestayController::class,'delete']);
 });
+
+//CRM-CAMPAIGN-CENTER ROUTE
+// Campaign Center Test Routes
+//curl -X GET "http://jalakdev.ramaresidencepadma.com/api/campaign-center/ping"
+Route::get('/campaign-center/ping', [App\Http\Controllers\CampaignCenterTestController::class, 'pingTest']);
+Route::get('/campaign-center/test-connection', [App\Http\Controllers\CampaignCenterTestController::class, 'testConnection']);
+
+// Quota Sync Routes
+//curl -X POST http://jalakdev.ramaresidencepadma.com/api/quota/sync/initial \
+//   -H "Content-Type: application/json" \
+//   -H "Accept: application/json"
+Route::post('quota/sync/initial', [App\Http\Controllers\QuotaSyncController::class, 'syncQuotaInitial']);
+Route::get('quota/sync/test', [App\Http\Controllers\QuotaSyncController::class, 'testQuotaSync']);
+
+
