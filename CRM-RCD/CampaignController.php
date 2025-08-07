@@ -15,8 +15,6 @@ use App\Traits\UserLogsActivity;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class CampaignController extends Controller
@@ -47,149 +45,56 @@ class CampaignController extends Controller
     }
 
     public function campaignlist(Request $request){
-        // Define column mapping for DataTables sorting
-        $columns = [
-            0 => 'id', // Row number (handled separately)
-            1 => 'name',
-            2 => 'segment', // Requires special handling due to relationship
-            3 => 'status',
-            4 => 'schedule', // Requires special handling due to relationship
-            5 => 'accepted', // Calculated field from email responses
-            6 => 'delivered', // Calculated field from email responses
-            7 => 'opened', // Calculated field from email responses
-            8 => 'clicked', // Calculated field from email responses
-            9 => 'unsubscribed', // Calculated field from email responses
-            10 => 'failed', // Calculated field from email responses
-            11 => 'rejected' // Calculated field from email responses
-        ];
-    
-        // Get total count of campaigns with schedules
-        $totalData = Campaign::whereHas('schedule')->count();
+        $campaign=Campaign::whereHas('schedule')->get();
+
+        $totalData = $campaign->count();
         $totalFiltered = $totalData;
         $limit = $request->input('length');
         $start = $request->input('start');
-        $search = $request->input('search.value');
-        
-        // Extract sorting parameters
-        $orderColumnIndex = $request->input('order.0.column');
-        $orderDirection = $request->input('order.0.dir');
-        $orderColumn = isset($columns[$orderColumnIndex]) ? $columns[$orderColumnIndex] : 'created_at';
-    
-        // Build base query with eager loading for performance
-        $query = Campaign::with(['schedule', 'segment', 'externalSegment', 'emailresponse'])
-                    ->whereHas('schedule');
-    
-        // Apply search filter if provided
+        $search=$request->input('search.value');
+
         if(!empty($search)){
-            $query->where('name','LIKE',"%$search%");
-            $totalFiltered = $query->count();
+            $campaignlist=Campaign::where('name','LIKE',"%$search%")->offset($start)->limit($limit)->orderBy('created_at','desc')->get();
+            $totalFiltered=count($campaignlist);
+        }else{
+            $campaignlist=Campaign::select()->offset($start)->limit($limit)->orderBy('created_at','desc')->get();
         }
-    
-        // Check if sorting is needed for calculated columns
-        $isCalculatedColumn = in_array($orderColumn, ['accepted', 'delivered', 'opened', 'clicked', 'unsubscribed', 'failed', 'rejected']);
-        
-        if (!$isCalculatedColumn) {
-            // Handle sorting for database columns
-            switch($orderColumn) {
-                case 'name':
-                case 'status':
-                    $query->orderBy($orderColumn, $orderDirection);
-                    break;
-                case 'schedule':
-                    // Join with schedules table for sorting
-                    $query->leftJoin('schedules', 'campaigns.id', '=', 'schedules.campaign_id')
-                          ->orderBy('schedules.schedule', $orderDirection)
-                          ->select('campaigns.*');
-                    break;
-                case 'segment':
-                    // Join with segment tables for sorting by first segment name
-                    $query->leftJoin('campaign_segment', 'campaigns.id', '=', 'campaign_segment.campaign_id')
-                          ->leftJoin('segments', 'campaign_segment.segment_id', '=', 'segments.id')
-                          ->orderBy('segments.name', $orderDirection)
-                          ->select('campaigns.*')
-                          ->distinct();
-                    break;
-                default:
-                    // Default sorting by creation date
-                    $query->orderBy('created_at', $orderDirection);
-                    break;
-            }
-            
-            // Apply pagination for non-calculated columns
-            $campaignlist = $query->offset($start)->limit($limit)->get();
-        } else {
-            // For calculated columns, fetch all data first (pagination applied later)
-            $campaignlist = $query->get();
-        }
-    
-        $data = [];
-    
+
+
         if(!empty($campaignlist)){
             foreach ($campaignlist as $item){
-                // Determine segment name based on campaign type
                 if($item->type=='internal'){
-                    $segment = $item->segment->isNotEmpty() ? $item->segment[0]->name : '';
+                    $segment=count($item->segment) ? $item->segment[0]->name:'';
                 }else{
-                    $segment = $item->externalSegment->isNotEmpty() ? $item->externalSegment[0]->category : '';
+                    $segment=count($item->externalSegment) ? $item->externalSegment[0]->category:'';
                 }
-                
-                // Filter email responses for current campaign
-                $campaignResponses = $item->emailresponse->where('campaign_id', $item->id);
-                
-                // Calculate email statistics using efficient grouping
-                $processedEvents = $campaignResponses->whereIn('event', ['processed','sent','open','click'])->groupBy('email_id');
-                $sentEvents = $campaignResponses->whereIn('event', ['sent','open','click'])->groupBy('email_id');
-                $openEvents = $campaignResponses->whereIn('event', ['open','click'])->groupBy('email_id');
-                $clickEvents = $campaignResponses->whereIn('event', ['click']);
-                $unsubscribeEvents = $campaignResponses->where('event', 'unsubscribe');
-                $failedEvents = $campaignResponses->whereIn('event', ['hardbounce','softbounce','invalid']);
-                $rejectedEvents = $campaignResponses->whereIn('event', ['dropped'])->groupBy('email_id');
-                
-                // Build response data structure
-                $nestedData['type'] = $item->type;
-                $nestedData['id'] = $item->id;
-                $nestedData['name'] = $item->name;
-                $nestedData['segment'] = $segment;
-                $nestedData['status'] = $item->status;
-                $nestedData['schedule'] = $item->schedule ? $item->schedule->schedule : '';
-                $nestedData['accepted'] = $processedEvents->count();
-                $nestedData['delivered'] = $sentEvents->count();
-                $nestedData['opened'] = $openEvents->count();
-                $nestedData['clicked'] = $clickEvents;
-                $nestedData['unsubscribed'] = $unsubscribeEvents->count();
-                $nestedData['failed'] = $failedEvents->count();
-                $nestedData['rejected'] = $rejectedEvents->count();
-                $nestedData['template'] = $item->template;
-                $data[] = $nestedData;
+                $nestedData['type']=$item->type;
+//                $nestedData['contact']=$contact;
+                $nestedData['id']=$item->id;
+                $nestedData['name']=$item->name;
+                $nestedData['segment']=$segment;
+                $nestedData['status']=$item->status;
+                $nestedData['schedule']= $item->schedule ? $item->schedule->schedule:'';
+                $nestedData['accepted']=count($item->emailresponse->where('campaign_id','=',$item->id)->whereIn('event',['processed','sent','open','click'])->groupBy('email_id'));
+                $nestedData['delivered']=count($item->emailresponse->where('campaign_id','=',$item->id)->whereIn('event',['sent','open','click'])->groupBy('email_id'));
+                $nestedData['opened']=count($item->emailresponse->where('campaign_id','=',$item->id)->whereIn('event',['open','click'])->groupBy('email_id'));
+                $nestedData['clicked']=$item->emailresponse->where('campaign_id','=',$item->id)->whereIn('event',['click']);
+                $nestedData['unsubscribed']=count($item->emailresponse->where('campaign_id','=',$item->id)->where('event','=','unsubscribe'));
+                $nestedData['failed']=count($item->emailresponse->where('campaign_id','=',$item->id)->whereIn('event',['hardbounce','softbounce','invalid']));
+                $nestedData['rejected']=count($item->emailresponse->where('campaign_id','=',$item->id)->whereIn('event',['dropped'])->groupBy('email_id'));
+                $nestedData['template']=$item->template;
+                $data[]=$nestedData;
+
             }
+
         }
-    
-        // Handle sorting for calculated columns
-        if ($isCalculatedColumn) {
-            // Sort data based on selected calculated column
-            usort($data, function($a, $b) use ($orderColumn, $orderDirection) {
-                $valueA = $orderColumn === 'clicked' ? count($a[$orderColumn]) : $a[$orderColumn];
-                $valueB = $orderColumn === 'clicked' ? count($b[$orderColumn]) : $b[$orderColumn];
-                
-                if ($orderDirection === 'asc') {
-                    return $valueA <=> $valueB;
-                } else {
-                    return $valueB <=> $valueA;
-                }
-            });
-            
-            // Apply pagination after sorting
-            $data = array_slice($data, $start, $limit);
-        }
-    
-        // Prepare JSON response for DataTables
         $json_data=array(
             "draw"=>intval($request->input('draw')),
             "recordsTotal"=>intval($totalData),
             "recordsFiltered"=>intval($totalFiltered),
             "data"=>$data
         );
-    
+
         return response($json_data);
     }
     public function campaignrecepient(Request $request){
@@ -234,14 +139,13 @@ class CampaignController extends Controller
             $segment=$request->category;
         }
 
-        // Buat campaign utama dulu
         $campaign=new Campaign();
         $campaign->name=$request->name;
-        $campaign->status='Pending Approval'; // Status baru
+        $campaign->status='Draft';
         $campaign->type=$type;
         $campaign->template_id=$request->template;
         $campaign->save();
-    
+
         $seg=Segment::find($segment);
         $cat=ExternalContactCategory::find($segment);
 
@@ -320,13 +224,11 @@ class CampaignController extends Controller
             return $q->has('transaction','<=',$seg->total_stay_to);
         })->when($seg->total_stay_from !=null and $seg->total_stay_to !=null, function ($q) use ($seg){
             return $q->has('transaction','>=',$seg->total_stay_from)->has('transaction','<=',$seg->total_stay_to);
-        })->when($seg->name !=null,function ($q) use ($seg){
-            return $q->whereRaw('CONCAT(fname,lname) like \'%'.$seg->name.'%\'');
         })->when($seg->age_from!=null and $seg->age_to!=null ,function ($q) use ($seg){
             return $q->whereRaw('birthday <= date_sub(now(), INTERVAL \''.$seg->age_from.'\' YEAR) and birthday >= date_sub(now(),interval \''.$seg->age_to.'\' year)');
-        })->when($seg->age_from!=null ,function($q) use ($seg){
+        })->when($seg->age_from !=null ,function($q) use ($seg){
             return $q->whereRaw('birthday <= date_sub(now(),INTERVAL \''.$seg->age_from.'\' YEAR)');
-        })->when($seg->age_to!=null,function ($q) use ($seg){
+        })->when($seg->age_to !=null,function ($q) use ($seg){
             return $q->whereRaw('birthday >= date_sub(now(),INTERVAL \''.$seg->age_to.'\' YEAR)');
         // })->when(unserialize($seg->booking_source)[0]!=null,function ($q) use ($seg){
         //     return   $q->whereHas('profilesfolio',function ($q) use ($seg){
@@ -557,11 +459,6 @@ class CampaignController extends Controller
            'status' => $campaign->status
        ];
        
-       // Hapus schedule terlebih dahulu
-       if ($campaign->schedule) {
-           $campaign->schedule->delete();
-       }
-       
        foreach ($campaign->contact as $key => $contact) {
            $campaign->contact()->detach($contact->id);
        }
@@ -591,168 +488,53 @@ class CampaignController extends Controller
     
     public function delete(Request $request)
     {
-        $id = $request->input('id');
+        $campaign=Campaign::find($request->id);
         
-        if (!$id) {
-            return response()->json(['success' => false, 'message' => 'Campaign ID is required'], 400);
-        }
+        // Simpan informasi campaign untuk logging
+        $campaignInfo = [
+            'id' => $campaign->id,
+            'name' => $campaign->name,
+            'status' => $campaign->status
+        ];
         
-        $campaign = Campaign::find($id);
-        
-        if (!$campaign) {
-            return response()->json(['success' => false, 'message' => 'Campaign not found'], 404);
-        }
-        
-        try {
-            // STEP 1: Laporkan pembatalan ke Campaign Center SEBELUM menghapus dari database
-            $cancellationResult = $this->reportCampaignCancellation($campaign);
-            
-            // STEP 2: Laporkan pembatalan untuk campaign children juga
-            $children = Campaign::where('parent_campaign_id', $id)->get();
-            foreach ($children as $child) {
-                $this->reportCampaignCancellation($child);
-            }
-            
-            // STEP 3: Setelah berhasil melaporkan pembatalan, baru hapus dari database lokal
-            
-            // Hapus campaign children terlebih dahulu
-            foreach ($children as $child) {
-                $this->detachCampaignRelations($child);
-                $child->delete();
-            }
-            
-            // Hapus campaign utama
-            $campaignName = $campaign->name; // Simpan nama sebelum dihapus untuk logging
-            $this->detachCampaignRelations($campaign);
-            $campaign->delete();
-            
-            // Log aktivitas
-            $this->logActivity('Campaign Deleted', 'Campaign ' . $campaignName . ' has been deleted');
-            
-            return response()->json([
-                'success' => true, 
-                'message' => 'Campaign deleted successfully',
-                'cancellation_result' => $cancellationResult
-            ]);
-            
-        } catch (\Exception $e) {
-            Log::error('Failed to delete campaign', [
-                'campaign_id' => $id,
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
-            
-            return response()->json([
-                'success' => false, 
-                'message' => 'Failed to delete campaign: ' . $e->getMessage()
-            ], 500);
-        }
-    }
-
-    private function reportCampaignCancellation($campaign)
-    {
-        if (!$campaign->campaign_center_id) {
-            Log::warning('Campaign cancellation not reported: no campaign_center_id', [
-                'campaign_id' => $campaign->id,
-                'campaign_name' => $campaign->name
-            ]);
-            return ['success' => false, 'reason' => 'No campaign_center_id'];
-        }
-        
-        try {
-            $campaignCenterUrl = env('CAMPAIGN_CENTER_URL') . "/api/schedule/cancel/{$campaign->campaign_center_id}";
-            $apiToken = env('CAMPAIGN_CENTER_API_TOKEN');
-            
-            $requestData = [
-                'app_code' => env('CAMPAIGN_CENTER_CODE', 'RRP'),
-                'reason' => 'Campaign no longer needed'
-            ];
-
-            $response = Http::withHeaders([
-                'Authorization' => 'Bearer ' . $apiToken,
-                'Content-Type' => 'application/json'
-            ])->timeout(30)->delete($campaignCenterUrl, $requestData);
-            
-            Log::info('Campaign cancellation reported', [
-                'campaign_id' => $campaign->id,
-                'campaign_center_id' => $campaign->campaign_center_id,
-                'url' => $campaignCenterUrl,
-                'request_data' => $requestData,
-                'response_status' => $response->status(),
-                'response_body' => $response->body(),
-                'successful' => $response->successful()
-            ]);
-            
-            if ($response->successful()) {
-                return [
-                    'success' => true, 
-                    'response' => $response->json()
-                ];
-            } else {
-                Log::error('Campaign cancellation failed', [
-                    'campaign_id' => $campaign->id,
-                    'campaign_center_id' => $campaign->campaign_center_id,
-                    'status_code' => $response->status(),
-                    'response_body' => $response->body()
-                ]);
-                return [
-                    'success' => false, 
-                    'error' => 'HTTP ' . $response->status() . ': ' . $response->body()
-                ];
-            }
-            
-        } catch (\Exception $e) {
-            Log::error('Failed to report campaign cancellation', [
-                'campaign_id' => $campaign->id,
-                'campaign_center_id' => $campaign->campaign_center_id,
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
-            
-            return [
-                'success' => false, 
-                'error' => $e->getMessage()
-            ];
-        }
-    }
-
-    /**
-     * Helper function untuk detach semua relasi campaign
-     */
-    private function detachCampaignRelations($campaign)
-    {
         // Hapus schedule terlebih dahulu
         if ($campaign->schedule) {
             $campaign->schedule->delete();
         }
         
-        // Detach contacts
-        if (!$campaign->contact->isEmpty()) {
-            foreach ($campaign->contact as $contact) {
+        if(!$campaign->contact->isEmpty()) {
+            foreach ($campaign->contact as $key => $contact) {
                 $campaign->contact()->detach($contact->id);
             }
         }
-        
-        // Detach segments
-        if (!$campaign->segment->isEmpty()) {
-            foreach ($campaign->segment as $segment) {
-                $campaign->segment()->detach($segment->id);
+        if(!$campaign->segment->isEmpty()) {
+            foreach ($campaign->segment as $key => $value) {
+            $campaign->segment()->detach($value->id);
             }
         }
-        
-        // Detach external contacts
-        if (!$campaign->external->isEmpty()) {
-            foreach ($campaign->external as $external) {
-                $campaign->external()->detach($external->id);
+        if(!$campaign->external->isEmpty()) {
+            foreach ($campaign->external as $key => $value) {
+                $campaign->external()->detach($value->id);
             }
         }
-        
-        // Detach external segments
-        if (!$campaign->externalSegment->isEmpty()) {
-            foreach ($campaign->externalSegment as $externalSegment) {
-                $campaign->externalSegment()->detach($externalSegment->id);
+        if(!$campaign->externalSegment->isEmpty()) {
+            foreach ($campaign->externalSegment as $key => $value) {
+                $campaign->externalSegment()->detach($value->id);
             }
         }
+        $campaign->delete();
+        
+        // Log aktivitas penghapusan setelah campaign berhasil dihapus
+        $this->logActivity(
+           'delete',
+           Campaign::class,
+           $request->id,
+           $campaignInfo,
+           null,
+           'Deleted campaign: ' . $campaignInfo['name']
+        );
+
+        return response('ok');
     }
 
     public function getRecepient(Request $seg){
@@ -1040,20 +822,33 @@ class CampaignController extends Controller
         }
     }
     public function saveSegment(Request $seg){
-
         $rules=['name'=>'required'];
         $message=['name.required'=>'Segment Name Required'];
         $validator=Validator::make($seg->all(),$rules,$message);
+        
         if(!$validator->fails()){
-            $guest_status=serialize($seg->guest_status);
-            $country_id=serialize($seg->country_id);
-            $gender=serialize($seg->gender);
-            $booking_source=serialize($seg->booking_source);
+            // Perbaikan serialisasi - pastikan selalu array kosong jika null/kosong
+            $guest_status = $seg->has('guest_status') && is_array($seg->guest_status) && !empty($seg->guest_status) 
+                           ? serialize($seg->guest_status) 
+                           : serialize([]);
+            $country_id = $seg->has('country_id') && is_array($seg->country_id) && !empty($seg->country_id) 
+                         ? serialize($seg->country_id) 
+                         : serialize([]);
+            $gender = $seg->has('gender') && is_array($seg->gender) && !empty($seg->gender) 
+                     ? serialize($seg->gender) 
+                     : serialize([]);
+            $booking_source = $seg->has('booking_source') && is_array($seg->booking_source) && !empty($seg->booking_source) 
+                             ? serialize($seg->booking_source) 
+                             : serialize([]);
+            $area = $seg->has('area') && is_array($seg->area) && !empty($seg->area) 
+                   ? serialize($seg->area) 
+                   : serialize([]);
+            
             $segment=new Segment();
             $segment->name=$seg->name;
             $segment->guest_status=$guest_status;
             $segment->country_id=$country_id;
-            $segment->area=serialize($seg->area);
+            $segment->area=$area;
             $segment->gender=$gender;
             $segment->booking_source=$booking_source;
             if($seg->stay_from!=null){
@@ -1123,166 +918,6 @@ class CampaignController extends Controller
 
 
 
-    }
-
-    private function requestCampaignApproval($data)
-    {
-        try {
-            // Simulasi request ke campaign center
-            $response = Http::timeout(30)->post(config('campaign.center_url') . '/api/request-approval', [
-                'unit_id' => config('campaign.unit_id'),
-                'campaign_data' => $data
-            ]);
-            
-            if($response->successful()) {
-                return $response->json();
-            }
-            
-            // Fallback jika campaign center tidak response
-            return [
-                'status' => 'approved',
-                'type' => 'single',
-                'schedules' => [[
-                    'date' => $data['schedule_date'],
-                    'recipients_count' => $data['total_recipients']
-                ]]
-            ];
-            
-        } catch(\Exception $e) {
-            // Fallback approval
-            return [
-                'status' => 'approved',
-                'type' => 'single', 
-                'schedules' => [[
-                    'date' => $data['schedule_date'],
-                    'recipients_count' => $data['total_recipients']
-                ]]
-            ];
-        }
-    }
-
-    private function processApprovalResponse($originalCampaign, $allContacts, $approvalResponse, $request)
-    {
-        DB::beginTransaction();
-        
-        try {
-            if($approvalResponse['status'] === 'rejected') {
-                $originalCampaign->status = 'Rejected';
-                $originalCampaign->save();
-                throw new \Exception('Campaign rejected by campaign center');
-            }
-            
-            $schedules = $approvalResponse['schedules'];
-            $campaignsCreated = [];
-            
-            // Jika hanya satu schedule, update campaign asli
-            if(count($schedules) === 1) {
-                $this->finalizeSingleCampaign($originalCampaign, $allContacts, $schedules[0], $request);
-                $campaignsCreated[] = $originalCampaign;
-            } else {
-                // Multiple schedules - buat campaign terpisah
-                $campaignsCreated = $this->createMultipleCampaigns($originalCampaign, $allContacts, $schedules, $request);
-                
-                // Update campaign asli jadi parent/master
-                $originalCampaign->status = 'Split into Multiple';
-                $originalCampaign->save();
-            }
-            
-            // Log activity
-            $this->logActivity(
-                'campaign_approval_processed',
-                Campaign::class,
-                $originalCampaign->id,
-                null,
-                [
-                    'approval_status' => $approvalResponse['status'],
-                    'campaigns_created' => count($campaignsCreated),
-                    'total_recipients' => count($allContacts)
-                ],
-                'Campaign approval processed: ' . $approvalResponse['status'] . ' with ' . count($campaignsCreated) . ' campaigns created'
-            );
-            
-            DB::commit();
-            return $campaignsCreated;
-            
-        } catch(\Exception $e) {
-            DB::rollback();
-            throw $e;
-        }
-    }
-
-    private function finalizeSingleCampaign($campaign, $allContacts, $schedule, $request)
-    {
-        // Attach semua contacts
-        $this->attachContactsOptimized($campaign, $allContacts);
-        
-        // Attach template dan segment
-        $campaign->template()->attach($campaign->template_id);
-        if($campaign->type === 'internal') {
-            $campaign->segment()->attach($request->segments);
-        } else {
-            $campaign->externalSegment()->attach($request->category);
-        }
-        
-        // Set schedule dan status
-        $this->setSheduleFunc($campaign->id, $schedule['date']);
-        
-        return $campaign;
-    }
-    
-    private function createMultipleCampaigns($originalCampaign, $allContacts, $schedules, $request)
-    {
-        $campaignsCreated = [];
-        $contactIndex = 0;
-        
-        foreach($schedules as $index => $schedule) {
-            // Buat campaign baru untuk setiap schedule
-            $newCampaign = new Campaign();
-            $newCampaign->name = $originalCampaign->name . ' - Part ' . ($index + 1);
-            $newCampaign->status = 'Draft';
-            $newCampaign->type = $originalCampaign->type;
-            $newCampaign->template_id = $originalCampaign->template_id;
-            $newCampaign->parent_campaign_id = $originalCampaign->id; // Reference ke campaign asli
-            $newCampaign->save();
-            
-            // Ambil contacts sesuai jumlah yang dialokasikan
-            $recipientsCount = $schedule['recipients_count'];
-            $campaignContacts = array_slice($allContacts, $contactIndex, $recipientsCount);
-            $contactIndex += $recipientsCount;
-            
-            // Attach contacts dengan batch processing untuk optimasi
-            $this->attachContactsOptimized($newCampaign, $campaignContacts);
-            
-            // Attach template dan segment
-            $newCampaign->template()->attach($originalCampaign->template_id);
-            if($originalCampaign->type === 'internal') {
-                $newCampaign->segment()->attach($request->segments);
-            } else {
-                $newCampaign->externalSegment()->attach($request->category);
-            }
-            
-            // Set schedule
-            $this->setSheduleFunc($newCampaign->id, $schedule['date']);
-            
-            $campaignsCreated[] = $newCampaign;
-        }
-        
-        return $campaignsCreated;
-    }
-
-    private function attachContactsOptimized($campaign, $contacts)
-    {
-        // Batch insert untuk optimasi performance dengan 16k+ contacts
-        $batchSize = 1000;
-        $batches = array_chunk($contacts, $batchSize);
-        
-        foreach($batches as $batch) {
-            $attachData = [];
-            foreach($batch as $contact) {
-                $attachData[$contact->id] = ['status' => 'queue'];
-            }
-            $campaign->contact()->attach($attachData);
-        }
     }
 
 }

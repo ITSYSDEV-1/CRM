@@ -8,7 +8,7 @@
             <div class="modal-content" >
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="recepientModalLabel"> Campaign</h4>
+                    <h4 class="modal-title" id="recepientModalLabel"> Campaign  </h4>
                 </div>
                 <div class="modal-body">
                     <table class="table table-bordered table-striped table-hover subtable responsive js-basic-example"  width="100%" id="recepienttable">
@@ -133,13 +133,12 @@
                                 <div class="clearfix"></div>
                             @can('4.1.1_add_new_campaign')
                                 <a href="{{ url('campaign/create') }}" title="Create New Campaign" class=" btn btn-success"><i class="fa fa-plus"> </i> Create New Campaign</a>
-                                <a href="{{route('campaign.calendar')}}"><i class="fa fa-calendar"></i> Campaign Calendar</a>
-                            @endcan    
-                        </div>
+                            @endcan
+                            </div>
                             <div class="x_content" >
 
                                 <div class="row clearfix">
-                                    <table id="campaigntable" class="table table-bordered table-striped table-hover js-basic-example ">
+                                    <table id="campaigntable" class="table table-bordered table-striped table-hover responsive js-basic-example ">
                                         <thead>
                                         <tr>
                                             <th width="10px">No</th>
@@ -184,7 +183,6 @@
                 },
                 "serverSide": true,
                 "pageLength":15,
-                "order": [[ 4, "desc" ]], // Urutkan berdasarkan kolom schedule (index 4) secara descending
                 "ajax":{
                     "url": "{{ route('campaignlist') }}",
                     "dataType": "json",
@@ -217,55 +215,62 @@
                     @endif
                 ],
                 "columnDefs":[
-                {
-                    "targets":0,
-                    "render":function (data,type,row,meta) {
-                        var info = $('#campaigntable').DataTable().page.info();
-                        return info.start + meta.row + 1;
-                    }
-                },
-                {
-                "targets":3,
-                "render":function (data,type,row) {
-                    var status = ''
-                        if (data==='Scheduled'){
-                        status='Scheduled @ '+ moment(row.schedule).format('YYYY MMMM DD HH:mm')
-                        }else{
-                            status=data
+                    {
+                        "targets":0,
+                        "sortable":false,
+                        "render":function (data,type,row,meta) {
+                            return meta.row+1
                         }
-                    return status
-                }
-                },
-                {
-                    "targets":4,
-                    "render":function (data,type,row) {
-                        var date =moment(data).format('YYYY MMMM DD HH:mm')
-                        return date
-                    }
-                },
-                {
-                    "targets":[8],
-                    "render":function (data,type,row) {
-                        var result=[]
-                        var urls=[]
-                        var res=''
-                        $.each(data,function(k,v){
-                            urls=v.url.split(';')
-                            $.each(urls, function(i, e) {
-                                if ($.inArray(e, result) == -1) result.push(e);
-                            });
-                            var list='<ul>'
-                            $.each(result,function(i,v){
-                                list+='<li>'+v+'</li>'
+                    },
+                    {
+                      "targets":3,
+                      "sortable":false,
+                      "render":function (data,type,row) {
+                          var status = ''
+                            if (data==='Scheduled'){
+                              status='Scheduled @ '+ moment(row.schedule).format('YYYY MMMM DD HH:mm')
+                            }else{
+                                status=data
+                            }
+                          return status
+                      }
+                    },
+                    {
+                        "targets":4,
+                        "sortable":false,
+                        "render":function (data,type,row) {
+                            var date =moment(data).format('YYYY MMMM DD HH:mm')
+                            return date
+                        }
+                    },
+                    {
+                        "targets":[2,5,6,7,9,10,11],
+                        "sortable":false,
+                    },
+                    {
+                        "targets":[8],
+                        "sortable":false,
+                        "render":function (data,type,row) {
+                            var result=[]
+                            var urls=[]
+                            var res=''
+                            $.each(data,function(k,v){
+                                urls=v.url.split(';')
+                                $.each(urls, function(i, e) {
+                                    if ($.inArray(e, result) == -1) result.push(e);
+                                });
+                                var list='<ul>'
+                                $.each(result,function(i,v){
+                                    list+='<li>'+v+'</li>'
+                                })
+                                list+='</ul>'
+                                res+='<tr><td>'+v.recepient+'</td><td>'+list+'</td></tr>'
                             })
-                            list+='</ul>'
-                            res+='<tr><td>'+v.recepient+'</td><td>'+list+'</td></tr>'
-                        })
-                            var count = $.map(data, function(n, i) { return i; }).length;
-                            return '<a href="javascript:void(0)" id="'+row.id+'" title="" onclick="openModal2(\'' + res + '\') "> '+count+'</a> '
+                                var count = $.map(data, function(n, i) { return i; }).length;
+                                return '<a href="javascript:void(0)" id="'+row.id+'" title="" onclick="openModal2(\'' + res + '\') "> '+count+'</a> '
 
-                    }
-                },
+                        }
+                    },
                     @if(auth()->user()->can('4.1.2_preview_campaign') || 
                     auth()->user()->can('4.1.3_set_schedule') || 
                     auth()->user()->can('4.1.4_show_recipient') || 
@@ -303,20 +308,21 @@
                             
                             // Delete Campaign - 4.1.5_delete_campaign
                             @can('4.1.5_delete_campaign')
-                            actions += '<a href="#" title="Delete Campaign" onclick="return swal({title:\'Delete Confirmation\',text:\'This campaign will permanently deleted\',type:\'warning\',\n' +
+                            actions += '<a href="#" title="Delete Template" onclick="return swal({title:\'Delete Confirmation\',text:\'This Template will permanently deleted\',type:\'warning\',\n' +
                                 '                                                            showCancelButton: true,\n' +
                                 '                                                            confirmButtonColor: \'#DD6B55\',\n' +
                                 '                                                            confirmButtonText:\'Delete\',\n' +
-                                '                                                            cancelButtonText: \'Cancel\',\n' +
-                                '                                                            closeOnConfirm: true,\n' +
-                                '                                                            closeOnCancel: true,\n' +
-                                '                                                            showLoaderOnConfirm: true\n' +
+                                '                                                            cancelButtonText: \'No\',\n' +
+                                '                                                            closeOnConfirm: false,\n' +
+                                '                                                            closeOnCancel: false\n' +
                                 '                                                            },\n' +
                                 '                                                            function(isConfirm){\n' +
                                 '                                                            if (isConfirm) {\n' +
                                 '                                                               deleteCampaign(\''+data.id+'\')\n' +
+                                '                                                            } else {\n' +
+                                '                                                            swal(\'Cancelled\', \'Delete Template Cancelled\',\'error\');\n' +
                                 '                                                            }\n' +
-                                '                                                            });" data-campaign-id="'+data.id+'"><i class="fa fa-trash" style="font-size: 1.5em">  </i>\n' +
+                                '                                                            });"><i class="fa fa-trash" style="font-size: 1.5em">  </i>\n' +
                                 '                                                    </a>'
                             @endcan
                             
@@ -388,104 +394,18 @@
     </script>
     <script>
         function deleteCampaign(id){
-            // Cek apakah sedang dalam proses delete untuk mencegah double-click
-            if (window.deletingCampaign) {
-                return false;
-            }
-            
-            // Set flag untuk mencegah double-click
-            window.deletingCampaign = true;
-            
-            // Disable semua tombol delete untuk mencegah multiple delete
-            $('a[data-campaign-id]').addClass('disabled').css('pointer-events', 'none');
-            
-            // Tampilkan loading indicator
-            swal({
-                title: 'Processing...',
-                text: 'Cancelling campaign and notifying Campaign Center...',
-                type: 'info',
-                showConfirmButton: false,
-                allowOutsideClick: false,
-                allowEscapeKey: false
-            });
-            
-            // Simpan halaman saat ini sebelum delete
-            var currentPage = $('#campaigntable').DataTable().page();
-            
-            // Cek apakah campaign ini memiliki children
-            var campaignData = $('#campaigntable').DataTable().rows().data().toArray();
-            var hasChildren = campaignData.some(function(campaign) {
-                return campaign.parent_campaign_id == id;
-            });
-            
             $.ajax({
                 url:'{{ route('campaign.delete') }}',
                 type:'POST',
                 data:{
                     _token:'{{ csrf_token() }}',
                     id:id
-                },
-                success:function(response){
-                    // Reset flag
-                    window.deletingCampaign = false;
-                    
-                    // Re-enable tombol delete
-                    $('a[data-campaign-id]').removeClass('disabled').css('pointer-events', 'auto');
-                    
-                    if(response === 'ok' || (response.success && response.success === true)){
-                        // Tutup loading dan tampilkan success
-                        swal({
-                            title: 'Deleted!',
-                            text: hasChildren ? 'Parent campaign and all children have been deleted successfully.' : 'Campaign has been deleted successfully.',
-                            type: 'success',
-                            timer: 2000,
-                            showConfirmButton: false
-                        });
-                        
-                        // Reload DataTable dan kembali ke halaman yang sama
-                        $('#campaigntable').DataTable().ajax.reload(function() {
-                            var table = $('#campaigntable').DataTable();
-                            var info = table.page.info();
-                            
-                            // Jika halaman saat ini kosong dan bukan halaman pertama, pindah ke halaman sebelumnya
-                            if (info.recordsDisplay > 0 && currentPage > 0 && info.end === info.start - 1) {
-                                table.page(currentPage - 1).draw('page');
-                            } else if (currentPage < info.pages) {
-                                table.page(currentPage).draw('page');
-                            }
-                        }, false);
-                    } else {
-                        // Tampilkan error dari response
-                        var errorMessage = 'Failed to delete campaign';
-                        if (response.message) {
-                            errorMessage += ': ' + response.message;
-                        }
-                        swal('Error!', errorMessage, 'error');
+                },success:function(s){
+                    if(s==='ok'){
+                        location.reload()
                     }
-                },
-                error:function(xhr){
-                    // Reset flag
-                    window.deletingCampaign = false;
-                    
-                    // Re-enable tombol delete
-                    $('a[data-campaign-id]').removeClass('disabled').css('pointer-events', 'auto');
-                    
-                    var errorMessage = 'Failed to delete campaign';
-                    try {
-                        var response = JSON.parse(xhr.responseText);
-                        if (response.message) {
-                            errorMessage += ': ' + response.message;
-                        } else {
-                            errorMessage += ': ' + xhr.responseText;
-                        }
-                    } catch (e) {
-                        errorMessage += ': ' + xhr.responseText;
-                    }
-                    
-                    swal('Error!', errorMessage, 'error');
-                },
-                timeout: 30000 // 30 detik timeout
-            });
+                }
+            })
         }
         function selectRecepient(id){
             var loading ='<i class="fa fa-spinner fa-spin fa-3x fa-fw center-align"></i><span class="sr-only">Loading...</span>';

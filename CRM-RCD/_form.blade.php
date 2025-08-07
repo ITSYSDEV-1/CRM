@@ -1,4 +1,4 @@
-<form id="example-form" action="{{ route('campaign.store.reservation') }}" method="POST" role="form" class="form-horizontal">
+<form id="example-form" action="{{ route('campaign.store') }}" method="POST" role="form" class="form-horizontal">
     <input type="hidden" name="_token" value="{{ csrf_token() }}">
     <div>
         <h3>Campaign</h3>

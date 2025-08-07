@@ -275,7 +275,15 @@ Route::get('/logs', 'App\Http\Controllers\LogController@index')->name('logs.inde
     Route::post('campaign/delete',[CampaignController::class,'delete'])->name('campaign.delete');
     Route::get('campaign/create',[CampaignController::class,'create']);
     Route::post('campaign/store',[CampaignController::class,'store'])->name('campaign.store');
+    Route::post('/campaign/store-with-reservation', [App\Http\Controllers\CampaignReservationStoreController::class, 'store'])->name('campaign.store.reservation');
     Route::get('campaign',[CampaignController::class,'index']);
+    
+    // Campaign Calendar Routes
+    Route::get('/campaign-calendar/monthly', [App\Http\Controllers\CampaignCalendarController::class, 'getMonthlyCalendar']);
+    Route::get('campaign/calendar', [App\Http\Controllers\CampaignCalendarController::class, 'index'])->name('campaign.calendar');
+    Route::get('api/campaign/calendar/overview', [App\Http\Controllers\CampaignCalendarController::class, 'getOverview'])->name('calendar.overview');
+    Route::get('api/campaign/calendar/range', [App\Http\Controllers\CampaignCalendarController::class, 'getRangeOverview'])->name('calendar.range');
+    Route::get('api/campaign/calendar/monthly', [App\Http\Controllers\CampaignCalendarController::class, 'getMonthlyCalendar'])->name('calendar.monthly');
     Route::get('mailsend/',[EmailTemplateController::class,'birthdaymail']);
 
     //External contact

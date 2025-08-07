@@ -28,7 +28,7 @@ class QuotaSyncController extends Controller
             $appCode = env('UNIT', 'RRP');
             
             // Ambil campaign center URL dan API token dari .env
-            $campaignCenterUrl = env('CAMPAIGN_CENTER_URL', 'https://crm-campaign-center.adityaputra.co');
+            $campaignCenterUrl = env('CAMPAIGN_CENTER_URL', 'http://jalak.campaign-center.com');
             $apiToken = env('CAMPAIGN_CENTER_API_TOKEN');
             
             // Format data sesuai dengan struktur yang diminta
@@ -111,7 +111,7 @@ class QuotaSyncController extends Controller
             }
             
             $appCode = env('UNIT', 'RRP');
-            $campaignCenterUrl = env('CAMPAIGN_CENTER_URL', 'https://crm-campaign-center.adityaputra.co');
+            $campaignCenterUrl = env('CAMPAIGN_CENTER_URL', 'http://jalak.campaign-center.com');
             $apiToken = env('CAMPAIGN_CENTER_API_TOKEN');
             
             $syncData = [

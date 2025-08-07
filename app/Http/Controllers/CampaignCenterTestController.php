@@ -13,7 +13,7 @@ class CampaignCenterTestController extends Controller
     {
         try {
             // Ambil campaign center URL dan API token dari .env
-            $campaignCenterUrl = env('CAMPAIGN_CENTER_URL', 'https://crm-campaign-center.adityaputra.co');
+            $campaignCenterUrl = env('CAMPAIGN_CENTER_URL', 'http://jalak.campaign-center.com');
             $apiToken = env('CAMPAIGN_CENTER_API_TOKEN');
             
             if (!$apiToken) {
@@ -80,7 +80,7 @@ class CampaignCenterTestController extends Controller
     {
         try {
             // Method untuk testing koneksi tanpa benar-benar mengirim request
-            $campaignCenterUrl = env('CAMPAIGN_CENTER_URL', 'https://crm-campaign-center.adityaputra.co');
+            $campaignCenterUrl = env('CAMPAIGN_CENTER_URL', 'http://jalak.campaign-center.com');
             $apiToken = env('CAMPAIGN_CENTER_API_TOKEN');
             
             return response()->json([
