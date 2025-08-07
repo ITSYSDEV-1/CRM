@@ -1,0 +1,512 @@
+/* FullCalendar Base Styling */
+.fc-view-harness {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+/* Back Button Styling */
+.back-button {
+      background: linear-gradient(135deg, #6b72807a 0%, #4b55635e 75%) !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 8px 16px !important;
+    font-weight: 500 !important;
+    color: #ffffff !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 2px 8px rgba(107, 114, 128, 0.3) !important;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.back-button:hover {
+    background: linear-gradient(135deg, #4b5563 0%, #374151 100%) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(107, 114, 128, 0.4) !important;
+    color: #ffffff !important;
+}
+
+.back-button:active {
+    transform: translateY(0) !important;
+}
+
+.back-button i {
+    font-size: 14px;
+}
+
+/* Header title styling update */
+.x_title {
+    padding: 15px 20px;
+}
+
+.x_title .d-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.x_title h2 {
+    margin: 0;
+    color: #1e293b;
+    font-weight: 500;
+    font-size: 24px;
+}
+
+.fc-day-today {
+    background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%) !important;
+    border: 2px solid #0ea5e9 !important;
+    box-shadow: inset 0 2px 4px rgba(14, 165, 233, 0.1);
+}
+
+.fc th {
+    padding: 15px 8px;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    border: none !important;
+    color: #475569;
+    font-weight: 600;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.fc-scroller {
+    overflow: hidden !important;
+}
+
+.fc-day-number {
+    padding: 8px;
+    font-weight: 600;
+    color: #64748b;
+    transition: all 0.3s ease;
+}
+
+.fc-daygrid-day {
+    height: 120px !important; /* Kurangi dari 140px menjadi 120px */
+    border: 1px solid #e2e8f0 !important;
+    background: #ffffff;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Tambahkan CSS untuk memastikan kalender tidak overflow */
+.fc-view-harness {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    overflow: visible; /* Ubah dari hidden menjadi visible */
+}
+
+.fc-scroller {
+    overflow: visible !important; /* Ubah dari hidden menjadi visible */
+}
+
+.fc-daygrid-day:hover {
+    background: linear-gradient(135deg, #fefefe 0%, #f8fafc 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    border-color: #cbd5e1 !important;
+}
+
+.fc-daygrid-day:hover .fc-day-number {
+    color: #1e293b;
+    transform: scale(1.05);
+}
+
+/* Header Styling */
+.fc-header-toolbar {
+    padding: 20px;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border-radius: 12px 12px 0 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.fc-button {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 8px 16px !important;
+    font-weight: 500 !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3) !important;
+}
+
+.fc-button:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4) !important;
+}
+
+.fc-button:active {
+    transform: translateY(0) !important;
+}
+
+.fc-toolbar-title {
+    color: #1e293b !important;
+    font-weight: 700 !important;
+    font-size: 24px !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* Custom styles for campaign info */
+.campaign-info {
+    font-size: 9px;
+    line-height: 1.2;
+    margin-top: 2px;
+    padding: 2px;
+    position: absolute;
+    bottom: 4px;
+    left: 4px;
+    right: 4px;
+    border-radius: 6px;
+    backdrop-filter: blur(10px);
+}
+
+.quota-info {
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+    border: 1px solid #93c5fd;
+    border-radius: 6px;
+    padding: 3px 6px;
+    margin: 2px 0;
+    display: block;
+    font-weight: 600;
+    color: #1e40af;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(30, 64, 175, 0.1);
+    transition: all 0.3s ease;
+}
+
+.quota-info:hover {
+    background: linear-gradient(135deg, #bfdbfe 0%, #93c5fd 100%);
+    transform: scale(1.02);
+}
+
+.sent-info {
+    background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+    border: 1px solid #86efac;
+    border-radius: 6px;
+    padding: 3px 6px;
+    margin: 2px 0;
+    display: block;
+    color: #166534;
+    text-align: center;
+    font-weight: 600;
+    box-shadow: 0 2px 4px rgba(22, 101, 52, 0.1);
+    transition: all 0.3s ease;
+}
+
+.sent-info:hover {
+    background: linear-gradient(135deg, #bbf7d0 0%, #86efac 100%);
+    transform: scale(1.02);
+}
+
+.reserved-info {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border: 1px solid #fbbf24;
+    border-radius: 6px;
+    padding: 3px 6px;
+    margin: 2px 0;
+    display: block;
+    color: #92400e;
+    text-align: center;
+    font-weight: 600;
+    box-shadow: 0 2px 4px rgba(146, 64, 14, 0.1);
+    transition: all 0.3s ease;
+}
+
+.reserved-info:hover {
+    background: linear-gradient(135deg, #fde68a 0%, #fbbf24 100%);
+    transform: scale(1.02);
+}
+
+.fc-daygrid-day-events {
+    margin-top: 0 !important;
+    min-height: 80px;
+    padding: 4px;
+}
+
+.fc-daygrid-day-top {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 4px 8px;
+}
+
+.fc-daygrid-day-frame {
+    position: relative;
+    height: 100%;
+}
+
+/* Custom styles for campaign events */
+.campaign-event {
+    font-size: 10px !important;
+    padding: 4px 8px !important;
+    margin: 2px 0 !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    border: none !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    backdrop-filter: blur(10px) !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+.campaign-event::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.campaign-event:hover::before {
+    left: 100%;
+}
+
+.campaign-event:hover {
+    transform: translateY(-2px) scale(1.02) !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15) !important;
+    z-index: 10 !important;
+}
+
+.quota-event {
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%) !important;
+    color: #1e40af !important;
+    border: 1px solid rgba(147, 197, 253, 0.6) !important;
+    box-shadow: 0 1px 3px rgba(147, 197, 253, 0.2) !important;
+}
+
+.quota-event:hover {
+    background: linear-gradient(135deg, #bfdbfe 0%, #93c5fd 100%) !important;
+    color: #1e3a8a !important;
+    border: 1px solid rgba(147, 197, 253, 0.8) !important;
+}
+
+.sent-event {
+    background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%) !important;
+    color: #166534 !important;
+    border: 1px solid rgba(134, 239, 172, 0.6) !important;
+    box-shadow: 0 1px 3px rgba(134, 239, 172, 0.2) !important;
+}
+
+.sent-event:hover {
+    background: linear-gradient(135deg, #bbf7d0 0%, #86efac 100%) !important;
+    color: #14532d !important;
+    border: 1px solid rgba(134, 239, 172, 0.8) !important;
+}
+
+.reserved-event {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%) !important;
+    color: #92400e !important;
+    border: 1px solid rgba(251, 191, 36, 0.6) !important;
+    box-shadow: 0 1px 3px rgba(251, 191, 36, 0.2) !important;
+}
+
+.reserved-event:hover {
+    background: linear-gradient(135deg, #fde68a 0%, #fbbf24 100%) !important;
+    color: #78350f !important;
+    border: 1px solid rgba(251, 191, 36, 0.8) !important;
+}
+
+.fc-event-title {
+    font-size: 10px !important;
+    line-height: 1.3 !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 600 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Modal styles */
+.event-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.event-modal-content {
+    background: #ffffff;
+    margin: 10% auto;
+    padding: 24px;
+    border: none;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 480px;
+    position: relative;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    animation: slideIn 0.2s ease;
+    border: 1px solid #e2e8f0;
+}
+
+@keyframes slideIn {
+    from { 
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to { 
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.event-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.event-modal-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0;
+}
+
+.event-modal-close {
+    color: #64748b;
+    font-size: 20px;
+    font-weight: normal;
+    cursor: pointer;
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    background: transparent;
+    border: none;
+}
+
+.event-modal-close:hover {
+    color: #374151;
+    background: #f8fafc;
+}
+
+.event-modal-body {
+    color: #475569;
+    line-height: 1.6;
+}
+
+.event-detail {
+    margin: 12px 0;
+    display: flex;
+    align-items: flex-start;
+}
+
+.event-detail-label {
+    font-weight: 500;
+    color: #374151;
+    min-width: 100px;
+    margin-right: 12px;
+    font-size: 14px;
+}
+
+.event-detail-value {
+    color: #64748b;
+    font-size: 14px;
+    flex: 1;
+}
+
+.event-status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: capitalize;
+    border: 1px solid transparent;
+}
+
+.status-sent {
+    background: #dcfce7;
+    color: #166534;
+    border-color: #bbf7d0;
+}
+
+.status-scheduled {
+    background: #fef3c7;
+    color: #92400e;
+    border-color: #fde68a;
+}
+
+.status-approved {
+    background: #dbeafe;
+    color: #1e40af;
+    border-color: #bfdbfe;
+}
+
+.status-cancelled {
+    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%) !important;
+    color: #dc2626 !important;
+    border: 1px solid rgba(248, 113, 113, 0.6) !important;
+    box-shadow: 0 1px 3px rgba(248, 113, 113, 0.2) !important;
+}
+
+.cancelled-event {
+    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%) !important;
+    color: #dc2626 !important;
+    border: 1px solid rgba(248, 113, 113, 0.6) !important;
+    box-shadow: 0 1px 3px rgba(248, 113, 113, 0.2) !important;
+}
+
+.cancelled-event:hover {
+    background: linear-gradient(135deg, #fecaca 0%, #f87171 100%) !important;
+    color: #b91c1c !important;
+    border: 1px solid rgba(248, 113, 113, 0.8) !important;
+}
+
+.status-draft {
+    background: #f1f5f9;
+    color: #475569;
+    border-color: #e2e8f0;
+}
+
+.status-pending {
+    background: #fef3c7;
+    color: #92400e;
+    border-color: #fde68a;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .event-modal-content {
+        margin: 5% auto;
+        width: 95%;
+        padding: 20px;
+    }
+    
+    .event-detail {
+        flex-direction: column;
+    }
+    
+    .event-detail-label {
+        min-width: auto;
+        margin-right: 0;
+        margin-bottom: 4px;
+    }
+}

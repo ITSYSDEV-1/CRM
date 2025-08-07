@@ -10,15 +10,14 @@
 
             <!-- Email Quota Info -->
             <div class="email-quota-info-modern">
-                <div class="quota-badge quota-brand" title="Sharing Account">RCD-RMS</div>
-                <div class="quota-badge quota-today" title="Today ({{ now()->format('d M Y') }}) | Limit: 3.000/day">
+                <a href="{{ url('email/quota/usage') }}" class="quota-badge quota-brand" title="Sharing Account">RRP-RRPTG-PS</a>
+                <span class="quota-today-no-hover" style="cursor: default" title="Today ({{ now()->format('d M Y') }}) | Limit: 3.000/day">
                     Today: <span class="quota-number">{{ number_format($quotaInfo['today_quota']['used'], 0, ',', '.') }}/{{ number_format($quotaInfo['today_quota']['remaining'], 0, ',', '.') }}</span>
-                </div>
-                <div class="quota-badge quota-period" title="Period: {{ Carbon\Carbon::parse($quotaInfo['billing_cycle']['start'])->format('d M Y') }} - {{ Carbon\Carbon::parse($quotaInfo['billing_cycle']['end'])->format('d M Y') }} | Total Limit: 150.000">
+                </span>
+                <span class="quota-period-no-hover" style="cursor: default" title="Period: {{ Carbon\Carbon::parse($quotaInfo['billing_cycle']['start'])->format('d M Y') }} - {{ Carbon\Carbon::parse($quotaInfo['billing_cycle']['end'])->format('d M Y') }} | Total Limit: 150.000">
                     Period: <span class="quota-number">{{ number_format($quotaInfo['quota_used'], 0, ',', '.') }}/{{ number_format($quotaInfo['quota_remaining'], 0, ',', '.') }}</span>
-                </div>
+                </span>
             </div>
-
 
             <ul class="nav navbar-nav navbar-right">
                 <li class="">
@@ -64,10 +63,13 @@
         box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         transition: all 0.2s ease;
         cursor: pointer;
+        text-decoration: none;
     }
 
     .quota-badge:hover {
         background: #e2e8f0;
+        text-decoration: none;
+        color: #333;
     }
 
     .quota-brand {
@@ -79,6 +81,25 @@
     .quota-brand:hover {
         background: white;
         color: #3498db;
+        text-decoration: none;
+    }
+
+    .quota-today-no-hover,
+    .quota-period-no-hover {
+        background: #f1f5f9;
+        color: #333;
+        padding: 5px 10px;
+        border-radius: 999px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    .quota-today-no-hover:hover,
+    .quota-period-no-hover:hover {
+        background: #f1f5f9;
+        color: #333;
+        text-decoration: none;
     }
 
     .quota-number {

@@ -15,6 +15,7 @@ use PepipostAPILib\Models\From;
 use PepipostAPILib\Models\Personalizations;
 use PepipostAPILib\Models\Settings;
 use PepipostAPILib\PepipostAPIClient;
+use Illuminate\Support\Facades\Cache;
 
 class PepipostMail extends Controller
 {
@@ -219,8 +220,164 @@ class PepipostMail extends Controller
         Log::error('Exception in getEmailQuota: ' . $e->getMessage());
         return ['error' => $e->getMessage(), 'data' => null];
     }
+}public function quotaUsageList()
+{
+    try {
+        $currentYear = Carbon::now()->year;
+        $currentMonth = Carbon::now()->month;
+        
+        // Cache key untuk seluruh list
+        $listCacheKey = 'pepipost_quota_list_' . $currentYear . '_' . Carbon::now()->format('Y-m-d');
+        
+        $monthlyData = Cache::remember($listCacheKey, 60, function() use ($currentYear, $currentMonth) {
+            $monthlyData = [];
+            $maxMonth = max($currentMonth, 8);
+            
+            // Batch load semua data sekaligus untuk efisiensi
+            for ($i = 1; $i <= $maxMonth; $i++) {
+                $quotaData = $this->getEmailQuota($i);
+                
+                if (!isset($quotaData['error'])) {
+                    $metrics = $quotaData['metrics'] ?? [];
+                    $totalRequests = ($metrics['sent'] ?? 0) + ($metrics['bounce'] ?? 0) + ($metrics['dropped'] ?? 0);
+                    
+                    $monthlyData[] = [
+                        'month' => $i,
+                        'month_name' => Carbon::create($currentYear, $i, 1)->format('F Y'),
+                        'month_short' => Carbon::create($currentYear, $i, 1)->format('M Y'),
+                        'quota_used' => $quotaData['quota_info']['quota_used'] ?? 0,
+                        'quota_remaining' => $quotaData['quota_info']['quota_remaining'] ?? 150000,
+                        'total_quota' => $quotaData['quota_info']['total_quota'] ?? 150000,
+                        'usage_percentage' => $quotaData['quota_info']['quota_usage_percentage'] ?? 0,
+                        'period_start' => $quotaData['period']['start'] ?? '',
+                        'period_end' => $quotaData['period']['end'] ?? '',
+                        'metrics' => $quotaData['metrics'] ?? [],
+                        'total_requests' => $totalRequests,
+                        'daily_requests' => $quotaData['daily_requests'] ?? []
+                    ];
+                }
+            }
+            
+            return $monthlyData;
+        });
+        
+        return view('email.quota.list', compact('monthlyData', 'currentYear'));
+        
+    } catch (\Exception $e) {
+        return back()->with('error', 'Failed to load quota usage data: ' . $e->getMessage());
+    }
 }
 
+public function quotaUsageDetail($month)
+{
+    try {
+        $quotaData = $this->getEmailQuota($month);
+        
+        if (isset($quotaData['error'])) {
+            return back()->with('error', 'Failed to load quota data: ' . $quotaData['error']);
+        }
+        
+        // Calculate additional metrics for better understanding
+        $metrics = $quotaData['metrics'] ?? [];
+        $sent = $metrics['sent'] ?? 0;
+        $opened = $metrics['open'] ?? 0;
+        $clicked = $metrics['click'] ?? 0;
+        $bounced = $metrics['bounce'] ?? 0;
+        $dropped = $metrics['dropped'] ?? 0;
+        $unsubscribed = $metrics['unsub'] ?? 0;
+        
+        // Calculate delivery and engagement rates
+        $totalRequests = $sent + $bounced + $dropped;
+        $successfullySent = $sent; // Emails yang berhasil dikirim (tidak bounce/drop)
+         
+        // Rate berdasarkan total requests sebagai 100%
+        $sentRate = $totalRequests > 0 ? ($sent / $totalRequests) * 100 : 0;
+        $bounceRate = $totalRequests > 0 ? ($bounced / $totalRequests) * 100 : 0;
+        $dropRate = $totalRequests > 0 ? ($dropped / $totalRequests) * 100 : 0;
+        
+        // Engagement Rate: (Opened + Clicked) / Total Requests * 100
+        $engagementRate = $totalRequests > 0 ? (($opened + $clicked) / $totalRequests) * 100 : 0;
+        
+        // Open Rate: Opened / Successfully Sent * 100 (hanya dari email yang berhasil dikirim)
+        $openRate = $successfullySent > 0 ? ($opened / $successfullySent) * 100 : 0;
+        
+        // Click Rate: Clicked / Successfully Sent * 100 (hanya dari email yang berhasil dikirim)
+        $clickRate = $successfullySent > 0 ? ($clicked / $successfullySent) * 100 : 0;
+        
+        $clickToOpenRate = $opened > 0 ? ($clicked / $opened) * 100 : 0;
+        
+        // Tentukan daily quota berdasarkan bulan
+        $getDailyQuota = function($month, $year = null) {
+            $year = $year ?? Carbon::now()->year;
+            
+            // Sebelum Mei 2025: 1000 per hari
+            if ($year < 2025 || ($year == 2025 && $month < 5)) {
+                return 1000;
+            }
+            // Mei 2025 dan seterusnya: 3000 per hari
+            else {
+                return 3000;
+            }
+        };
+        
+        $dailyQuotaLimit = $getDailyQuota($month);
+        
+        // Process daily breakdown from raw_data
+        $dailyBreakdown = [];
+        if (isset($quotaData['raw_data']['data'])) {
+            foreach ($quotaData['raw_data']['data'] as $dayData) {
+                $date = $dayData['date'];
+                $dayMetrics = $dayData['stats'][0]['metrics'] ?? [];
+                
+                $dailySent = intval($dayMetrics['sent'] ?? 0);
+                $dailyBounced = intval($dayMetrics['bounce'] ?? 0);
+                $dailyDropped = intval($dayMetrics['dropped'] ?? 0);
+                $dailyOpened = intval($dayMetrics['open'] ?? 0);
+                $dailyClicked = intval($dayMetrics['click'] ?? 0);
+                $dailyUnsub = intval($dayMetrics['unsub'] ?? 0);
+                
+                $dailyRequests = $dailySent + $dailyBounced + $dailyDropped;
+                $quotaUsed = $dailyRequests;
+                $quotaRemaining = $dailyQuotaLimit - $quotaUsed; // Gunakan daily quota yang dinamis
+                $usagePercentage = ($quotaUsed / $dailyQuotaLimit) * 100; // Gunakan daily quota yang dinamis
+                
+                $dailyBreakdown[$date] = [
+                    'requests' => $dailyRequests,
+                    'sent' => $dailySent,
+                    'bounced' => $dailyBounced,
+                    'dropped' => $dailyDropped,
+                    'opened' => $dailyOpened,
+                    'clicked' => $dailyClicked,
+                    'unsubscribed' => $dailyUnsub,
+                    'quota_used' => $quotaUsed,
+                    'quota_remaining' => $quotaRemaining,
+                    'usage_percentage' => $usagePercentage,
+                    'daily_quota_limit' => $dailyQuotaLimit // Tambahkan info daily quota limit
+                ];
+            }
+        }
+        
+        $quotaData['calculated_metrics'] = [
+            'total_requests' => $totalRequests,
+            'sent_rate' => round($sentRate, 2),
+            'bounce_rate' => round($bounceRate, 2),
+            'drop_rate' => round($dropRate, 2),
+            'engagement_rate' => round($engagementRate, 2),
+            'open_rate' => round($openRate, 2),
+            'click_rate' => round($clickRate, 2),
+            'click_to_open_rate' => round($clickToOpenRate, 2)
+        ];
+        
+        $quotaData['daily_breakdown'] = $dailyBreakdown;
+        
+        $monthName = Carbon::create(null, $month, 1)->format('F Y');
+        
+        return view('email.quota.detail', compact('quotaData', 'month', 'monthName'));
+        
+    } catch (\Exception $e) {
+        return back()->with('error', 'Failed to load quota detail: ' . $e->getMessage());
+    }
+}
     public function convertstring($str){
         $spl=explode(' ',$str);
         $frag=[];

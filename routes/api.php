@@ -105,3 +105,34 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::post('updateprestay', [PrestayController::class,'update']);
     Route::post('deleteprestay', [PrestayController::class,'delete']);
 });
+
+//CRM-CAMPAIGN-CENTER ROUTE
+// Campaign Center Test Routes
+//curl -X GET "http://jalakdev.ramaresidencepadma.com/api/campaign-center/ping"
+Route::get('/campaign-center/ping', [App\Http\Controllers\CampaignCenterTestController::class, 'pingTest']);
+Route::get('/campaign-center/test-connection', [App\Http\Controllers\CampaignCenterTestController::class, 'testConnection']);
+
+// Quota Sync Routes
+//curl -X POST http://jalakdev.ramaresidencepadma.com/api/quota/sync/initial \
+//   -H "Content-Type: application/json" \
+//   -H "Accept: application/json"
+Route::post('quota/sync/initial', [App\Http\Controllers\QuotaSyncController::class, 'syncQuotaInitial']);
+Route::get('quota/sync/test', [App\Http\Controllers\QuotaSyncController::class, 'testQuotaSync']);
+
+// Campaign Reservation Routes
+// curl -X POST http://jalakdev.ramaresidencepadma.com/api/campaign/schedule/request \
+//   -H "Content-Type: application/json" \
+//   -H "Authorization: Bearer supersecret123" \
+//   -d '{
+//     "campaign_id": 1,
+//     "scheduled_date": "2025-07-27",
+//     "email_count": 2700,
+//     "campaign_type": "promotional",
+//     "subject": "New Year Special Promotion",
+//     "description": "Promotional campaign for new year packages"
+//   }'
+// curl -X GET http://jalakdev.ramaresidencepadma.com/api/campaign/1/reservation-history
+Route::post('/campaign/schedule/request', [App\Http\Controllers\CampaignReservationController::class, 'requestSchedule']);
+Route::get('/campaign/{campaignId}/reservation-history', [App\Http\Controllers\CampaignReservationController::class, 'getReservationHistory']);
+
+

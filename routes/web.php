@@ -70,7 +70,12 @@ Route::get('apitest',function (){
 
 
 
-Route::get('email/quota/{month?}', function($month = null) {
+Route::get('email/quota/usage', [App\Http\Controllers\PepipostMail::class, 'quotaUsageList'])->name('email.quota.usage');
+Route::get('email/quota/usage/{month}', [App\Http\Controllers\PepipostMail::class, 'quotaUsageDetail'])->name('email.quota.usage.detail');
+
+
+
+Route::get('api/email/quota/{month?}', function($month = null) {
     $mail = new PepipostMail();
     return $mail->getEmailQuota($month);
 });
@@ -186,6 +191,19 @@ Route::get('/logs', 'App\Http\Controllers\LogController@index')->name('logs.inde
     Route::get('contacts/f/country/{country}',[ContactController::class,'country']);
     Route::get('contacts/f/created/{dateadded}',[ContactController::class,'dateadded']);
     Route::get('contacts/f/status/{status}',[ContactController::class,'dstatus']);
+    Route::get('contacts/repeaters', [ContactController::class, 'repeaters']);
+    Route::get('contacts/inhouse-repeaters', [ContactController::class, 'inhouseRepeaters']);
+    Route::get('contacts/f/repeater-month/{month}', [ContactController::class, 'repeaterByMonth']);
+    Route::post('dashboard/repeater-data', [ContactController::class, 'getRepeaterDataAjax'])->name('dashboard.repeater.data');
+    Route::get('/contacts/inhouse-birthday-today', function() {
+    $contacts = \App\Models\Contact::whereRaw('DATE_FORMAT(birthday,"%m-%d") = ?', [\Carbon\Carbon::now()->format('m-d')])
+        ->whereHas('profilesfolio', function($q) {
+            return $q->where('foliostatus', '=', 'I');
+        })
+        ->get();
+    
+    return view('contacts.list', ['data' => $contacts, 'title' => 'In-House Guests Birthday Today']);
+})->name('contacts.inhouse.birthday.today');
     Route::get('contacts/f/longest/{contact}',[ContactController::class,'longest']);
     Route::get('contacts/f/spending/{spending}',[ContactController::class,'spending']);
     Route::get('contacts/f/roomtype/{type}',[ContactController::class,'type']);
@@ -257,7 +275,15 @@ Route::get('/logs', 'App\Http\Controllers\LogController@index')->name('logs.inde
     Route::post('campaign/delete',[CampaignController::class,'delete'])->name('campaign.delete');
     Route::get('campaign/create',[CampaignController::class,'create']);
     Route::post('campaign/store',[CampaignController::class,'store'])->name('campaign.store');
+    Route::post('/campaign/store-with-reservation', [App\Http\Controllers\CampaignReservationStoreController::class, 'store'])->name('campaign.store.reservation');
     Route::get('campaign',[CampaignController::class,'index']);
+    
+    // Campaign Calendar Routes
+    Route::get('/campaign-calendar/monthly', [App\Http\Controllers\CampaignCalendarController::class, 'getMonthlyCalendar']);
+    Route::get('campaign/calendar', [App\Http\Controllers\CampaignCalendarController::class, 'index'])->name('campaign.calendar');
+    Route::get('api/campaign/calendar/overview', [App\Http\Controllers\CampaignCalendarController::class, 'getOverview'])->name('calendar.overview');
+    Route::get('api/campaign/calendar/range', [App\Http\Controllers\CampaignCalendarController::class, 'getRangeOverview'])->name('calendar.range');
+    Route::get('api/campaign/calendar/monthly', [App\Http\Controllers\CampaignCalendarController::class, 'getMonthlyCalendar'])->name('calendar.monthly');
     Route::get('mailsend/',[EmailTemplateController::class,'birthdaymail']);
 
     //External contact
@@ -354,6 +380,9 @@ Route::get('list',function (){
 Route::post('contactslist',[ContactController::class,'contactslist'])->name('contactslist');
 Route::get('contacts/list',function (){
     return view('contacts.list3',['gender'=>NULL,'country'=>NULL]);
+});
+Route::get('contacts/repeaters/list',function (){
+    return view('contacts.list3',['gender'=>NULL,'repeater_only'=>true]);
 });
 Route::post('loadcontacts',[ContactController::class,'loadcontacts'])->name('loadcontacts');
 Auth::routes();

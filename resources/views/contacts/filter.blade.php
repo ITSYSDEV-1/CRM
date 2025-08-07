@@ -712,16 +712,15 @@
     }
 
     $.ajax({
-        url: '/contacts/newcampaign',
+        url: '/campaign/store-with-reservation',
         type: 'POST',
         data: {
-            cname: $('#cname').val(),
-            segment_id: $('#segmentid').val(),
-            template_id: $('#template').val(),
+            name: $('#cname').val(),
+            segments: [$('#segmentid').val()],
+            template: $('#template').val(),
             contacts: selectedContacts,
-            status: 'Scheduled',
-            type: 'Promo', 
             schedule: $('#schedule').val(),
+            checkexternal: false, // untuk internal campaign
             _token: '{{ csrf_token() }}'
         },
         success: function(data) {

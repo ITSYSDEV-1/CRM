@@ -20,24 +20,23 @@
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content" style="height:120px;">
-                        <div class="row tile_count">
-                            <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+                        <div class="row tile_count" style="display: flex; flex-wrap: nowrap;">
+                            <div class="tile_stats_count" style="flex: 1; margin: 0 5px;">
                                 <span class="count_top"><i class="fa fa-user"></i> Total Contacts</span>
                                 <div class="count green"> <a href="{{ url('contacts/list') }}" class="green" >{{ \App\Models\Contact::with('transaction')->whereHas('transaction')->count()  }}</a> </div>
-
                             </div>
 
-                            <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+                            <div class="tile_stats_count" style="flex: 1; margin: 0 5px;">
                                 <span class="count_top"><i class="fa fa-user"></i> Total Male</span>
                                 <div class="count blue"><a href="{{ url('contacts/f/male') }}" class="green" >{{ \App\Models\Contact::with('transaction')->whereHas('transaction')->where('gender','M')->count() }}</a></div>
-
                             </div>
-                            <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+                            
+                            <div class="tile_stats_count" style="flex: 1; margin: 0 5px;">
                                 <span class="count_top"><i class="fa fa-user"></i> Total Female</span>
                                 <div class="count orange"><a href="{{ url('contacts/f/female') }}" class="green" >{{ \App\Models\Contact::with('transaction')->whereHas('transaction')->where('gender','F')->count() }}</a></div>
-
                             </div>
-                            <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+                            
+                            <div class="tile_stats_count" style="flex: 1; margin: 0 5px;">
                                 <span class="count_top"><i class="fa fa-user"></i> Inhouse </span>
                                 <div class="count green"> <a href="{{ url('contacts/f/status/Inhouse') }}" class="green" >{{ \App\Models\Contact::whereHas('profilesfolio',function($q){
                                     return $q->where('foliostatus','=','I')->groupBy('profileid');
@@ -46,13 +45,26 @@
                                     })->count() }} </a> </div>
                             </div>
 
-                            <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+                            <div class="tile_stats_count" style="flex: 1; margin: 0 5px;">
+                                <span class="count_top"><i class="fa fa-refresh"></i> Inhouse Repeaters</span>
+                                <div class="count green">
+                                    <a href="{{ url('contacts/f/status/InhouseRepeater') }}" class="green">{{ $inhouseRepeaterCount ?? 0 }}</a>
+                                </div>
+                            </div>
+
+                            <div class="tile_stats_count" style="flex: 1; margin: 0 5px;">
+                                <span class="count_top"><i class="fa fa-birthday-cake"></i> In-House Birthday</span>
+                                <div class="count green">
+                                  <a href="{{ route('contacts.inhouse.birthday.today') }}" class="green">{{ $inhouseBirthdayTodayCount ?? 0 }}</a>
+                                </div>
+                            </div>
+
+                            <div class="tile_stats_count" style="flex: 1; margin: 0 5px;">
                                 <span class="count_top"><i class="fa fa-user"></i> Confirm </span>
                                 <div class="count red"> <a href="{{ url('contacts/f/status/Confirm') }}" class="green" > {{ \App\Models\Contact::whereHas('profilesfolio', function($q) {
                                     return $q->where('foliostatus', '=', 'C');
                                 })->count() }} </a></div>
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -146,6 +158,34 @@
                     </div>
                 </div>
             </div>
+            <!-- Tambahkan setelah panel Email Reports -->
+<div class="col-md-4 col-sm-4 col-xs-12 paneld" id="closeRepeater">
+    <div class="x_panel tile" style="height: 420px">
+        <div class="x_title">
+            <h2>Repeater Statistics</h2>
+            <div class="btn-group" style="float: left; margin-left: 10px;">
+                <button type="button" class="btn btn-xs btn-primary" onclick="updateRepeaterChart(3)" id="btn-3m">3 Months</button>
+                <button type="button" class="btn btn-xs btn-default" onclick="updateRepeaterChart(6)" id="btn-6m">6 Months</button>
+                <button type="button" class="btn btn-xs btn-default" onclick="updateRepeaterChart(12)" id="btn-12m">12 Months</button>
+            </div>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link" id="closeRepeater"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class="dashboard-widget-content">
+                <!-- Loading indicator -->
+                <div id="repeater_loading" style="display: none; text-align: center; padding: 50px;">
+                    <i class="fa fa-spinner fa-spin fa-2x"></i>
+                    <p>Loading data...</p>
+                </div>
+                <div id="repeater_chart" class="dashboard-donut-chart"></div>
+            </div>
+        </div>
+    </div>
+</div>
             <div class="col-md-4 col-sm-4 col-xs-12 paneld" id="closeIncoming">
                 <div class="x_panel">
                     <div class="x_title">
@@ -519,5 +559,77 @@
                 return '('+y+') '+ res + '% of ' + temailcount +' email sent\n\n'+ month
             }
         })
+
+// Ganti bagian script repeater chart
+var repeaterChart;
+var currentPeriod = 3; // Default 3 bulan
+
+// Inisialisasi chart repeater
+function initRepeaterChart(data) {
+    if (repeaterChart) {
+        repeaterChart.setData(data);
+    } else {
+        repeaterChart = Morris.Bar({
+            element: 'repeater_chart',
+            resize: true,
+            data: data,
+            xkey: 'x',
+            ykeys: ['y'],
+            labels: ['Repeaters'],
+            barColors: function (row, series, type) {
+                return 'rgb(57, 128, 181)';
+            },
+            hoverCallback: function (index, options, content, row) {
+                return row.x + ': ' + row.y + ' repeaters';
+            }
+        }).on('click', function(i, row) {
+            // Link ke halaman list dengan filter bulan (tanpa parameter period)
+            var encodedMonth = encodeURIComponent(row.x);
+            window.location.href = 'contacts/f/repeater-month/' + encodedMonth;
+        });
+    }
+}
+
+// Function untuk update chart berdasarkan periode
+function updateRepeaterChart(months) {
+    currentPeriod = months;
+    
+    // Update button states
+    $('.btn-group button').removeClass('btn-primary').addClass('btn-default');
+    $('#btn-' + months + 'm').removeClass('btn-default').addClass('btn-primary');
+    
+    // Show loading indicator
+    $('#repeater_loading').show();
+    $('#repeater_chart').hide();
+    
+    // AJAX call untuk mendapatkan data baru
+    $.ajax({
+        url: '{{ route("dashboard.repeater.data") }}',
+        method: 'POST',
+        data: {
+            months: months,
+            _token: '{{ csrf_token() }}'
+        },
+        success: function(data) {
+            $('#repeater_loading').hide();
+            $('#repeater_chart').show();
+            initRepeaterChart(data);
+        },
+        error: function(xhr, status, error) {
+            $('#repeater_loading').hide();
+            $('#repeater_chart').show();
+            console.error('Error loading repeater data:', error);
+            alert('Gagal memuat data repeater. Silakan coba lagi.');
+        }
+    });
+}
+
+// Inisialisasi chart saat halaman dimuat
+$(document).ready(function() {
+    // Load data awal via AJAX untuk menghindari loading lambat
+    updateRepeaterChart(3);
+});
+
+
     </script>
     @endsection

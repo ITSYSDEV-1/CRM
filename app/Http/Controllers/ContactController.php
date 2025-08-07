@@ -204,8 +204,139 @@ class ContactController extends Controller
 
         $dataemailreport=json_encode($dataemail);
 
-        return view('main.index',['data'=>$contact,'datastay'=>$datastays,'country'=>$country,'total'=>$total,'monthcount'=>$data,'countstatus'=>$datastatus,'spending'=>$dataspending,'longstay'=>$datatrx,'data_age'=>$data_age,'tages'=>$tages,'room_type'=>$data_room_type,'troom'=>$troom,'reviews'=>$reviews,'booking_com'=>$databooking,'databookingsource'=>$databookingsource,'tbookingsource'=>$tbookingsource,'dataemailreport'=>$dataemailreport,'temailcount'=>$temailcount]);
+        $inhouseRepeaterCount = Contact::inhouseRepeaters()->count();
+        $totalRepeaterCount = Contact::repeaters()
+            ->whereHas('transaction', function($q) {
+                return $q->havingRaw('sum(revenue) >= 0');
+            })
+            ->count();
+
+        // Tambahkan statistik untuk in-house birthday today
+        $inhouseBirthdayTodayCount = Contact::whereRaw('DATE_FORMAT(birthday,"%m-%d") = ?', [Carbon::now()->format('m-d')])
+            ->whereHas('profilesfolio', function($q) {
+                return $q->where('foliostatus', '=', 'I');
+            })
+            ->count();
+        
+            
+            return view('main.index',[
+                'data'=>$contact,
+                'datastay'=>$datastays,
+                'country'=>$country,
+                'total'=>$total,
+                'monthcount'=>$data,
+                'countstatus'=>$datastatus,
+                'spending'=>$dataspending,
+                'longstay'=>$datatrx,
+                'data_age'=>$data_age,
+                'tages'=>$tages,
+                'room_type'=>$data_room_type,
+                'troom'=>$troom,
+                'reviews'=>$reviews,
+                'booking_com'=>$databooking,
+                'databookingsource'=>$databookingsource,
+                'tbookingsource'=>$tbookingsource,
+                'dataemailreport'=>$dataemailreport,
+                'temailcount'=>$temailcount,
+                'inhouseRepeaterCount'=>$inhouseRepeaterCount,
+                'totalRepeaterCount'=>$totalRepeaterCount,
+                'inhouseBirthdayTodayCount'=>$inhouseBirthdayTodayCount,
+               
+            ]);
+        }
+            
+
+ public function getRepeaterMonthlyData($months = 3) {
+    $dateS = Carbon::now()->startOfMonth()->subMonths($months - 1);
+    $dateE = Carbon::now()->endOfMonth();
+    
+    // Query yang dioptimalkan - mengurangi redundant operations
+    $repeaterData = DB::select(DB::raw("
+        SELECT 
+            DATE_FORMAT(pf.dateci, '%Y %M') as month_year,
+            COUNT(DISTINCT c.contactid) as repeater_count
+        FROM contacts c
+        INNER JOIN contact_transaction ct ON ct.contact_id = c.contactid
+        INNER JOIN transactions t ON t.id = ct.transaction_id
+        INNER JOIN profilesfolio pf ON pf.folio = t.resv_id
+        WHERE pf.dateci BETWEEN ? AND ?
+        AND EXISTS (
+            SELECT 1 
+            FROM contact_transaction ct2
+            INNER JOIN transactions t2 ON t2.id = ct2.transaction_id
+            WHERE ct2.contact_id = c.contactid
+            GROUP BY ct2.contact_id
+            HAVING COUNT(DISTINCT t2.resv_id) > 1
+        )
+        GROUP BY DATE_FORMAT(pf.dateci, '%Y %M'), YEAR(pf.dateci), MONTH(pf.dateci)
+        ORDER BY YEAR(pf.dateci) ASC, MONTH(pf.dateci) ASC
+    "), [$dateS->format('Y-m-d'), $dateE->format('Y-m-d')]);
+    
+    $data = [];
+    foreach ($repeaterData as $item) {
+        $data[] = ['x' => $item->month_year, 'y' => (int)$item->repeater_count];
     }
+    
+    return $data;
+}
+
+public function getRepeaterDataAjax(Request $request) {
+    $months = $request->input('months', 3);
+    $data = $this->getRepeaterMonthlyData($months);
+    return response()->json($data);
+}
+
+
+/**
+ * Filter contacts berdasarkan bulan repeater
+ */
+public function repeaterByMonth($month)
+{
+    // Parse bulan dan tahun dari parameter
+    $monthYear = explode(' ', $month);
+    
+    if (is_numeric($monthYear[0])) {
+        $year = $monthYear[0];
+        $monthName = $monthYear[1];
+    } else {
+        $monthName = $monthYear[0];
+        $year = $monthYear[1];
+    }
+    
+    $monthNumber = str_pad(date('m', strtotime($monthName)), 2, '0', STR_PAD_LEFT);
+    $startDate = "{$year}-{$monthNumber}-01";
+    $endDate = date('Y-m-t', strtotime($startDate));
+    
+    // Query yang dioptimalkan dengan CTE
+    $contactIds = DB::select(DB::raw("
+        WITH repeater_contacts AS (
+            SELECT DISTINCT ct.contact_id
+            FROM contact_transaction ct
+            INNER JOIN transactions t ON t.id = ct.transaction_id
+            GROUP BY ct.contact_id
+            HAVING COUNT(DISTINCT t.resv_id) > 1
+        )
+        SELECT DISTINCT c.contactid
+        FROM contacts c
+        INNER JOIN repeater_contacts rc ON rc.contact_id = c.contactid
+        INNER JOIN contact_transaction ct ON ct.contact_id = c.contactid
+        INNER JOIN transactions t ON t.id = ct.transaction_id
+        INNER JOIN profilesfolio pf ON pf.folio = t.resv_id
+        WHERE pf.dateci BETWEEN ? AND ?
+    "), [$startDate, $endDate]);
+    
+    $ids = array_column($contactIds, 'contactid');
+    
+    $contacts = Contact::with(['transaction', 'profilesfolio', 'country'])
+        ->whereIn('contactid', $ids)
+        ->withCount('profilesfolio')
+        ->get();
+    
+    return view('contacts.list', [
+        'data' => $contacts,
+        'title' => "Repeater Contacts - {$month}",
+    ]);
+}
     /**
      * Show the form for creating a new resource.
      *
@@ -305,11 +436,17 @@ public function contactslist(Request $request){
         }
     ])->whereHas('transaction')->withCount('campaign')->withCount('transaction')->when(!empty($request->gender),function ($qq) use ($request){
         return $qq->where('gender','=',$request->gender);
+    })->when(!empty($request->repeater_only),function ($qq) use ($request){
+        return $qq->whereHas('transaction', function($q) {
+            $q->select(DB::raw('contact_id'))
+              ->groupBy('contact_id')
+              ->havingRaw('COUNT(*) > 1');
+        });
     })->withCount('excluded')->groupBy('contactid')
         ->get();
 
 
-    $columns = array(
+        $columns = array(
         0 =>'contactid',
         1 =>'fname',
         2 =>'lname',
@@ -317,11 +454,11 @@ public function contactslist(Request $request){
         4 =>'wedding_bday',
         5 =>'country_id',
         6 =>'area',
-    //        7 =>'status',
         7 =>'campaign_count',
         8 =>'transaction_count',
-        9 =>'profilesfolio.dateci', // Ubah ini untuk mereferensikan tabel yang benar
-        10=>'revenue'
+        9 =>'is_repeater',
+        10=>'profilesfolio.dateci',
+        11=>'revenue'
     );
     $totalData = $contacts->count();
     $totalFiltered = $totalData;
@@ -341,6 +478,11 @@ public function contactslist(Request $request){
         $orderJoin = " LEFT JOIN profilesfolio as pf ON pf.profileid = contacts.contactid ";
     }
     
+    // Tambahkan penanganan untuk sorting kolom is_repeater
+    if($order == 'is_repeater') {
+        $orderBy = 'transaction_count';
+    }
+    
     if(empty($search)){
         $contactslist=Contact::whereHas('transaction')
             ->join(DB::raw('(select id,sum(revenue) as revenue,contact_id from transactions left join contact_transaction on contact_transaction.transaction_id=transactions.id group by id) as revenue'),'revenue.contact_id','=','contactid')
@@ -350,8 +492,14 @@ public function contactslist(Request $request){
             ->withCount('campaign')->withCount('transaction')
             ->offset($start)->limit($limit)
             ->orderBy($orderBy, $dir)
-            ->withCount('campaign')->withCount('transaction')->when(!empty($request->gender),function($qq) use ($request){
+            ->when(!empty($request->gender),function($qq) use ($request){
                 return $qq->where('gender','=',$request->gender);
+            })->when(!empty($request->repeater_only),function ($qq) use ($request){
+                return $qq->whereHas('transaction', function($q) {
+                    $q->select(DB::raw('contact_id'))
+                      ->groupBy('contact_id')
+                      ->havingRaw('COUNT(*) > 1');
+                });
             })->withCount('excluded')->groupBy('contactid')->get();
     }else{
         $contactslist=Contact::whereHas('transaction')->join(DB::raw('(select id,sum(revenue) as revenue,contact_id from transactions left join contact_transaction on contact_transaction.transaction_id=transactions.id  group by id) as revenue'),'revenue.contact_id','=','contactid')
@@ -362,6 +510,21 @@ public function contactslist(Request $request){
             ->orWhereHas('country',function ($q) use ($search) {
                 return $q->where('country', 'LIKE', "%{$search}%");
             })->orWhere('area','LIKE',"%{$search}%")
+            ->orWhere(function($query) use ($search) {
+                if (strtolower($search) == 'repeater') {
+                    $query->whereHas('transaction', function($q) {
+                        $q->select(DB::raw('contact_id'))
+                          ->groupBy('contact_id')
+                          ->havingRaw('COUNT(*) > 1');
+                    });
+                } elseif (strtolower($search) == 'new guest' || strtolower($search) == 'new') {
+                    $query->whereHas('transaction', function($q) {
+                        $q->select(DB::raw('contact_id'))
+                          ->groupBy('contact_id')
+                          ->havingRaw('COUNT(*) = 1');
+                    });
+                }
+            })
             ->offset($start)
             ->limit($limit)
             ->orderBy($orderBy,$dir)
@@ -375,7 +538,6 @@ public function contactslist(Request $request){
 
     $data=array();
     if (!empty($contactslist)){
-
         foreach ($contactslist as $key=>$list){
             $rev=0;
             foreach ($list->transaction as $transaction){
@@ -389,9 +551,9 @@ public function contactslist(Request $request){
             $nestedData['wedding_bday']=$list->wedding_bday;
             $nestedData['country_id']=$list->country_id;
             $nestedData['area']=$list->area;
-//            $nestedData['status']=$list->transaction[0]->status;
             $nestedData['campaign']=count($list->campaign);
             $nestedData['stay']=count($list->transaction);
+            $nestedData['is_repeater']=count($list->transaction) > 1 ? 1 : 0;
             $nestedData['checkin']=$list->profilesfolio[0]->dateci;
             $nestedData['revenue']=$rev;
             $nestedData['excluded']=$list->excluded;
@@ -945,12 +1107,24 @@ if ($contact->wedding_bday && $request->birthday &&
                return $q->where('foliostatus', '=', 'C');
            })->get();
             $status = 'Confirm';
-        }
+        }elseif ($stat=='Repeater'){
+        $contacts = Contact::repeaters()
+            ->whereHas('transaction', function($q) {
+                return $q->havingRaw('sum(revenue) >= 0');
+            })
+            ->withCount('transaction')
+            ->get();
+        $status = 'Repeater Guests';
+    }
+    elseif ($stat=='InhouseRepeater'){
+        $contacts = Contact::inhouseRepeaters()
+            ->withCount('transaction')
+            ->get();
+        
+    }
 
-        // dd($contacts[17]);
-        //return view('contacts.list', ['data' => $contacts]);
-        return view('contacts.list', ['data' => $contacts, 'status' => $status]);
-        }
+    return view('contacts.list', ['data' => $contacts]);
+}
 
     public function male(){
        $gender='M';
@@ -960,6 +1134,43 @@ if ($contact->wedding_bday && $request->birthday &&
         $gender='F';
        return view('contacts.list3',['gender'=>$gender]);
     }
+
+    public function repeaters()
+    {
+        $contacts = Contact::repeaters()
+            ->whereHas('transaction', function($q) {
+                return $q->havingRaw('sum(revenue) >= 0');
+            })
+            ->withCount('transaction')
+            ->get();
+        
+        return view('contacts.list', ['data' => $contacts]);
+    }
+
+    public function inhouseRepeaters()
+    {
+        $contacts = Contact::inhouseRepeaters()
+            ->withCount('transaction')
+            ->get();
+        
+        return view('contacts.list', ['data' => $contacts]);
+    }
+
+    public function getRepeaterCount()
+    {
+        return Contact::repeaters()
+            ->whereHas('transaction', function($q) {
+                return $q->havingRaw('sum(revenue) >= 0');
+            })
+            ->count();
+    }
+
+    public function getInhouseRepeaterCount()
+    {
+        return Contact::inhouseRepeaters()->count();
+    }
+
+
     public function uploadStay(Request $request){
 
         $file=$request->file('file');

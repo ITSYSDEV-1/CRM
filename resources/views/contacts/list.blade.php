@@ -31,6 +31,7 @@
 										<th class="align-center">Status</th>
 										<th class="align-center">Campaign</th>
 										<th class="align-center">Total Stays</th>
+										<th class="align-center">Guest Type</th>
 										<th class="align-center">Last Stay</th>
 										<th class="align-center">Total Spending (Rp.)</th>
 									</tr>
@@ -52,8 +53,20 @@
                                         </td>
                                         <td>{{ $contact->birthday=='' ? "": \Carbon\Carbon::parse($contact->birthday)->format('M d') }}</td>
                                         <td>{{ $contact->wedding_bday=='' ? "": \Carbon\Carbon::parse($contact->wedding_bday)->format('M d') }}</td>
-                                        <td>{{ \App\Models\Country::where(env('COUNTRY_ISO'),$contact->country_id)->first()['country'] }}
-                                            <img src="{{ asset('flags/blank.gif') }}" class="flag flag-{{strtolower($contact->country['iso2'])}} pull-right" alt="{{$contact->country['country']}}" />
+                                        <td>
+                                            @php
+                                                $countryData = \App\Models\Country::where(env('COUNTRY_ISO'), $contact->country_id)->first();
+                                            @endphp
+                                            
+                                            @if($countryData)
+                                                {{ $countryData['country'] }}
+                                                <img src="{{ asset('flags/blank.gif') }}" class="flag flag-{{ strtolower($countryData['iso2']) }} pull-right" alt="{{ $countryData['country'] }}" />
+                                            @elseif($contact->country)
+                                                {{ $contact->country->country }}
+                                                <img src="{{ asset('flags/blank.gif') }}" class="flag flag-{{ strtolower($contact->country->iso2) }} pull-right" alt="{{ $contact->country->country }}" />
+                                            @else
+                                                Unknown Country
+                                            @endif
                                         </td>
                                         <td>{{ $contact->area }}</td>
                                         <td>
@@ -90,6 +103,13 @@
                                                 {{ $contact->transaction_count }}
                                             @elseif($contact->transaction->count())
                                                 {{ $contact->transaction->count() }}
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if(($contact->transaction_count ?? $contact->transaction->count()) > 1)
+                                                <i class="fa fa-refresh"></i> Repeater
+                                            @else
+                                                New Guest
                                             @endif
                                         </td>
                                         <td>

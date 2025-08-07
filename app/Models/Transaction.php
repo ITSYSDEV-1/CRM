@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Transaction extends Model
 {
-    protected $fillable=['resv_id','checkin','checkout','room','room_type','revenue','status'];
+    protected $fillable=['resv_id','revenue'];
     //
     public function contact(){
         return $this->belongsToMany('\App\Models\Contact','contact_transaction','transaction_id','contact_id','id','contactid');
