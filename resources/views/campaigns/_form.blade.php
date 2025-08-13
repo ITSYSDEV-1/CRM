@@ -1,4 +1,4 @@
- @if($action=='create')
+@if($action=='create')
        {{ Form::model($model,['route'=>'campaign.store','files'=>'true','id'=>'campaignForm','class'=>'data-parsley-validate']) }}
   @else
        {{ Form::model($model,['route'=>['campaign.update',$model->id],'files'=>'true','id'=>'campaignForm','class'=>'data-parsley-validate']) }}
@@ -301,11 +301,18 @@
                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
                         {{ Form::label('','Schedule') }}
                     </div>
-                    <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3">
+                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
                         <div class="form-group">
                             <div class="form-line">
                                 {{ Form::text('schedule',null,['class'=>'datepicker form-control','id'=>'schedule','placeholder'=>'Schedule' ,'required']) }}
                             </div>
+                            <!-- Reservation status will be inserted here by JavaScript -->
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                        <div id="reservation-history" style="display: none;">
+                            <h5>Reservation History</h5>
+                            <div id="reservation-list"></div>
                         </div>
                     </div>
                 </div>

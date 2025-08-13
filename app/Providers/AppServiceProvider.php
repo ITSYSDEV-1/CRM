@@ -37,7 +37,7 @@ class AppServiceProvider extends ServiceProvider
         // If no cache, use default values
         if (!$quotaInfo) {
             $quotaInfo = [
-                'today_quota' => ['used' => 0, 'remaining' => 3000],
+                'today_quota' => ['used' => 0, 'remaining' => 5000],
                 'quota_used' => 0,
                 'quota_remaining' => 150000,
                 'billing_cycle' => [

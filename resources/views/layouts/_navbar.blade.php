@@ -10,7 +10,7 @@
 
             <!-- Email Quota Info -->
             <div class="email-quota-info-modern">
-                <a href="{{ url('email/quota/usage') }}" class="quota-badge quota-brand" title="Sharing Account">RCD-RMS</a>
+                <a href="{{ url('email/quota/usage') }}" class="quota-badge quota-brand" title="Sharing Account">RRP-RRPTG-PS</a>
                 <span class="quota-today-no-hover" style="cursor: default" title="Today ({{ now()->format('d M Y') }}) | Limit: 3.000/day">
                     Today: <span class="quota-number">{{ number_format($quotaInfo['today_quota']['used'], 0, ',', '.') }}/{{ number_format($quotaInfo['today_quota']['remaining'], 0, ',', '.') }}</span>
                 </span>

@@ -29,7 +29,7 @@ class PepipostMail extends Controller
                     'total' => 150000,  // Total quota per periode billing
                 ],
                 'daily' => [
-                    'limit' => 3000     // Batas maksimum pengiriman per hari
+                    'limit' => 5000     // Batas maksimum pengiriman per hari
                 ]
             ];
 

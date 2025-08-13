@@ -75,8 +75,12 @@
         $('#schedule').datetimepicker({
             format: 'DD MMMM YYYY hh:mm',
             showClear:true,
-
-        })
+        }).on('dp.change', function(e) {
+            // Trigger reservation request when schedule changes
+            if (e.date) {
+                requestCampaignReservation(e.date.format('YYYY-MM-DD HH:mm:ss'));
+            }
+        });
         $('#stay_to').datetimepicker({
             format: 'DD MMMM YYYY',
             showClear:true,
@@ -568,3 +572,116 @@
         })
     </script>
     @endsection
+
+// Add new function for campaign reservation
+function requestCampaignReservation(scheduleDateTime) {
+    // Get campaign data
+    var campaignData = {
+        name: $('#name').val(),
+        schedule: scheduleDateTime,
+        template_id: $('#template').val(),
+        recipient_count: $('.recepient').text().match(/\d+/) ? parseInt($('.recepient').text().match(/\d+/)[0]) : 0,
+        _token: '{{ csrf_token() }}'
+    };
+    
+    // Validate required fields
+    if (!campaignData.name || !campaignData.template_id || campaignData.recipient_count === 0) {
+        showReservationStatus('warning', 'Please complete campaign details before setting schedule');
+        return;
+    }
+    
+    // Show loading
+    showReservationStatus('info', 'Requesting schedule reservation...');
+    
+    // Send reservation request
+    $.ajax({
+        url: '/api/campaign/schedule/request',
+        type: 'POST',
+        data: campaignData,
+        success: function(response) {
+            handleReservationResponse(response);
+        },
+        error: function(xhr) {
+            var errorMsg = 'Reservation request failed';
+            if (xhr.responseJSON && xhr.responseJSON.message) {
+                errorMsg = xhr.responseJSON.message;
+            }
+            showReservationStatus('error', errorMsg);
+        }
+    });
+}
+
+function handleReservationResponse(response) {
+    switch(response.approval_type) {
+        case 'full':
+            showReservationStatus('success', 'Schedule approved! Campaign can be saved.');
+            $('#saveBtn').prop('disabled', false);
+            break;
+        case 'auto-booking':
+            showReservationStatus('success', 'Schedule auto-approved! Campaign can be saved.');
+            $('#saveBtn').prop('disabled', false);
+            break;
+        case 'partial':
+            showReservationStatus('warning', 
+                `Partial approval: ${response.approved_count}/${response.requested_count} slots available. ` +
+                'Campaign can be saved with reduced recipients.');
+            $('#saveBtn').prop('disabled', false);
+            break;
+        case 'rejected':
+            showReservationStatus('error', 
+                `Schedule rejected: ${response.reason || 'No available slots'}`);
+            $('#saveBtn').prop('disabled', true);
+            break;
+        default:
+            showReservationStatus('info', 'Reservation response received');
+    }
+}
+
+function showReservationStatus(type, message) {
+    // Remove existing status
+    $('.reservation-status').remove();
+    
+    // Create status element
+    var statusClass = {
+        'success': 'alert-success',
+        'warning': 'alert-warning', 
+        'error': 'alert-danger',
+        'info': 'alert-info'
+    }[type] || 'alert-info';
+    
+    var statusHtml = `
+        <div class="alert ${statusClass} reservation-status" style="margin-top: 10px;">
+            <i class="fa fa-${type === 'success' ? 'check' : type === 'warning' ? 'exclamation-triangle' : type === 'error' ? 'times' : 'info'}-circle"></i>
+            ${message}
+        </div>
+    `;
+    
+    // Insert after schedule field
+    $('#schedule').closest('.form-group').after(statusHtml);
+}
+
+// Modify existing save button handler
+$(document).ready(function(){
+    $("#saveBtn").on('click', function(event) {
+        // Check if reservation is required and approved
+        if ($('#schedule').val() && !$('.reservation-status.alert-success').length) {
+            swal('Warning', 'Please wait for schedule reservation approval before saving', 'warning');
+            event.preventDefault();
+            return;
+        }
+        
+        // validate form with parsley.
+        $('#campaignForm').parsley().validate();
+
+        // if this form is valid
+        if (!$('#campaignForm').parsley().isValid()) {
+            // show alert message
+            swal('Error','Some fields contain error','warning');
+        } else {
+            $('#campaignForm').submit();
+        }
+        event.preventDefault();
+    });
+    
+    // ... existing code ...
+});
