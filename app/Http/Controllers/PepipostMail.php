@@ -26,10 +26,10 @@ class PepipostMail extends Controller
 
             $quotaConfig = [
                 'period' => [
-                    'total' => 150000,  // Total quota per periode billing
+                    'total' => env('EMAIL_QUOTA_TOTAL', 150000),  // Total quota per periode billing
                 ],
                 'daily' => [
-                    'limit' => 5000     // Batas maksimum pengiriman per hari
+                    'limit' => env('EMAIL_QUOTA_DAILY_LIMIT', 5000)     // Batas maksimum pengiriman per hari
                 ]
             ];
 
@@ -246,8 +246,8 @@ class PepipostMail extends Controller
                         'month_name' => Carbon::create($currentYear, $i, 1)->format('F Y'),
                         'month_short' => Carbon::create($currentYear, $i, 1)->format('M Y'),
                         'quota_used' => $quotaData['quota_info']['quota_used'] ?? 0,
-                        'quota_remaining' => $quotaData['quota_info']['quota_remaining'] ?? 150000,
-                        'total_quota' => $quotaData['quota_info']['total_quota'] ?? 150000,
+                        'quota_remaining' => $quotaData['quota_info']['quota_remaining'] ?? env('EMAIL_QUOTA_TOTAL', 150000),
+                        'total_quota' => $quotaData['quota_info']['total_quota'] ?? env('EMAIL_QUOTA_TOTAL', 150000),
                         'usage_percentage' => $quotaData['quota_info']['quota_usage_percentage'] ?? 0,
                         'period_start' => $quotaData['period']['start'] ?? '',
                         'period_end' => $quotaData['period']['end'] ?? '',

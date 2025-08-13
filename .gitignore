@@ -16,3 +16,4 @@ yarn-error.log
 /.vscode
 /MYSQL_BACKUP
 storage/framework/views/*.php
+!storage/framework/views/.gitignore
