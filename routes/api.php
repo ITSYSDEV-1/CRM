@@ -135,4 +135,7 @@ Route::get('quota/sync/test', [App\Http\Controllers\QuotaSyncController::class, 
 Route::post('/campaign/schedule/request', [App\Http\Controllers\CampaignReservationController::class, 'requestSchedule']);
 Route::get('/campaign/{campaignId}/reservation-history', [App\Http\Controllers\CampaignReservationController::class, 'getReservationHistory']);
 
+// Birthday API endpoints for Hotspot Manager
+Route::get('/birthday/data', [App\Http\Controllers\Api\BirthdayApiController::class, 'getBirthdayData']);
+
 

@@ -33,6 +33,18 @@ class Kernel extends ConsoleKernel
         // $schedule->command('syncemailresponse')->hourly();
         $schedule->command('validateemail')->cron('0 */6 * * *');
         $schedule->command('sync:iface-history')->cron('0 */6 * * *');
+        
+        // Push birthday data to Hotspot every 3 hours 30 minutes
+        $schedule->command('birthday:push-to-hotspot')
+                 ->cron('30 */3 * * *') // 00:30, 03:30, 06:30, dst.
+                 ->withoutOverlapping()
+                 ->runInBackground();
+
+        // // Temporary: ubah ke setiap menit untuk testing
+        // $schedule->command('birthday:push-to-hotspot')
+        //  ->everyMinute() // Ganti sementara untuk testing
+        //  ->withoutOverlapping()
+        //  ->runInBackground();
     }
 
     /**
