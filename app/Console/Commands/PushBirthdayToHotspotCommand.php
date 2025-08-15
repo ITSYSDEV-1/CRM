@@ -20,6 +20,12 @@ class PushBirthdayToHotspotCommand extends Command
 
     public function handle()
     {
+        // Cek apakah fitur birthday push diaktifkan
+        if (!env('BIRTHDAY_PUSH_ENABLED', false)) {
+            $this->info('🚫 Birthday push feature is disabled in environment configuration');
+            return 0;
+        }
+
         $testMode = $this->option('test');
         $force = $this->option('force');
         
