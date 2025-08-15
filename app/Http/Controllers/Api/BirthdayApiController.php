@@ -13,6 +13,14 @@ class BirthdayApiController extends Controller
 {
     public function getBirthdayData(Request $request)
     {
+        // Cek apakah fitur birthday push diaktifkan
+        if (!env('BIRTHDAY_PUSH_ENABLED', false)) {
+            return response()->json([
+                'error' => 'Birthday feature is disabled',
+                'message' => 'Birthday push feature is currently disabled in system configuration'
+            ], 503);
+        }
+
         try {
             // Validate API token
             $token = $request->bearerToken() ?? $request->get('token');
