@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-        <title>{{ App\Helpers\UnitHelper::getRegistrationFormTitle() }}</title>
+    <title>{{ App\Helpers\UnitHelper::getRegistrationFormTitle() }}</title>
     <style>
         @page {
             size: A4;
@@ -46,8 +46,8 @@
         
         /* Koordinat dikali 3.125 */
         .room-number {
-            top: 343.75px;
-            left: 190.625px;
+            top: 415.625px;
+            left: 284.375px;
             font-size: 81.25px;
         }
 
@@ -58,19 +58,19 @@
         }
 
         .folio-number {
-            top: 637.5px;
-            left: 250px;
+            top: 675px;
+            left: 1831.25px;
             font-size: 50px;
         }
 
         .room-type {
-            top: 637.5px;
-            left: 806.25px;
+            top: 678.125px;
+            left: 387.5px;
             font-size: 50px;
         }
 
         .guest-name {
-            top: 900px;
+            top: 1065.625px;
             left: 346.875px;
             font-size: 50px;
         }
@@ -88,26 +88,26 @@
         }
                 
         .email {
-            top: 1009.375px;
+            top: 1596.875px;
             left: 346.875px;
-            font-size: 50px;
+            font-size: 43.75px;
         }
                 
         .company {
-            top: 1109.375px;
-            left: 346.875px;
-            font-size: 50px;
+            top: 965.625px;
+            left: 515.625px;
+            font-size: 43.75px;
         }
                 
         .nationality {
-            top: 1215.625px;
+            top: 1471.875px;
             left: 346.875px;
             font-size: 50px;
         }
                 
         .id-number {
-            top: 1215.625px;
-            left: 896.875px;
+            top: 1193.75px;
+            left: 459.375px;
             font-size: 40.625px;
             max-width: 1093.75px;
             overflow: hidden;
@@ -123,7 +123,7 @@
                 
         .address {
             position: absolute;
-            top: 1318.75px;
+            top: 1300px;
             left: 346.875px;
             width: 2784.375px;
             max-height: 293.75px;
@@ -136,19 +136,18 @@
                 
         .mobile-phone {
             top: 1459.375px;
-            left: 1375px;
+            left: 1081.25px;
             font-size: 50px;
         }
             
         .arrival-date {
-            top: 1215.625px;
+            top: 1721.875px;
             left: 2025px;
             font-size: 50px;
         }
-
         
         .departure-date {
-            top: 1412.5px;
+            top: 1831.25px;
             left: 2025px;
             font-size: 50px;
         }
@@ -160,8 +159,8 @@
         }
         
         .adult-count {
-            top: 531.25px;
-            left: 806.25px;
+            top: 653.125px;
+            left: 1078.125px;
             font-size: 50px;
         }
         
@@ -170,7 +169,6 @@
             left: 1675px;
             font-size: 50px;
         }
-
     </style>
 </head>
 <body>
@@ -181,9 +179,9 @@
             {{ $room ?? '136' }}
         </div>
 
-        <div class="overlay-text room-number2">
+        <!-- <div class="overlay-text room-number2">
             {{ $room ?? '136' }}
-        </div>
+        </div> -->
         
         <!-- Folio Number -->
         <div class="overlay-text folio-number">
@@ -231,9 +229,9 @@
         </div>
 
        <!-- Birthday -->
-        <div class="overlay-text birthday">
+        <!-- <div class="overlay-text birthday">
             {{ isset($birthday) ? \Carbon\Carbon::parse($birthday)->format('d M Y') : '' }}
-        </div>
+        </div> -->
 
         <!-- Address -->
         <div class="overlay-text address">
