@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Registration Form - Kuta Seaview</title>
+    <title>{{ App\Helpers\UnitHelper::getRegistrationFormTitle() }}</title>
     <style>
         @page {
             size: A4;
@@ -25,7 +25,7 @@
             position: relative;
             width: 210mm;
             height: 297mm;
-            background-image: url('{{ asset('images/300DPIcrm-tanpa-judul-2480-x-3508-piksel_eDbYxo1O.png') }}');
+            background-image: url('{{ App\Helpers\UnitHelper::getRegistrationFormBackground() }}');
             background-size: cover;
             background-repeat: no-repeat;
             background-position: center;

@@ -69,7 +69,7 @@
         <!-- menu profile quick info -->
         <div class="profile clearfix">
           <div class="profile_pic">
-            <img src="{{ asset('').'/'.$configuration->logo }}" alt="logo"  class="img-thumbnail profile_img">
+            <img src="{{ App\Helpers\UnitHelper::getUnitLogo() }}" alt="logo"  class="img-thumbnail profile_img">
           </div>
           <div class="profile_info">
 

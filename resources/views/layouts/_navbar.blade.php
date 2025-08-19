@@ -5,7 +5,7 @@
                 <a id="menu_toggle"><i class="fa fa-bars"></i></a>
             </div>
             <div class="navbar navbar-brand navbar-dark">
-                <h1>{{ $configuration->hotel_name }}</h1>
+                <h1>{{ App\Helpers\UnitHelper::getUnitName() }}</h1>
             </div>
 
             <!-- Email Quota Info -->
