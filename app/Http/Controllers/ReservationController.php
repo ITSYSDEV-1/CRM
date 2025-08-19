@@ -11,6 +11,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use function PHPUnit\Framework\isEmpty;
 
 use App\Traits\UserLogsActivity;
+use App\Helpers\UnitHelper; // Tambahkan import UnitHelper
 
 class ReservationController extends Controller
 {
@@ -72,13 +73,18 @@ class ReservationController extends Controller
                 'folio_master' => $completeContactPrestay['folio_master'],
                 'contact_id' => $completeContactPrestay['contact_id'],
                 'dateci' => $completeContactPrestay['dateci'],
-                'dateco' => $completeContactPrestay['dateco']
+                'dateco' => $completeContactPrestay['dateco'],
+                'unit' => env('UNIT', 'default'), // Tambahkan info unit
+                'template_used' => UnitHelper::getAvailableRegistrationTemplate() // Tambahkan info template
             ],
-            'Printed registration form for folio: ' . $completeContactPrestay['folio_master']
+            'Printed registration form for folio: ' . $completeContactPrestay['folio_master'] . ' using unit: ' . env('UNIT', 'default')
         );
     
+        // Dapatkan template yang sesuai dengan unit
+        $template = UnitHelper::getAvailableRegistrationTemplate();
+        
         // Konfigurasi PDF dengan kualitas tinggi
-        $pdf = PDF::loadView('reservation.registrationpdf',$completeContactPrestays)
+        $pdf = PDF::loadView($template, $completeContactPrestays) // Gunakan template dinamis
             ->setPaper('A4', 'portrait')
             ->setOptions([
                 'dpi' => 300,                    // Set DPI tinggi
@@ -119,20 +125,23 @@ class ReservationController extends Controller
     }
 
     // Method baru untuk preview HTML
-public function registrationformpreview ($registrationformcode){
-    $completeContactPrestay = Contactprestay::where('registration_code', $registrationformcode)->where('next_action','=','COMPLETED')->first();
-    $profilesFolio = ProfileFolio::select('room','roomtype','pax','dateci','dateco')->where('folio',$completeContactPrestay['folio_master'])->first();
-    $completeContactPrestay['dateci'] = $profilesFolio->dateci == null ? '-':$profilesFolio->dateci;
-    $completeContactPrestay['dateco'] = $profilesFolio->dateco == null ? '-':$profilesFolio->dateco;
-    $completeContactPrestay['room'] = $profilesFolio->room == null ? '-':$profilesFolio->room;
-    $completeContactPrestay['roomtype'] = $profilesFolio->roomtype == null ? '-':$profilesFolio->roomtype;
-    $completeContactPrestay['pax'] = $profilesFolio->pax == null ? '-':$profilesFolio->pax;
-    $completeContactPrestays = $completeContactPrestay->toarray();
+    public function registrationformpreview ($registrationformcode){
+        $completeContactPrestay = Contactprestay::where('registration_code', $registrationformcode)->where('next_action','=','COMPLETED')->first();
+        $profilesFolio = ProfileFolio::select('room','roomtype','pax','dateci','dateco')->where('folio',$completeContactPrestay['folio_master'])->first();
+        $completeContactPrestay['dateci'] = $profilesFolio->dateci == null ? '-':$profilesFolio->dateci;
+        $completeContactPrestay['dateco'] = $profilesFolio->dateco == null ? '-':$profilesFolio->dateco;
+        $completeContactPrestay['room'] = $profilesFolio->room == null ? '-':$profilesFolio->room;
+        $completeContactPrestay['roomtype'] = $profilesFolio->roomtype == null ? '-':$profilesFolio->roomtype;
+        $completeContactPrestay['pax'] = $profilesFolio->pax == null ? '-':$profilesFolio->pax;
+        $completeContactPrestays = $completeContactPrestay->toarray();
 
-    // Return HTML view langsung tanpa PDF
-    return view('reservation.registrationpdf', $completeContactPrestays);
-}
-
+        // Dapatkan template yang sesuai dengan unit
+        $template = UnitHelper::getAvailableRegistrationTemplate();
+        
+        // Return HTML view langsung tanpa PDF menggunakan template dinamis
+        return view($template, $completeContactPrestays);
+    }
+    
     /**
      * Show the form for creating a new resource.
      *
