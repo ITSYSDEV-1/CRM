@@ -17,3 +17,5 @@ yarn-error.log
 /MYSQL_BACKUP
 storage/framework/views/*.php
 !storage/framework/views/.gitignore
+disk_usage.txt
+
