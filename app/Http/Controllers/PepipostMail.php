@@ -200,7 +200,7 @@ class PepipostMail extends Controller
             'quota_usage_percentage' => ($totalMetrics['requests'] / $quotaConfig['period']['total']) * 100,
             'average_daily_usage' => $totalMetrics['requests'] / 30,
             'daily_quota_remaining' => ($totalMetrics['requests'] > 0) ? 
-                ($quotaConfig['period']['total'] - $totalMetrics['requests']) / Carbon::parse($endDate)->diffInDays($now) : 
+                $this->calculateDailyQuotaRemaining($quotaConfig, $totalMetrics, $endDate, $now) : 
                 $quotaConfig['daily']['limit']
         ];
         
@@ -220,7 +220,31 @@ class PepipostMail extends Controller
         Log::error('Exception in getEmailQuota: ' . $e->getMessage());
         return ['error' => $e->getMessage(), 'data' => null];
     }
-}public function quotaUsageList()
+}
+
+    /**
+     * Calculate daily quota remaining safely to avoid division by zero
+     */
+    private function calculateDailyQuotaRemaining($quotaConfig, $totalMetrics, $endDate, $now)
+    {
+        $daysRemaining = Carbon::parse($endDate)->diffInDays($now);
+        
+        // Prevent division by zero
+        if ($daysRemaining <= 0) {
+            return $quotaConfig['daily']['limit'];
+        }
+        
+        $quotaRemaining = $quotaConfig['period']['total'] - $totalMetrics['requests'];
+        
+        // Ensure we don't return negative values
+        if ($quotaRemaining <= 0) {
+            return 0;
+        }
+        
+        return $quotaRemaining / $daysRemaining;
+    }
+
+public function quotaUsageList()
 {
     try {
         $currentYear = Carbon::now()->year;
